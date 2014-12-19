@@ -85,12 +85,12 @@ TEST_F(native_types_pool_unittest, TestCreateAndErase)
 
   ASSERT_EQ(0, pool.size());
 
-  // Second time caling `.erase`
+  // Second time calling `.erase`
   ASSERT_THROW(
     {
       pool.erase(key);
     },
-    corevm::memory::invalid_address_error
+    corevm::runtime::native_type_handle_not_found_error
   );
 
   ASSERT_THROW(

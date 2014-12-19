@@ -108,7 +108,8 @@ public:
   corevm::dyobj::ntvhndl_key create()
     throw(corevm::runtime::native_type_handle_insertion_error);
 
-  void erase(const corevm::dyobj::ntvhndl_key&);
+  void erase(const corevm::dyobj::ntvhndl_key&)
+    throw(corevm::runtime::native_type_handle_not_found_error);
 
 private:
   container_type m_container;
