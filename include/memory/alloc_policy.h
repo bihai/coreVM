@@ -148,6 +148,15 @@ bool operator==(
   return false;
 }
 
+template<typename T, typename AllocationScheme, size_t N>
+inline
+bool operator!=(
+  alloc_policy<T, AllocationScheme, N> const& lhs,
+  alloc_policy<T, AllocationScheme, N> const& rhs)
+{
+  return !operator==(lhs, rhs);
+}
+
 template<typename T, typename AllocationScheme, size_t N, typename U, typename OtherAllocationScheme, size_t M>
 inline
 bool operator!=(
