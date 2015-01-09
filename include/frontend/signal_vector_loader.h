@@ -24,6 +24,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define COREVM_SIGNAL_VECTOR_LOADER_H_
 
 #include "errors.h"
+#include "../runtime/process.h"
 
 #include <sneaker/json/json.h>
 
@@ -43,7 +44,7 @@ class signal_vector_loader {
 public:
   explicit signal_vector_loader(const std::string&);
 
-  void load() throw(corevm::frontend::file_loading_error);
+  void load(corevm::runtime::process&) throw(corevm::frontend::file_loading_error);
 
 private:
   static const std::string raw_schema;

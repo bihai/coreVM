@@ -23,6 +23,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "../../include/frontend/signal_vector_loader.h"
 
 #include "../../include/frontend/errors.h"
+#include "../../include/runtime/process.h"
 
 #include <boost/format.hpp>
 #include <sneaker/json/json.h>
@@ -151,7 +152,7 @@ corevm::frontend::signal_vector_loader::signal_vector_loader(
 
 
 void
-corevm::frontend::signal_vector_loader::load() throw(corevm::frontend::file_loading_error)
+corevm::frontend::signal_vector_loader::load(corevm::runtime::process& process) throw(corevm::frontend::file_loading_error)
 {
   std::ifstream f(m_path, std::ios::binary);
   std::stringstream buffer;
@@ -185,6 +186,18 @@ corevm::frontend::signal_vector_loader::load() throw(corevm::frontend::file_load
   }
 
   this->validate(content_json);
+
+  const JSON::object json_object = content_json.object_items();
+  const JSON::object& signals_object = json_object.at("signals").object_items();
+
+  for(auto itr = signals_object.begin(); itr != signals_object.end(); ++itr) {
+    std::string signal_str = static_cast<std::string>(itr->first);
+    const JSON& signal_json = static_cast<const JSON>(itr->second);
+
+    const JSON::array& signal_vector_json = signal_json.array_items();
+
+    // TODO: [COREVM-101] Load instruction vectors into process in signal vector loader
+  }
 }
 
 void
