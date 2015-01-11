@@ -46,7 +46,7 @@ corevm::frontend::bytecode_runner::get_vector_from_json(const JSON& json)
         corevm::runtime::instr_oprd oprd1 = 0;
         corevm::runtime::instr_oprd oprd2 = 0;
 
-        const JSON& code_raw  = instr_tuple[0];
+        const JSON& code_raw = instr_tuple[0];
         code = static_cast<corevm::runtime::instr_code>(code_raw.int_value());
 
         if (instr_tuple.size() >= 2) {
