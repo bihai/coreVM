@@ -84,10 +84,10 @@ const std::unordered_map<std::string, sig_atomic_t> \
 
   //-----------------  Arithmetic and execution signals -----------------------/
 
-  { "SIGFPE", SIGFPE        },
-  { "SIGKILL", SIGKILL      },
-  { "SIGSEGV", SIGSEGV      },
-  { "SIGBUS", SIGBUS        },
+  { "SIGFPE",     SIGFPE    },
+  { "SIGKILL",    SIGKILL   },
+  { "SIGSEGV",    SIGSEGV   },
+  { "SIGBUS",     SIGBUS    },
 
   //---------------------- Termination signals --------------------------------/
 
