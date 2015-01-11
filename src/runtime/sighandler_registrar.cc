@@ -84,7 +84,34 @@ const std::unordered_map<std::string, sig_atomic_t> \
 
   //-----------------  Arithmetic and execution signals -----------------------/
 
-  { "SIGFPE", SIGFPE },
+  { "SIGFPE", SIGFPE        },
+  { "SIGKILL", SIGKILL      },
+  { "SIGSEGV", SIGSEGV      },
+  { "SIGBUS", SIGBUS        },
+
+  //---------------------- Termination signals --------------------------------/
+
+  { "SIGABRT",    SIGABRT   },
+  { "SIGINT",     SIGINT    },
+  { "SIGTERM",    SIGTERM   },
+  { "SIGQUIT",    SIGQUIT   },
+
+  //------------------------ Alarm signals ------------------------------------/
+
+  { "SIGALRM",    SIGALRM   },
+  { "SIGVTALRM",  SIGVTALRM },
+  { "SIGPROF",    SIGPROF   },
+
+  //---------------------- Operation error signals ----------------------------/
+
+  { "SIGPIPE",    SIGPIPE   },
+  { "SIGXCPU",    SIGXCPU   },
+  { "SIGXFSZ",    SIGXFSZ   },
+
+  //-------------------- Asynchronous I/O signals -----------------------------/
+
+  { "SIGIO",      SIGIO     },
+  { "SIGURG",     SIGURG    },
 };
 
 
