@@ -24,6 +24,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "../../include/runtime/sighandler.h"
 
+#include <string>
+
 
 corevm::runtime::process* corevm::runtime::sighandler_registrar::process = nullptr;
 
@@ -76,6 +78,16 @@ const std::unordered_map<sig_atomic_t, corevm::runtime::sighandler_wrapper> \
 };
 
 
+const std::unordered_map<std::string, sig_atomic_t> \
+  corevm::runtime::sighandler_registrar::sig_value_to_str_map
+{
+
+  //-----------------  Arithmetic and execution signals -----------------------/
+
+  { "SIGFPE", SIGFPE },
+};
+
+
 void
 corevm::runtime::sighandler_registrar::init(corevm::runtime::process* process)
 {
@@ -114,4 +126,10 @@ corevm::runtime::sighandler_registrar::handle_signal(int signum)
   corevm::runtime::sighandler_registrar::sig_raised = true;
 
   siglongjmp(corevm::runtime::sighandler_registrar::get_sigjmp_env(), 1);
+}
+
+sig_atomic_t
+corevm::runtime::sighandler_registrar::get_sig_value_from_string(const std::string& str)
+{
+  return sig_value_to_str_map.at(str);
 }
