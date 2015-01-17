@@ -403,7 +403,7 @@ corevm::runtime::process::append_instrs(const std::vector<corevm::runtime::instr
 void
 corevm::runtime::process::append_vector(const corevm::runtime::vector& vector)
 {
-  m_vector.push_back(vector);
+  m_vectors.push_back(vector);
 }
 
 bool

@@ -170,7 +170,7 @@ private:
   uint8_t m_gc_flag;
   corevm::runtime::instr_addr m_pc;
   std::vector<corevm::runtime::instr> m_instrs;
-  std::vector<corevm::runtime::vector> m_vector;
+  std::vector<corevm::runtime::vector> m_vectors;
   corevm::dyobj::dynamic_object_heap<garbage_collection_scheme::dynamic_object_manager> m_dynamic_object_heap;
   std::stack<corevm::dyobj::dyobj_id> m_dyobj_stack;
   std::stack<corevm::runtime::frame> m_call_stack;
