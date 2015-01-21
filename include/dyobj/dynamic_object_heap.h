@@ -122,7 +122,7 @@ template<class dynamic_object_manager>
 typename corevm::dyobj::dynamic_object_heap<dynamic_object_manager>::size_type
 corevm::dyobj::dynamic_object_heap<dynamic_object_manager>::active_size() const noexcept
 {
-  return std::count_if(
+  return std::count_if (
     cbegin(),
     cend(),
     [](const dynamic_object_type& obj) {
@@ -144,7 +144,7 @@ corevm::dyobj::dynamic_object_heap<dynamic_object_manager>::erase(dynamic_object
 {
   auto itr = m_container.find(id);
 
-  if(itr != m_container.end()) {
+  if (itr != m_container.end()) {
     erase(itr);
   }
 }
