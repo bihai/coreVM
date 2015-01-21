@@ -142,7 +142,7 @@ corevm::memory::sequential_allocation_scheme::combine_free_blocks() noexcept
     }
   }
 
-  std::remove_if (
+  std::remove_if(
     this->begin(),
     this->end(),
     [](const block_descriptor_type& block) -> bool {
