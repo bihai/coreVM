@@ -57,7 +57,7 @@ corevm::runtime::instr_handler_meta::instr_info_map = {
 
   { corevm::runtime::instr_enum::RTRN,      { .num_oprd=0, .str="rtrn",      .handler=new corevm::runtime::instr_handler_rtrn()      } },
   { corevm::runtime::instr_enum::JMP,       { .num_oprd=1, .str="jmp",       .handler=new corevm::runtime::instr_handler_jmp()       } },
-  { corevm::runtime::instr_enum::JMPIF,     { .num_oprd=1, .str="jmpif",     .handler=new corevm::runtime::instr_handler_jmpif ()     } },
+  { corevm::runtime::instr_enum::JMPIF,     { .num_oprd=1, .str="jmpif",     .handler=new corevm::runtime::instr_handler_jmpif()     } },
   { corevm::runtime::instr_enum::EXC,       { .num_oprd=0, .str="exc",       .handler=new corevm::runtime::instr_handler_exc()       } },
   { corevm::runtime::instr_enum::EXC2,      { .num_oprd=0, .str="exc2",      .handler=new corevm::runtime::instr_handler_exc2()      } },
   { corevm::runtime::instr_enum::EXIT,      { .num_oprd=1, .str="exit",      .handler=new corevm::runtime::instr_handler_exit()      } },
