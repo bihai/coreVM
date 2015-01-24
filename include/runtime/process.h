@@ -51,7 +51,8 @@ namespace corevm {
 namespace runtime {
 
 
-/* A process is a unit for executing a sequence of instructions.
+/**
+ * A process is a unit for executing a sequence of instructions.
  * It's supposed to have the following:
  *
  * - A flag for pause/resume execution.
@@ -62,8 +63,9 @@ namespace runtime {
  * - A heap for holding dynamic objects.
  * - A call stack for executing blocks of instructions.
  * - A pool of native type handles.
+ * - A table for storing closures.
  * - An incrementor for closure IDs.
- * */
+ */
 class process : public sneaker::threading::fixed_time_interval_daemon_service {
 
 public:

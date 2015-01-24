@@ -166,13 +166,15 @@ public:
   {
     const JSON::object& json_object = content_json.object_items();
 
+    // [COREVM-116] Implement mechanism to check bytecode format and target verisons
     const JSON::string& format = json_object.at("format").string_value();
     const JSON::string& format_version = json_object.at("format-version").string_value();
     const JSON::string& target_version = json_object.at("target-version").string_value();
     const JSON::string& encoding = json_object.at("encoding").string_value();
+
+    // Load encoding map (keys and values are flipped)
     const JSON::object& encoding_map = json_object.at("encoding_map").object_items();
 
-    // Load encoding map (the keys and values are flipped)
     for (auto itr = encoding_map.begin(); itr != encoding_map.end(); ++itr) {
       const JSON& raw_value = static_cast<JSON>(itr->first);
       const JSON& raw_key = static_cast<JSON>(itr->second);
