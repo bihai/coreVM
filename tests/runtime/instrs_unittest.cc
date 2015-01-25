@@ -377,26 +377,6 @@ protected:
 };
 
 
-TEST_F(process_functions_instrs_test, TestInstrFRM)
-{
-  ASSERT_THROW(
-    {
-      m_process.top_frame();
-    },
-    corevm::runtime::frame_not_found_error
-  );
-
-  corevm::runtime::instr instr;
-  corevm::runtime::instr_handler_frm handler;
-  handler.execute(instr, m_process);
-
-  ASSERT_NO_THROW(
-    {
-      m_process.top_frame();
-    }
-  );
-}
-
 TEST_F(process_functions_instrs_test, TestInstrPUTARG)
 {
   corevm::runtime::frame frame;

@@ -147,10 +147,6 @@ enum instr_enum : uint32_t {
 
   //------------------------ Function instructions ----------------------------/
 
-  // <frm, _, _>
-  // Creates a new frame and place it on top of the current one.
-  FRAME,
-
   // <putarg, _, _>
   // Pops the top object off the stack and assign it as the next argument
   // for the next call.
@@ -775,12 +771,6 @@ public:
 
 
 //-------------------------- Function instructions ----------------------------/
-
-
-class instr_handler_frm : public instr_handler {
-public:
-  virtual void execute(const corevm::runtime::instr&, corevm::runtime::process&);
-};
 
 
 class instr_handler_putarg : public instr_handler {

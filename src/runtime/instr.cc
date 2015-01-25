@@ -27,6 +27,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <boost/format.hpp>
 
+#include <cassert>
 #include <csignal>
 #include <cstdlib>
 #include <stdexcept>
@@ -358,7 +359,31 @@ void
 corevm::runtime::instr_handler_lbobj::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
 {
-  // TODO: [COREVM-49] Complete instruction set and implementations
+  corevm::runtime::variable_key key = static_cast<corevm::runtime::variable_key>(instr.oprd1);
+  corevm::runtime::frame& frame = process.top_frame();
+
+  corevm::runtime::frame* frame_ptr = &frame;
+
+  while (!frame_ptr->has_visible_var(key)) {
+    corevm::runtime::closure_id closure_id = frame_ptr->closure_id();
+    corevm::runtime::closure closure = process.get_closure_by_id(closure_id);
+
+    corevm::runtime::closure_id parent_closure_id = closure.parent_id;
+
+    if (parent_closure_id == corevm::runtime::NONESET_CLOSURE_ID) {
+      throw corevm::runtime::local_variable_not_found_error();
+    }
+
+    process.get_frame_by_closure_id(parent_closure_id, &frame_ptr);
+
+    // Theoretically, the pointer that points to the frame that's
+    // associated with the parent closure should exist.
+    assert(frame_ptr);
+  }
+
+  auto id = frame_ptr->get_visible_var(key);
+
+  process.push_stack(id);
 }
 
 void
@@ -636,15 +661,6 @@ corevm::runtime::instr_handler_exit::execute(
   std::exit(exit_code);
   */
   raise(SIGTERM);
-}
-
-void
-corevm::runtime::instr_handler_frm::execute(
-  const corevm::runtime::instr& instr, corevm::runtime::process& process)
-{
-  // TODO: we need a way to set the starting instr addr for the frame.
-  corevm::runtime::frame frame;
-  process.push_frame(frame);
 }
 
 void
