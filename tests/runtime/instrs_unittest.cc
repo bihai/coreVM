@@ -102,8 +102,8 @@ TEST_F(process_obj_instrs_test, TestInstrLDOBJ)
 
   parent_frame.set_visible_var(key, id);
 
-  m_process.push_frame(frame);
   m_process.push_frame(parent_frame);
+  m_process.push_frame(frame);
 
   corevm::runtime::instr instr = {
     .code=0,
@@ -258,8 +258,8 @@ TEST_F(process_obj_instrs_test, TestInstrLDOBJ2)
 
   parent_frame.set_invisible_var(key, id);
 
-  m_process.push_frame(frame);
   m_process.push_frame(parent_frame);
+  m_process.push_frame(frame);
 
   corevm::runtime::instr instr = {
     .code=0,
