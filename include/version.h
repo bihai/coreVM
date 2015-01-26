@@ -33,8 +33,12 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define COREVM_VERSION 000100
 
 
-// Canonical version of library.
-#define COREVM_LIB_VERSION "0.0.1"
+// Canonical version.
+#define COREVM_CANONICAL_VERSION "0.0.1"
+
+
+// Short canonical version.
+#define COREVM_SHORT_CANONICAL_VERSION "0.1"
 
 
 #endif /* _COREVM_VERSION_H_ */

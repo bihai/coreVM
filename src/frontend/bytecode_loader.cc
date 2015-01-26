@@ -22,6 +22,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 *******************************************************************************/
 #include "../../include/frontend/bytecode_loader.h"
 
+#include "../../include/version.h"
 #include "../../include/frontend/bytecode_loader_v0_1.h"
 #include "../../include/frontend/errors.h"
 #include "../../include/frontend/utils.h"
@@ -125,8 +126,15 @@ validate_and_load(const JSON& content_json, corevm::runtime::process& process)
 {
   const JSON::object& json_object = content_json.object_items();
 
-  if (json_object.find("format-version") == json_object.end()) {
-    throw corevm::frontend::file_loading_error("Missing \"format-version\" in file");
+  const JSON::string& target_version = json_object.at("target-version").string_value();
+  const std::string target_version_str = static_cast<std::string>(target_version);
+
+  if (target_version_str != COREVM_SHORT_CANONICAL_VERSION) {
+    throw corevm::frontend::file_loading_error(
+      str(
+        boost::format("Invalid target-version: %s") % target_version_str
+      )
+    );
   }
 
   const JSON::string& format = json_object.at("format").string_value();
@@ -140,8 +148,6 @@ validate_and_load(const JSON& content_json, corevm::runtime::process& process)
   );
 
   const std::string& schema = loader->schema();
-
-  // TODO: validate `target-version` field.
 
   const JSON schema_json = sneaker::json::parse(schema);
 

@@ -35,7 +35,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <string>
 
 
-const std::string BYTECODE_LOADER_V0_1_FORMAT = "nucleus";
+const std::string BYTECODE_LOADER_V0_1_FORMAT = "application/json";
 
 const std::string BYTECODE_LOADER_V0_1_VERSION = "0.1";
 
@@ -66,7 +66,8 @@ corevm::frontend::bytecode_loader_v0_1::schema() const
           "\"type\": \"string\""
         "},"
         "\"target-version\": {"
-          "\"type\": \"string\""
+          "\"type\": \"string\","
+          "\"pattern\": \"(0|1|2|3|4|5|6|7|8|9)(\.)(0|1|2|3|4|5|6|7|8|9)\""
         "},"
         "\"path\": {"
           "\"type\": \"string\""
@@ -171,10 +172,6 @@ corevm::frontend::bytecode_loader_v0_1::load(
 {
   const JSON::object& json_object = content_json.object_items();
 
-  // [COREVM-116] Implement mechanism to check bytecode format and target verisons
-  const JSON::string& format = json_object.at("format").string_value();
-  const JSON::string& format_version = json_object.at("format-version").string_value();
-  const JSON::string& target_version = json_object.at("target-version").string_value();
   const JSON::string& encoding = json_object.at("encoding").string_value();
 
   // Load encoding map.
