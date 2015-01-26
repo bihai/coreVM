@@ -46,7 +46,7 @@ public:
   virtual std::string schema() const = 0;
 
   static void load(const std::string&, corevm::runtime::process&)
-   throw(corevm::frontend::file_loading_error);
+    throw(corevm::frontend::file_loading_error);
 };
 
 
