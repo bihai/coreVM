@@ -455,7 +455,31 @@ void
 corevm::runtime::instr_handler_ldobj2::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
 {
-  // TODO: to be implemented.
+  corevm::runtime::variable_key key = static_cast<corevm::runtime::variable_key>(instr.oprd1);
+  corevm::runtime::frame& frame = process.top_frame();
+
+  corevm::runtime::frame* frame_ptr = &frame;
+
+  while (!frame_ptr->has_invisible_var(key)) {
+    corevm::runtime::closure_id closure_id = frame_ptr->closure_id();
+    corevm::runtime::closure closure = process.get_closure_by_id(closure_id);
+
+    corevm::runtime::closure_id parent_closure_id = closure.parent_id;
+
+    if (parent_closure_id == corevm::runtime::NONESET_CLOSURE_ID) {
+      throw corevm::runtime::local_variable_not_found_error();
+    }
+
+    process.get_frame_by_closure_id(parent_closure_id, &frame_ptr);
+
+    // Theoretically, the pointer that points to the frame that's
+    // associated with the parent closure should exist.
+    assert(frame_ptr);
+  }
+
+  auto id = frame_ptr->get_invisible_var(key);
+
+  process.push_stack(id);
 }
 
 void
