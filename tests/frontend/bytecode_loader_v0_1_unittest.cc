@@ -35,7 +35,7 @@ protected:
   virtual const char* bytecode() {
     return \
     "{"
-      "\"format\": \"corevm\","
+      "\"format\": \"nucleus\","
       "\"format-version\": \"0.1\","
       "\"target-version\": \"0.1\","
       "\"path\": \"./example.corevm\","
