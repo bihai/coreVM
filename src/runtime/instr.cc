@@ -39,7 +39,7 @@ corevm::runtime::instr_handler_meta::instr_info_map = {
   //--------------------------- Object instructions ---------------------------/
 
   { corevm::runtime::instr_enum::NEW,       { .num_oprd=0, .str="new",       .handler=new corevm::runtime::instr_handler_new()       } },
-  { corevm::runtime::instr_enum::LDOBJ,     { .num_oprd=1, .str="ldobj",     .handler=new corevm::runtime::instr_handler_lbobj()     } },
+  { corevm::runtime::instr_enum::LDOBJ,     { .num_oprd=1, .str="ldobj",     .handler=new corevm::runtime::instr_handler_ldobj()     } },
   { corevm::runtime::instr_enum::STOBJ,     { .num_oprd=1, .str="stobj",     .handler=new corevm::runtime::instr_handler_stobj()     } },
   { corevm::runtime::instr_enum::GETATTR,   { .num_oprd=1, .str="getattr",   .handler=new corevm::runtime::instr_handler_getattr()   } },
   { corevm::runtime::instr_enum::SETATTR,   { .num_oprd=1, .str="setattr",   .handler=new corevm::runtime::instr_handler_setattr()   } },
@@ -356,7 +356,7 @@ corevm::runtime::instr_handler_new::execute(
 }
 
 void
-corevm::runtime::instr_handler_lbobj::execute(
+corevm::runtime::instr_handler_ldobj::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
 {
   corevm::runtime::variable_key key = static_cast<corevm::runtime::variable_key>(instr.oprd1);

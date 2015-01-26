@@ -641,7 +641,7 @@ public:
 };
 
 
-class instr_handler_lbobj : public instr_handler {
+class instr_handler_ldobj : public instr_handler {
 public:
   virtual void execute(const corevm::runtime::instr&, corevm::runtime::process&);
 };
