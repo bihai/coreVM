@@ -29,6 +29,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
 corevm::runtime::frame::frame():
+  m_compartment_id(corevm::runtime::NONESET_COMPARTMENT_ID),
   m_closure_id(corevm::runtime::NONESET_CLOSURE_ID),
   m_start_addr(corevm::runtime::NONESET_INSTR_ADDR),
   m_return_addr(corevm::runtime::NONESET_INSTR_ADDR),
@@ -283,4 +284,17 @@ void
 corevm::runtime::frame::set_closure_id(corevm::runtime::closure_id closure_id)
 {
   m_closure_id = closure_id;
+}
+
+const corevm::runtime::compartment_id
+corevm::runtime::frame::compartment_id() const
+{
+  return m_compartment_id;
+}
+
+void
+corevm::runtime::frame::set_compartment_id(
+  corevm::runtime::compartment_id compartment_id)
+{
+  m_compartment_id = compartment_id;
 }

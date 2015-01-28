@@ -20,12 +20,12 @@ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 *******************************************************************************/
-#ifndef COREVM_RUNTIME_COMMON_H_
-#define COREVM_RUNTIME_COMMON_H_
+#ifndef COREVM_COMPARTMENT_H_
+#define COREVM_COMPARTMENT_H_
 
-#include <cstdint>
-#include <string>
-#include <unordered_map>
+#include "closure.h"
+#include "common.h"
+#include "errors.h"
 
 
 namespace corevm {
@@ -34,47 +34,38 @@ namespace corevm {
 namespace runtime {
 
 
-typedef int32_t instr_addr;
+typedef std::unordered_map<corevm::runtime::closure_id, corevm::runtime::closure> closure_table;
 
 
-typedef uint16_t instr_code;
+class compartment {
+public:
+  explicit compartment();
+
+  const corevm::runtime::compartment_id id() const;
+
+  void set_encoding_map(const corevm::runtime::encoding_map&);
+
+  std::string get_encoding_string(uint64_t) const
+    throw(corevm::runtime::encoding_string_not_found_error);
+
+  size_t closure_count() const;
+
+  const corevm::runtime::closure& get_closure_by_id(
+    corevm::runtime::closure_id) const throw(corevm::runtime::closure_not_found_error);
+
+  void insert_closure_table(const corevm::runtime::closure_table&);
+
+private:
+  corevm::runtime::compartment_id m_id;
+  corevm::runtime::encoding_map m_encoding_map;
+  corevm::runtime::closure_table m_closure_table;
+};
 
 
-typedef uint64_t instr_oprd;
+}; /* end namespace runtime */
 
 
-typedef int32_t variable_key;
+}; /* end namespace corevm */
 
 
-typedef uint8_t gc_bitfield_t;
-
-
-typedef int64_t closure_id;
-
-
-typedef std::unordered_map<uint64_t, std::string> encoding_map;
-
-
-typedef int32_t compartment_id;
-
-
-const compartment_id NONESET_COMPARTMENT_ID = -1;
-
-
-const closure_id NONESET_CLOSURE_ID = -1;
-
-
-const instr_addr NONESET_INSTR_ADDR = -1;
-
-
-// Default size of native types pool: 128 MB.
-const uint64_t COREVM_DEFAULT_NATIVE_TYPES_POOL_SIZE = 1024 * 1024 * 128;
-
-
-} /* end namespace runtime */
-
-
-} /* end namespace corevm */
-
-
-#endif /* COREVM_RUNTIME_COMMON_H_ */
+#endif /* COREVM_COMPARTMENT_H_ */

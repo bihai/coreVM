@@ -50,6 +50,8 @@ namespace runtime {
  * - Parameter list (args).
  * - Optional parameter <-> default value mapping (kwargs).
  * - Evaluation stack.
+ * - Compartment ID.
+ * - Closure ID.
  */
 class frame {
 public:
@@ -118,7 +120,12 @@ public:
 
   void set_closure_id(corevm::runtime::closure_id);
 
+  const corevm::runtime::compartment_id compartment_id() const;
+
+  void set_compartment_id(corevm::runtime::compartment_id);
+
 protected:
+  corevm::runtime::compartment_id m_compartment_id;
   corevm::runtime::closure_id m_closure_id;
   corevm::runtime::instr_addr m_start_addr;
   corevm::runtime::instr_addr m_return_addr;
