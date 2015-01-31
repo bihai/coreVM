@@ -137,8 +137,8 @@ public:
 
   void append_vector(const corevm::runtime::vector&);
 
-  void get_frame_by_compartment_and_closure(
-    corevm::runtime::compartment_id, corevm::runtime::closure_id, corevm::runtime::frame**);
+  void get_frame_by_closure_ctx(
+    corevm::runtime::closure_ctx&, corevm::runtime::frame**);
 
   void start();
 

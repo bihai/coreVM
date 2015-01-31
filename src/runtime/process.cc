@@ -399,19 +399,14 @@ corevm::runtime::process::append_vector(const corevm::runtime::vector& vector)
 }
 
 void
-corevm::runtime::process::get_frame_by_compartment_and_closure(
-  corevm::runtime::compartment_id compartment_id,
-  corevm::runtime::closure_id closure_id,
-  corevm::runtime::frame** frame_ptr)
+corevm::runtime::process::get_frame_by_closure_ctx(
+  corevm::runtime::closure_ctx& closure_ctx, corevm::runtime::frame** frame_ptr)
 {
   auto itr = std::find_if(
     m_call_stack.begin(),
     m_call_stack.end(),
-    [&](const corevm::runtime::frame& frame) {
-      return (
-        frame.compartment_id() == compartment_id &&
-        frame.closure_id() == closure_id
-      );
+    [&closure_ctx](const corevm::runtime::frame& frame) -> bool {
+      return frame.closure_ctx() == closure_ctx;
     }
   );
 

@@ -25,6 +25,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "common.h"
 #include "vector.h"
+#include <unordered_map>
 
 
 namespace corevm {
@@ -39,6 +40,9 @@ public:
   const corevm::runtime::closure_id parent_id;
   const corevm::runtime::vector vector;
 } closure;
+
+
+typedef std::unordered_map<corevm::runtime::closure_id, corevm::runtime::closure> closure_table;
 
 
 } /* end namespace runtime */

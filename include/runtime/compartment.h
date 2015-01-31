@@ -34,9 +34,6 @@ namespace corevm {
 namespace runtime {
 
 
-typedef std::unordered_map<corevm::runtime::closure_id, corevm::runtime::closure> closure_table;
-
-
 class compartment {
 public:
   explicit compartment();
@@ -53,7 +50,7 @@ public:
   const corevm::runtime::closure& get_closure_by_id(
     corevm::runtime::closure_id) const throw(corevm::runtime::closure_not_found_error);
 
-  void insert_closure_table(const corevm::runtime::closure_table&);
+  void set_closure_table(const corevm::runtime::closure_table&);
 
 private:
   corevm::runtime::compartment_id m_id;

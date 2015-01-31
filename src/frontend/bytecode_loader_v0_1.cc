@@ -247,5 +247,5 @@ corevm::frontend::bytecode_loader_v0_1::load(
     );
   }
 
-  compartment.insert_closure_table(closure_table);
+  compartment.set_closure_table(closure_table);
 }

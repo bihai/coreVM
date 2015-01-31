@@ -38,6 +38,7 @@ void
 corevm::runtime::compartment::set_encoding_map(
   const corevm::runtime::encoding_map& encoding_map)
 {
+  m_encoding_map.clear();
   m_encoding_map.insert(encoding_map.begin(), encoding_map.end());
 }
 
@@ -61,9 +62,10 @@ corevm::runtime::compartment::closure_count() const
 }
 
 void
-corevm::runtime::compartment::insert_closure_table(
+corevm::runtime::compartment::set_closure_table(
   const corevm::runtime::closure_table& closure_table)
 {
+  m_closure_table.clear();
   m_closure_table.insert(closure_table.begin(), closure_table.end());
 }
 
