@@ -192,6 +192,8 @@ corevm::frontend::bytecode_loader_v0_1::load(
 
     const std::string value = static_cast<std::string>(raw_value.string_value());
     const uint64_t key = static_cast<uint64_t>(raw_key.int_value());
+
+    encoding_map[key] = value;
   }
 
   compartment.set_encoding_map(encoding_map);
@@ -241,11 +243,13 @@ corevm::frontend::bytecode_loader_v0_1::load(
         corevm::runtime::closure {
           .id = id,
           .parent_id = parent_id,
-        . vector = vector
+          .vector = vector
         }
       )
     );
   }
 
   compartment.set_closure_table(closure_table);
+
+  process.insert_compartment(compartment);
 }
