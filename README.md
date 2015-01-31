@@ -82,14 +82,14 @@ which is essentially a handle that points to an entity that is of one of these
 ### Object Management
 Another component that directly relates to the memory management layer is the
 object heap, which allocates memory from it to store objects. Objects in coreVM
-are referred as "dynamic objects", meaning that their properties can be
-dynamically changed during execution. This provides the flexibility for language
+are referred as "dynamic objects", meaning their properties can be dynamically
+changed during execution. This provides the flexibility for language
 developers to incorporate their custom object abstractions and meta-programming
 features.
 
 Each dynamic object can hold one native type handle. For example, an object
 of custom integer type in a language may hold a native type handle of type
-32-bit signed integer, in order to perform any arithmetic operations on it.
+32-bit signed integer, in order to perform integer arithmetic operations.
 
 ### Garbage Collection
 The garbage collection layer is responsible for cleaning up unreachable objects
@@ -148,16 +148,16 @@ the initial release, and they are the *Debugging and Profiling APIs*,
 ### Debugging and Profiling APIs
 These are a set of APIs and facilities that provide developers powerful
 capabilities to debug executable code running on coreVM. This includes the
-typical debugging capabilities such as execution pausing, variables examination,
-call stack unwinding and rewinding, etc. In addition, there will be a set of
-facilities for instrumenting a diversity of aspects regarding executions,
-such as process introspections, memory footprint statistics, heap allocation
-heat map, to name a few.
+typical debugging capabilities such as pause/resume execution, variables
+examination, call stack unwinding and rewinding, etc. In addition, there will
+be a set of facilities for instrumenting a diversity of aspects regarding
+executions, such as process introspections, memory footprint statistics, heap
+allocation heat map, to name a few.
 
 ### Embedder APIs
-The Embedder APIs provide developers the capability to create virtual execution
-runtimes in their native applications by interacting with a set of APIs and
-abstracted models that define the entities and behaviors of executions of
+The Embedder APIs provide developers the capabilities to create virtual
+execution runtimes in their applications by interacting with a set of APIs and
+abstract models that define the entities and behaviors of executions of
 coreVM's internal runtime. For example, a developer who wants to build a little
 scripting engine in his or her application can employ the Embedder APIs to
 accomplish the heavy liftings of executing user provided scripts. All the work
@@ -168,7 +168,7 @@ left for coreVM to handle.
 The Extension APIs are at the frontier of the next wave of heavy development
 with the goal of greatly enhance the capability and versatility of coreVM.
 The foundation of this is a scripting engine that allows developers to modify
-the functionalities of existing instructions or to create their own ones to
+the functionalities of existing instructions and to create their own ones to
 performs custom functions. Developers can use a set of micro-instructions
 to program their desired functionalities for existing and new instructions.
 
@@ -182,6 +182,7 @@ The last feature is to support native plugins, which allows developers to
 incorporate the execution of native code in conjunction with coreVM's execution,
 in order to allow more interactions with the operating system.
 
+<br/>
 
 Below is a table of all the past milestones and some of the goals defined in the
 roadmap in the near future, with their respective completion dates and ETAs:
