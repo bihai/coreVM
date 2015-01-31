@@ -148,7 +148,7 @@ the initial release, and they are the *Debugging and Profiling APIs*,
 ### Debugging and Profiling APIs
 These are a set of APIs and facilities that provide developers powerful
 capabilities to debug executable code running on coreVM. This includes the
-typical debugging capabilities such as pause/resume execution, variables
+typical debugging capabilities such as pause/resume executions, variables
 examination, call stack unwinding and rewinding, etc. In addition, there will
 be a set of facilities for instrumenting a diversity of aspects regarding
 executions, such as process introspections, memory footprint statistics, heap
