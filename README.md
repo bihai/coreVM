@@ -13,8 +13,8 @@ programming languages.
 With the proliferation of dynamic programming languages being a dominating trend
 in the software industry, many developers have taken the endeavor to invent
 their own, in attempts to modernize the designs and implementations of many
-legacy systems, and how modern software systems can be built. However, such a
-task would usually become a massive undertaking as the steps involved in
+legacy systems, and how modern software systems can be developed. However, such
+a task would usually become a massive undertaking as the steps involved in
 developing a custom runtime for a dynamic programming language tend to be
 extremely complex, error prone and resource consuming, thus ending up being a
 very intimidating part in the process. Although there are candidates of generic
@@ -107,8 +107,8 @@ the one for the reference-count GC scheme keeps tracks of a reference count for
 that object.
 
 The current version of the garbage collector has a non-copying,
-non-generational, and stop-the-world implementation. Future works are needed to
-improve the GC with more optimizations.
+non-generational, and stop-the-world implementation. Future works to improve and
+optimize GC performance are in the roadmap.
 
 ### Core Runtime
 The core runtime layer is the central component that interacts with the rest of
@@ -137,13 +137,13 @@ learning curve for many developers.
 
 
 ## Current State & Roadmap
-Since the inception of this project, which is the beginning of March 2014, a lot
-of milestones have been achieved and many components are near completion at this
-point. However, there are still many new and exciting features to be designed
-and implemented ahead to greatly enhance the prowess and versatility of coreVM.
-There are three major features that are envisioned after the initial release,
-and they are the Debugging and Profiling APIs, Embedder APIs, and the
-Extension APIs.
+Since the inception of this project, which is the beginning of March 2014, a
+great number of milestones have been achieved and many components are near
+completion at this point. However, there are still many new and exciting
+features to be designed and implemented ahead to greatly enhance the prowess and
+versatility of coreVM. There are three major features that are envisioned after
+the initial release, and they are the *Debugging and Profiling APIs*,
+*Embedder APIs*, and the *Extension APIs*.
 
 ### Debugging and Profiling APIs
 These are a set of APIs and facilities that provide developers powerful
@@ -194,8 +194,8 @@ roadmap in the near future, with their respective completion dates and ETAs:
   Instruction execution (done)                |            Aug, 2014
   Signal handling (done)                      |            Aug, 2014
   GC implementation and integration (done)    |            Aug, 2014
-  Bytecode loading and validation (done)      |            Oct, 2014
-  Frontend and core runtime integration       |            Nov, 2014
+  Bytecode loading and validation (done)      |            Feb, 2015
+  Frontend and runtime integration (done)     |            Feb, 2015
   Exception handling mechanism                |            Feb, 2015
   Re-entrant execution                        |            Feb, 2015
   Mark-and-sweep garbage collection           |            Mar, 2015
@@ -224,7 +224,7 @@ development:
 ### Project "Lithum-Ion"
 Focuses on achieving the highest performance possible while striving to maintain
 great architecture designs. Performance and efficiency should be factors taken
-consideration at every stage of design and development. Some metrics for
+into consideration at every stage of design and development. Some metrics for
 measuring performance and efficiency include per-instruction and overall
 execution time, memory usage, byte-code loading time, etc.
 
@@ -307,11 +307,11 @@ The latest build of coreVM depends on the following libraries:
 
   * [Boost] (http://www.boost.org/) `version 1.55`
   * [Google Test] (https://code.google.com/p/googletest/) `version 1.6.0`
-  * [Sneaker] (http://www.libsneaker.org/) `version 0.2.7`
+  * [Sneaker] (http://www.libsneaker.org/) `version 0.2.8`
 
 
 ## License
-coreVM is licensed under The MIT License: http://opensource.org/licenses/MIT
+coreVM is licensed under [The MIT License](http://opensource.org/licenses/MIT).
 
 
 ## Inquiries
