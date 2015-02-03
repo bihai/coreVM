@@ -202,22 +202,6 @@ TEST_F(dynamic_object_unittest, TestGetAndSetAttrs)
   );
 }
 
-TEST_F(dynamic_object_unittest, TestGetAndSetInstrBlockKey)
-{
-  dynamic_object_type obj;
-
-  ASSERT_EQ(corevm::dyobj::NONESET_INSTR_BLOCK_KEY, obj.get_instr_block_key());
-
-  corevm::dyobj::instr_block_key key = 100;
-  obj.set_instr_block_key(key);
-
-  ASSERT_EQ(key, obj.get_instr_block_key());
-
-  obj.clear_instr_block_key();
-
-  ASSERT_EQ(corevm::dyobj::NONESET_INSTR_BLOCK_KEY, obj.get_instr_block_key());
-}
-
 TEST_F(dynamic_object_unittest, TestEquality)
 {
   dynamic_object_type obj;
