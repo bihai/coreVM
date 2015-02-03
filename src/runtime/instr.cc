@@ -53,7 +53,7 @@ corevm::runtime::instr_handler_meta::instr_info_map = {
   { corevm::runtime::instr_enum::CLRHNDL,   { .num_oprd=0, .str="clrhndl",   .handler=new corevm::runtime::instr_handler_clrhndl()   } },
   { corevm::runtime::instr_enum::OBJEQ,     { .num_oprd=0, .str="objeq",     .handler=new corevm::runtime::instr_handler_objeq()     } },
   { corevm::runtime::instr_enum::OBJNEQ,    { .num_oprd=0, .str="objneq",    .handler=new corevm::runtime::instr_handler_objneq()    } },
-  { corevm::runtime::instr_enum::SETCLS,    { .num_oprd=1, .str="setcls",    .handler=new corevm::runtime::instr_handler_setcls()    } },
+  { corevm::runtime::instr_enum::SETCTX,    { .num_oprd=1, .str="setctx",    .handler=new corevm::runtime::instr_handler_setctx()    } },
 
   //--------------------------- Control instructions --------------------------/
 
@@ -640,7 +640,7 @@ corevm::runtime::instr_handler_objneq::execute(
 }
 
 void
-corevm::runtime::instr_handler_setcls::execute(
+corevm::runtime::instr_handler_setctx::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
 {
   corevm::runtime::frame& frame = process.top_frame();

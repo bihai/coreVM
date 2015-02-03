@@ -202,6 +202,30 @@ TEST_F(dynamic_object_unittest, TestGetAndSetAttrs)
   );
 }
 
+TEST_F(dynamic_object_unittest, TestSetAndGetClosureCtx)
+{
+  dynamic_object_type obj;
+
+  corevm::runtime::closure_ctx ctx;
+
+  obj.closure_ctx(&ctx);
+
+  ASSERT_EQ(corevm::runtime::NONESET_COMPARTMENT_ID, ctx.compartment_id);
+  ASSERT_EQ(corevm::runtime::NONESET_CLOSURE_ID, ctx.closure_id);
+
+  corevm::runtime::closure_ctx expected_ctx {
+    .compartment_id = 123,
+    .closure_id = 456
+  };
+
+  obj.set_closure_ctx(expected_ctx);
+
+  obj.closure_ctx(&ctx);
+
+  ASSERT_EQ(expected_ctx.compartment_id, ctx.compartment_id);
+  ASSERT_EQ(expected_ctx.closure_id, ctx.closure_id);
+}
+
 TEST_F(dynamic_object_unittest, TestEquality)
 {
   dynamic_object_type obj;
