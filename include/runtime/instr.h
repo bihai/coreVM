@@ -126,13 +126,13 @@ enum instr_enum : uint32_t
   //------------------------- Control instructions ----------------------------/
 
   // <pinvk, _, _>
-  // Prepares the invokation of a vector.
+  // Prepares the invocation of a function.
   // Creates a new frame on top of the call stack, and sets its closure context
   // using the context of the object on top of the stack.
   PINVK,
 
   // <invk, _, _>
-  // Invokes the vector of the object on the top of the stack.
+  // Invokes the vector of the object on top of the stack.
   INVK,
 
   // <rtrn, _, _>
