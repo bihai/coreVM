@@ -780,7 +780,7 @@ TEST_F(process_control_instrs_test, TestInstrPINVK)
   ASSERT_TRUE(m_ctx == ctx);
 }
 
-TEST_F(process_obj_instrs_test, TestInstrINVK)
+TEST_F(process_control_instrs_test, TestInstrINVK)
 {
   corevm::runtime::closure_id closure_id = 1;
   corevm::runtime::compartment_id compartment_id = 0;
@@ -791,9 +791,14 @@ TEST_F(process_obj_instrs_test, TestInstrINVK)
   corevm::runtime::frame frame(m_ctx);
   m_process.push_frame(frame);
 
-  corevm::runtime::closure closure;
+  corevm::runtime::vector vector;
+  corevm::runtime::closure closure {
+    .id = closure_id,
+    .parent_id = corevm::runtime::NONESET_CLOSURE_ID,
+    .vector = vector
+  };
   corevm::runtime::compartment compartment;
-  corevm::runtime::closure_table {
+  corevm::runtime::closure_table closure_table {
     { closure_id, closure }
   };
 
@@ -806,7 +811,7 @@ TEST_F(process_obj_instrs_test, TestInstrINVK)
     .oprd2=0
   };
 
-  m_process.set_pc(10);
+  m_process.set_pc(8);
 
   corevm::runtime::instr_handler_invk handler;
   handler.execute(instr, m_process);
