@@ -672,12 +672,12 @@ corevm::runtime::instr_handler_pinvk::execute(
 
   if (ctx.compartment_id == corevm::runtime::NONESET_COMPARTMENT_ID)
   {
-    throw corevm::runtime::compartment_not_found_error();
+    throw corevm::runtime::compartment_not_found_error(ctx.compartment_id);
   }
 
   if (ctx.closure_id == corevm::runtime::NONESET_CLOSURE_ID)
   {
-    throw corevm::runtime::closure_not_found_error();
+    throw corevm::runtime::closure_not_found_error(ctx.closure_id);
   }
 
   corevm::runtime::frame frame(ctx);
@@ -690,10 +690,9 @@ corevm::runtime::instr_handler_invk::execute(
 {
   corevm::runtime::frame& frame = process.top_frame();
 
-  frame.set_start_addr(process.pc() + 1);
   frame.set_return_addr(process.pc());
 
-  corevm::runtime::closure_ctx = frame.closure_ctx();
+  corevm::runtime::closure_ctx ctx = frame.closure_ctx();
 
   corevm::runtime::compartment* compartment = nullptr;
   process.get_compartment(ctx.compartment_id, &compartment);
