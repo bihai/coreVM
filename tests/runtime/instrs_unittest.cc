@@ -733,7 +733,7 @@ public:
 protected:
   virtual void SetUp()
   {
-    std::vector<corevm::runtime::instr> instrs = {
+    corevm::runtime::vector vector {
       corevm::runtime::instr(),
       corevm::runtime::instr(),
       corevm::runtime::instr(),
@@ -745,7 +745,7 @@ protected:
       corevm::runtime::instr(),
       corevm::runtime::instr(),
     };
-    m_process.append_instrs(instrs);
+    m_process.append_vector(vector);
   }
 
   corevm::runtime::process m_process;
