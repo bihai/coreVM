@@ -39,6 +39,7 @@ namespace frontend {
 
 using sneaker::json::JSON;
 
+// -----------------------------------------------------------------------------
 
 class signal_vector_loader
 {
@@ -54,6 +55,8 @@ private:
 
   std::string m_path;
 };
+
+// -----------------------------------------------------------------------------
 
 
 }; /* end namespace frontend */
