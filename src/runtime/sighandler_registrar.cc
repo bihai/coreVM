@@ -29,18 +29,23 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 corevm::runtime::process* corevm::runtime::sighandler_registrar::process = nullptr;
 
+// -----------------------------------------------------------------------------
 
 bool corevm::runtime::sighandler_registrar::sig_raised = false;
 
+// -----------------------------------------------------------------------------
 
 sigjmp_buf _env;
 
+// -----------------------------------------------------------------------------
 
 sigjmp_buf&
 corevm::runtime::sighandler_registrar::get_sigjmp_env()
 {
   return _env;
 }
+
+// -----------------------------------------------------------------------------
 
 const std::unordered_map<sig_atomic_t, corevm::runtime::sighandler_wrapper> \
   corevm::runtime::sighandler_registrar::handler_map
@@ -77,6 +82,7 @@ const std::unordered_map<sig_atomic_t, corevm::runtime::sighandler_wrapper> \
   { SIGURG,     { .handler=new sighandler_SIGURG()    } },
 };
 
+// -----------------------------------------------------------------------------
 
 const std::unordered_map<std::string, sig_atomic_t> \
   corevm::runtime::sighandler_registrar::sig_value_to_str_map
@@ -114,6 +120,7 @@ const std::unordered_map<std::string, sig_atomic_t> \
   { "SIGURG",     SIGURG    },
 };
 
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::sighandler_registrar::init(corevm::runtime::process* process)
@@ -130,11 +137,15 @@ corevm::runtime::sighandler_registrar::init(corevm::runtime::process* process)
   }
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::sighandler_registrar::ignore(sig_atomic_t sig)
 {
   signal(sig, SIG_IGN);
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::sighandler_registrar::handle_signal(int signum)
@@ -155,8 +166,12 @@ corevm::runtime::sighandler_registrar::handle_signal(int signum)
   siglongjmp(corevm::runtime::sighandler_registrar::get_sigjmp_env(), 1);
 }
 
+// -----------------------------------------------------------------------------
+
 sig_atomic_t
 corevm::runtime::sighandler_registrar::get_sig_value_from_string(const std::string& str)
 {
   return sig_value_to_str_map.at(str);
 }
+
+// -----------------------------------------------------------------------------

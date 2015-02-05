@@ -179,6 +179,7 @@ corevm::runtime::instr_handler_meta::instr_info_map = {
   { corevm::runtime::instr_enum::MAPSWP,    { .num_oprd=0, .str="mapswp",    .handler=new corevm::runtime::instr_handler_mapswp()    } },
 };
 
+// -----------------------------------------------------------------------------
 
 corevm::runtime::instr_info
 corevm::runtime::instr_handler_meta::find(corevm::runtime::instr_code instr_code)
@@ -192,6 +193,8 @@ corevm::runtime::instr_handler_meta::find(corevm::runtime::instr_code instr_code
 
   return corevm::runtime::instr_handler_meta::instr_info_map.at(instr_code);
 }
+
+// -----------------------------------------------------------------------------
 
 corevm::runtime::instr_info
 corevm::runtime::instr_handler_meta::validate_instr(
@@ -209,6 +212,8 @@ corevm::runtime::instr_handler_meta::validate_instr(
   }
 }
 
+// -----------------------------------------------------------------------------
+
 std::string
 corevm::runtime::instr_handler_meta::instr_to_string(const corevm::runtime::instr& instr)
 {
@@ -224,8 +229,13 @@ corevm::runtime::instr_handler_meta::instr_to_string(const corevm::runtime::inst
   }
 }
 
+// -----------------------------------------------------------------------------
 
-/*************************** INSTRUCTION HANDLERS *****************************/
+
+/* --------------------------- INSTRUCTION HANDLERS ------------------------- */
+
+
+// -----------------------------------------------------------------------------
 
 template<typename InterfaceFunc>
 void
@@ -242,6 +252,8 @@ corevm::runtime::instr_handler::execute_unary_operator_instr(
 
   frame.push_eval_stack(result);
 }
+
+// -----------------------------------------------------------------------------
 
 template<typename InterfaceFunc>
 void
@@ -260,6 +272,8 @@ corevm::runtime::instr_handler::execute_binary_operator_instr(
   frame.push_eval_stack(result);
 }
 
+// -----------------------------------------------------------------------------
+
 template<typename NativeType>
 void
 corevm::runtime::instr_handler::execute_native_type_creation_instr(
@@ -271,6 +285,8 @@ corevm::runtime::instr_handler::execute_native_type_creation_instr(
 
   frame.push_eval_stack(hndl);
 }
+
+// -----------------------------------------------------------------------------
 
 template<typename InterfaceFunc>
 void
@@ -287,6 +303,8 @@ corevm::runtime::instr_handler::execute_native_type_conversion_instr(
   frame.push_eval_stack(result);
 }
 
+// -----------------------------------------------------------------------------
+
 template<typename InterfaceFunc>
 void
 corevm::runtime::instr_handler::execute_native_type_complex_instr_1(
@@ -301,6 +319,8 @@ corevm::runtime::instr_handler::execute_native_type_complex_instr_1(
 
   frame.push_eval_stack(result);
 }
+
+// -----------------------------------------------------------------------------
 
 template<typename InterfaceFunc>
 void
@@ -318,6 +338,8 @@ corevm::runtime::instr_handler::execute_native_type_complex_instr_2(
   frame.push_eval_stack(result);
 }
 
+// -----------------------------------------------------------------------------
+
 template<typename InterfaceFunc>
 void
 corevm::runtime::instr_handler::execute_native_type_complex_instr_3(
@@ -334,6 +356,8 @@ corevm::runtime::instr_handler::execute_native_type_complex_instr_3(
 
   frame.push_eval_stack(result);
 }
+
+// -----------------------------------------------------------------------------
 
 template<typename InterfaceFunc>
 void
@@ -353,6 +377,8 @@ corevm::runtime::instr_handler::execute_native_type_complex_instr_4(
   frame.push_eval_stack(result);
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_new::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -363,6 +389,8 @@ corevm::runtime::instr_handler_new::execute(
 
   process.push_stack(id);
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_ldobj::execute(
@@ -412,6 +440,8 @@ corevm::runtime::instr_handler_ldobj::execute(
   process.push_stack(id);
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_stobj::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -423,6 +453,8 @@ corevm::runtime::instr_handler_stobj::execute(
 
   frame.set_visible_var(key, id);
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_getattr::execute(
@@ -436,6 +468,8 @@ corevm::runtime::instr_handler_getattr::execute(
 
   process.push_stack(attr_id);
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_setattr::execute(
@@ -454,6 +488,8 @@ corevm::runtime::instr_handler_setattr::execute(
   process.push_stack(target_id);
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_delattr::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -470,12 +506,16 @@ corevm::runtime::instr_handler_delattr::execute(
   process.push_stack(id);
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_pop::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
 {
   process.pop_stack();
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_ldobj2::execute(
@@ -525,6 +565,8 @@ corevm::runtime::instr_handler_ldobj2::execute(
   process.push_stack(id);
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_stobj2::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -536,6 +578,8 @@ corevm::runtime::instr_handler_stobj2::execute(
 
   frame.set_invisible_var(key, id);
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_delobj::execute(
@@ -549,6 +593,8 @@ corevm::runtime::instr_handler_delobj::execute(
   obj.manager().on_delete();
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_delobj2::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -560,6 +606,8 @@ corevm::runtime::instr_handler_delobj2::execute(
   auto &obj = corevm::runtime::process::adapter(process).help_get_dyobj(id);
   obj.manager().on_delete();
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_gethndl::execute(
@@ -581,6 +629,8 @@ corevm::runtime::instr_handler_gethndl::execute(
   frame.push_eval_stack(hndl);
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_sethndl::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -596,6 +646,8 @@ corevm::runtime::instr_handler_sethndl::execute(
 
   obj.set_ntvhndl_key(ntvhndl_key);
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_clrhndl::execute(
@@ -615,6 +667,8 @@ corevm::runtime::instr_handler_clrhndl::execute(
   obj.clear_ntvhndl_key();
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_objeq::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -628,6 +682,8 @@ corevm::runtime::instr_handler_objeq::execute(
   frame.push_eval_stack(hndl);
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_objneq::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -640,6 +696,8 @@ corevm::runtime::instr_handler_objneq::execute(
 
   frame.push_eval_stack(hndl);
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_setctx::execute(
@@ -659,6 +717,8 @@ corevm::runtime::instr_handler_setctx::execute(
 
   obj.set_closure_ctx(ctx);
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_pinvk::execute(
@@ -684,6 +744,8 @@ corevm::runtime::instr_handler_pinvk::execute(
   process.push_frame(frame);
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_invk::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -702,6 +764,8 @@ corevm::runtime::instr_handler_invk::execute(
   process.append_vector(closure.vector);
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_rtrn::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -718,6 +782,8 @@ corevm::runtime::instr_handler_rtrn::execute(
   process.set_pc(return_addr);
   process.pop_frame();
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_jmp::execute(
@@ -741,6 +807,8 @@ corevm::runtime::instr_handler_jmp::execute(
 
   process.set_pc(addr);
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_jmpif::execute(
@@ -775,6 +843,8 @@ corevm::runtime::instr_handler_jmpif::execute(
   }
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_exc::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -782,12 +852,16 @@ corevm::runtime::instr_handler_exc::execute(
   // TODO: to be implemented.
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_exc2::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
 {
   // TODO: to be implemented.
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_exit::execute(
@@ -802,6 +876,8 @@ corevm::runtime::instr_handler_exit::execute(
   raise(SIGTERM);
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_putarg::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -811,6 +887,8 @@ corevm::runtime::instr_handler_putarg::execute(
 
   frame.put_param(id);
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_putkwarg::execute(
@@ -823,6 +901,8 @@ corevm::runtime::instr_handler_putkwarg::execute(
   frame.put_param_value_pair(key, id);
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_getarg::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -832,6 +912,8 @@ corevm::runtime::instr_handler_getarg::execute(
 
   process.push_stack(id);
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_getkwarg::execute(
@@ -843,6 +925,8 @@ corevm::runtime::instr_handler_getkwarg::execute(
 
   process.push_stack(id);
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_getargs::execute(
@@ -860,6 +944,8 @@ corevm::runtime::instr_handler_getargs::execute(
   corevm::types::native_type_handle hndl = array;
   frame.push_eval_stack(hndl);
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_getkwargs::execute(
@@ -882,6 +968,8 @@ corevm::runtime::instr_handler_getkwargs::execute(
   frame.push_eval_stack(hndl);
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_pos::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -892,6 +980,8 @@ corevm::runtime::instr_handler_pos::execute(
     corevm::types::interface_apply_positive_operator
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_neg::execute(
@@ -904,6 +994,8 @@ corevm::runtime::instr_handler_neg::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_inc::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -914,6 +1006,8 @@ corevm::runtime::instr_handler_inc::execute(
     corevm::types::interface_apply_increment_operator
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_dec::execute(
@@ -926,6 +1020,8 @@ corevm::runtime::instr_handler_dec::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_add::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -936,6 +1032,8 @@ corevm::runtime::instr_handler_add::execute(
     corevm::types::interface_apply_addition_operator
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_sub::execute(
@@ -948,6 +1046,8 @@ corevm::runtime::instr_handler_sub::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_mul::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -958,6 +1058,8 @@ corevm::runtime::instr_handler_mul::execute(
     corevm::types::interface_apply_multiplication_operator
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_div::execute(
@@ -970,6 +1072,8 @@ corevm::runtime::instr_handler_div::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_mod::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -980,6 +1084,8 @@ corevm::runtime::instr_handler_mod::execute(
     corevm::types::interface_apply_modulus_operator
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_pow::execute(
@@ -992,6 +1098,8 @@ corevm::runtime::instr_handler_pow::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_bnot::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -1002,6 +1110,8 @@ corevm::runtime::instr_handler_bnot::execute(
     corevm::types::interface_apply_bitwise_not_operator
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_band::execute(
@@ -1014,6 +1124,8 @@ corevm::runtime::instr_handler_band::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_bor::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -1024,6 +1136,8 @@ corevm::runtime::instr_handler_bor::execute(
     corevm::types::interface_apply_bitwise_or_operator
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_bxor::execute(
@@ -1036,6 +1150,8 @@ corevm::runtime::instr_handler_bxor::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_bls::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -1046,6 +1162,8 @@ corevm::runtime::instr_handler_bls::execute(
     corevm::types::interface_apply_bitwise_left_shift_operator
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_brs::execute(
@@ -1058,6 +1176,8 @@ corevm::runtime::instr_handler_brs::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_eq::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -1068,6 +1188,8 @@ corevm::runtime::instr_handler_eq::execute(
     corevm::types::interface_apply_eq_operator
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_neq::execute(
@@ -1080,6 +1202,8 @@ corevm::runtime::instr_handler_neq::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_gt::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -1090,6 +1214,8 @@ corevm::runtime::instr_handler_gt::execute(
     corevm::types::interface_apply_gt_operator
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_lt::execute(
@@ -1102,6 +1228,8 @@ corevm::runtime::instr_handler_lt::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_gte::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -1112,6 +1240,8 @@ corevm::runtime::instr_handler_gte::execute(
     corevm::types::interface_apply_gte_operator
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_lte::execute(
@@ -1124,6 +1254,8 @@ corevm::runtime::instr_handler_lte::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_lnot::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -1134,6 +1266,8 @@ corevm::runtime::instr_handler_lnot::execute(
     corevm::types::interface_apply_logical_not_operator
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_land::execute(
@@ -1146,6 +1280,8 @@ corevm::runtime::instr_handler_land::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_lor::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -1157,6 +1293,8 @@ corevm::runtime::instr_handler_lor::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_int8::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -1166,6 +1304,8 @@ corevm::runtime::instr_handler_int8::execute(
     process
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_uint8::execute(
@@ -1177,6 +1317,8 @@ corevm::runtime::instr_handler_uint8::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_int16::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -1186,6 +1328,8 @@ corevm::runtime::instr_handler_int16::execute(
     process
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_uint16::execute(
@@ -1197,6 +1341,8 @@ corevm::runtime::instr_handler_uint16::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_int32::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -1206,6 +1352,8 @@ corevm::runtime::instr_handler_int32::execute(
     process
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_uint32::execute(
@@ -1217,6 +1365,8 @@ corevm::runtime::instr_handler_uint32::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_int64::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -1226,6 +1376,8 @@ corevm::runtime::instr_handler_int64::execute(
     process
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_uint64::execute(
@@ -1237,6 +1389,8 @@ corevm::runtime::instr_handler_uint64::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_bool::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -1246,6 +1400,8 @@ corevm::runtime::instr_handler_bool::execute(
     process
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_dec1::execute(
@@ -1257,6 +1413,8 @@ corevm::runtime::instr_handler_dec1::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_dec2::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -1266,6 +1424,8 @@ corevm::runtime::instr_handler_dec2::execute(
     process
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_str::execute(
@@ -1277,6 +1437,8 @@ corevm::runtime::instr_handler_str::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_ary::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -1287,6 +1449,8 @@ corevm::runtime::instr_handler_ary::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_map::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -1296,6 +1460,8 @@ corevm::runtime::instr_handler_map::execute(
     process
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_2int8::execute(
@@ -1308,6 +1474,8 @@ corevm::runtime::instr_handler_2int8::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_2uint8::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -1318,6 +1486,8 @@ corevm::runtime::instr_handler_2uint8::execute(
     corevm::types::interface_to_uint8
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_2int16::execute(
@@ -1330,6 +1500,8 @@ corevm::runtime::instr_handler_2int16::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_2uint16::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -1340,6 +1512,8 @@ corevm::runtime::instr_handler_2uint16::execute(
     corevm::types::interface_to_uint16
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_2int32::execute(
@@ -1352,6 +1526,8 @@ corevm::runtime::instr_handler_2int32::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_2uint32::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -1362,6 +1538,8 @@ corevm::runtime::instr_handler_2uint32::execute(
     corevm::types::interface_to_uint32
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_2int64::execute(
@@ -1374,6 +1552,8 @@ corevm::runtime::instr_handler_2int64::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_2uint64::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -1384,6 +1564,8 @@ corevm::runtime::instr_handler_2uint64::execute(
     corevm::types::interface_to_uint64
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_2bool::execute(
@@ -1396,6 +1578,8 @@ corevm::runtime::instr_handler_2bool::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_2dec1::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -1406,6 +1590,8 @@ corevm::runtime::instr_handler_2dec1::execute(
     corevm::types::interface_to_dec1
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_2dec2::execute(
@@ -1418,6 +1604,8 @@ corevm::runtime::instr_handler_2dec2::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_2str::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -1428,6 +1616,8 @@ corevm::runtime::instr_handler_2str::execute(
     corevm::types::interface_to_str
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_2ary::execute(
@@ -1440,6 +1630,8 @@ corevm::runtime::instr_handler_2ary::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_2map::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -1450,6 +1642,8 @@ corevm::runtime::instr_handler_2map::execute(
     corevm::types::interface_to_map
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_strlen::execute(
@@ -1462,6 +1656,8 @@ corevm::runtime::instr_handler_strlen::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_strclr::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -1472,6 +1668,8 @@ corevm::runtime::instr_handler_strclr::execute(
     corevm::types::interface_string_clear
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_strapd::execute(
@@ -1484,6 +1682,8 @@ corevm::runtime::instr_handler_strapd::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_strpsh::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -1494,6 +1694,8 @@ corevm::runtime::instr_handler_strpsh::execute(
     corevm::types::interface_string_pushback
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_strist::execute(
@@ -1506,6 +1708,8 @@ corevm::runtime::instr_handler_strist::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_strist2::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -1516,6 +1720,8 @@ corevm::runtime::instr_handler_strist2::execute(
     corevm::types::interface_string_insert_char
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_strers::execute(
@@ -1528,6 +1734,8 @@ corevm::runtime::instr_handler_strers::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_strers2::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -1538,6 +1746,8 @@ corevm::runtime::instr_handler_strers2::execute(
     corevm::types::interface_string_erase2
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_strrplc::execute(
@@ -1550,6 +1760,8 @@ corevm::runtime::instr_handler_strrplc::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_strswp::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -1560,6 +1772,8 @@ corevm::runtime::instr_handler_strswp::execute(
     corevm::types::interface_string_swap
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_strsub::execute(
@@ -1572,6 +1786,8 @@ corevm::runtime::instr_handler_strsub::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_strsub2::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -1582,6 +1798,8 @@ corevm::runtime::instr_handler_strsub2::execute(
     corevm::types::interface_string_substr2
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_strfnd::execute(
@@ -1594,6 +1812,8 @@ corevm::runtime::instr_handler_strfnd::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_strfnd2::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -1604,6 +1824,8 @@ corevm::runtime::instr_handler_strfnd2::execute(
     corevm::types::interface_string_find2
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_strrfnd::execute(
@@ -1616,6 +1838,8 @@ corevm::runtime::instr_handler_strrfnd::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_strrfnd2::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -1626,6 +1850,8 @@ corevm::runtime::instr_handler_strrfnd2::execute(
     corevm::types::interface_string_rfind2
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_arylen::execute(
@@ -1638,6 +1864,8 @@ corevm::runtime::instr_handler_arylen::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_aryemp::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -1648,6 +1876,8 @@ corevm::runtime::instr_handler_aryemp::execute(
     corevm::types::interface_array_empty
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_aryat::execute(
@@ -1660,6 +1890,8 @@ corevm::runtime::instr_handler_aryat::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_aryfrt::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -1670,6 +1902,8 @@ corevm::runtime::instr_handler_aryfrt::execute(
     corevm::types::interface_array_front
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_arybak::execute(
@@ -1682,6 +1916,8 @@ corevm::runtime::instr_handler_arybak::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_aryapnd::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -1692,6 +1928,8 @@ corevm::runtime::instr_handler_aryapnd::execute(
     corevm::types::interface_array_append
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_arypop::execute(
@@ -1704,6 +1942,8 @@ corevm::runtime::instr_handler_arypop::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_aryswp::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -1714,6 +1954,8 @@ corevm::runtime::instr_handler_aryswp::execute(
     corevm::types::interface_array_swap
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_aryclr::execute(
@@ -1726,6 +1968,8 @@ corevm::runtime::instr_handler_aryclr::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_maplen::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -1736,6 +1980,8 @@ corevm::runtime::instr_handler_maplen::execute(
     corevm::types::interface_map_size
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_mapemp::execute(
@@ -1748,6 +1994,8 @@ corevm::runtime::instr_handler_mapemp::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_mapat::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -1758,6 +2006,8 @@ corevm::runtime::instr_handler_mapat::execute(
     corevm::types::interface_map_at
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_mapput::execute(
@@ -1770,6 +2020,8 @@ corevm::runtime::instr_handler_mapput::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_mapers::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -1780,6 +2032,8 @@ corevm::runtime::instr_handler_mapers::execute(
     corevm::types::interface_map_erase
   );
 }
+
+// -----------------------------------------------------------------------------
 
 void
 corevm::runtime::instr_handler_mapclr::execute(
@@ -1792,6 +2046,8 @@ corevm::runtime::instr_handler_mapclr::execute(
   );
 }
 
+// -----------------------------------------------------------------------------
+
 void
 corevm::runtime::instr_handler_mapswp::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
@@ -1802,3 +2058,5 @@ corevm::runtime::instr_handler_mapswp::execute(
     corevm::types::interface_map_swap
   );
 }
+
+// -----------------------------------------------------------------------------
