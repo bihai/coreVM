@@ -348,7 +348,7 @@ corevm::runtime::process::erase_ntvhndl(corevm::dyobj::ntvhndl_key& key)
 const corevm::runtime::instr_handler*
 corevm::runtime::process::get_instr_handler(corevm::runtime::instr_code code)
 {
-  corevm::runtime::instr_info instr_info = m_instr_handler_meta.find(code);
+  corevm::runtime::instr_info instr_info = corevm::runtime::instr_handler_meta::find(code);
   return instr_info.handler;
 }
 

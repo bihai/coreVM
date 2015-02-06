@@ -184,7 +184,6 @@ private:
   std::stack<corevm::dyobj::dyobj_id> m_dyobj_stack;
   std::list<corevm::runtime::frame> m_call_stack;
   native_types_pool_type m_ntvhndl_pool;
-  corevm::runtime::instr_handler_meta m_instr_handler_meta;
   std::unordered_map<sig_atomic_t, corevm::runtime::vector> m_sig_instr_map;
   std::vector<corevm::runtime::compartment> m_compartments;
 };
