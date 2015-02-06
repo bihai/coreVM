@@ -34,9 +34,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
 const corevm::runtime::instr_handler_meta::map_type
-corevm::runtime::instr_handler_meta::instr_info_map = {
+corevm::runtime::instr_handler_meta::instr_info_map {
 
-  //--------------------------- Object instructions ---------------------------/
+  /* -------------------------- Object instructions ------------------------- */
 
   { corevm::runtime::instr_enum::NEW,       { .num_oprd=0, .str="new",       .handler=new corevm::runtime::instr_handler_new()       } },
   { corevm::runtime::instr_enum::LDOBJ,     { .num_oprd=1, .str="ldobj",     .handler=new corevm::runtime::instr_handler_ldobj()     } },
@@ -55,7 +55,7 @@ corevm::runtime::instr_handler_meta::instr_info_map = {
   { corevm::runtime::instr_enum::OBJNEQ,    { .num_oprd=0, .str="objneq",    .handler=new corevm::runtime::instr_handler_objneq()    } },
   { corevm::runtime::instr_enum::SETCTX,    { .num_oprd=1, .str="setctx",    .handler=new corevm::runtime::instr_handler_setctx()    } },
 
-  //--------------------------- Control instructions --------------------------/
+  /* -------------------------- Control instructions ------------------------ */
 
   { corevm::runtime::instr_enum::PINVK,     { .num_oprd=0, .str="pinvk",     .handler=new corevm::runtime::instr_handler_pinvk()     } },
   { corevm::runtime::instr_enum::INVK,      { .num_oprd=0, .str="invk",      .handler=new corevm::runtime::instr_handler_invk()      } },
@@ -66,7 +66,7 @@ corevm::runtime::instr_handler_meta::instr_info_map = {
   { corevm::runtime::instr_enum::EXC2,      { .num_oprd=0, .str="exc2",      .handler=new corevm::runtime::instr_handler_exc2()      } },
   { corevm::runtime::instr_enum::EXIT,      { .num_oprd=1, .str="exit",      .handler=new corevm::runtime::instr_handler_exit()      } },
 
-  //-------------------------- Function instructions --------------------------/
+  /* ------------------------- Function instructions ------------------------ */
 
   { corevm::runtime::instr_enum::PUTARG,    { .num_oprd=0, .str="putarg",    .handler=new corevm::runtime::instr_handler_putarg()    } },
   { corevm::runtime::instr_enum::PUTKWARG,  { .num_oprd=1, .str="putkwarg",  .handler=new corevm::runtime::instr_handler_putkwarg()  } },
@@ -75,7 +75,7 @@ corevm::runtime::instr_handler_meta::instr_info_map = {
   { corevm::runtime::instr_enum::GETARGS,   { .num_oprd=0, .str="getargs",   .handler=new corevm::runtime::instr_handler_getargs()   } },
   { corevm::runtime::instr_enum::GETKWARGS, { .num_oprd=0, .str="getkwargs", .handler=new corevm::runtime::instr_handler_getkwargs() } },
 
-  //------------------ Arithmetic and logic instructions ----------------------/
+  /* ---------------- Arithmetic and logic instructions --------------------- */
 
   { corevm::runtime::instr_enum::POS,       { .num_oprd=0, .str="pos",       .handler=new corevm::runtime::instr_handler_pos()       } },
   { corevm::runtime::instr_enum::NEG,       { .num_oprd=0, .str="neg",       .handler=new corevm::runtime::instr_handler_neg()       } },
@@ -103,7 +103,7 @@ corevm::runtime::instr_handler_meta::instr_info_map = {
   { corevm::runtime::instr_enum::LAND,      { .num_oprd=0, .str="land",      .handler=new corevm::runtime::instr_handler_land()      } },
   { corevm::runtime::instr_enum::LOR,       { .num_oprd=0, .str="lor",       .handler=new corevm::runtime::instr_handler_lor()       } },
 
-  //------------------- Native type creation instructions ---------------------/
+  /* ----------------- Native type creation instructions -------------------- */
 
   { corevm::runtime::instr_enum::INT8,      { .num_oprd=1, .str="int8",      .handler=new corevm::runtime::instr_handler_int8()      } },
   { corevm::runtime::instr_enum::UINT8,     { .num_oprd=1, .str="uint8",     .handler=new corevm::runtime::instr_handler_uint8()     } },
@@ -120,7 +120,7 @@ corevm::runtime::instr_handler_meta::instr_info_map = {
   { corevm::runtime::instr_enum::ARY,       { .num_oprd=0, .str="ary",       .handler=new corevm::runtime::instr_handler_ary()       } },
   { corevm::runtime::instr_enum::MAP,       { .num_oprd=0, .str="map",       .handler=new corevm::runtime::instr_handler_map()       } },
 
-  //------------------ Native type conversion instructions --------------------/
+  /* ----------------- Native type conversion instructions ------------------ */
 
   { corevm::runtime::instr_enum::TOINT8,    { .num_oprd=0, .str="2int8",     .handler=new corevm::runtime::instr_handler_2int8()     } },
   { corevm::runtime::instr_enum::TOUINT8,   { .num_oprd=0, .str="2uint8",    .handler=new corevm::runtime::instr_handler_2uint8()    } },
@@ -137,7 +137,7 @@ corevm::runtime::instr_handler_meta::instr_info_map = {
   { corevm::runtime::instr_enum::TOARY,     { .num_oprd=0, .str="2ary",      .handler=new corevm::runtime::instr_handler_2ary()      } },
   { corevm::runtime::instr_enum::TOMAP,     { .num_oprd=0, .str="2map",      .handler=new corevm::runtime::instr_handler_2map()      } },
 
-  //----------------------- String type instructions --------------------------/
+  /* --------------------- String type instructions ------------------------- */
 
   { corevm::runtime::instr_enum::STRLEN,    { .num_oprd=0, .str="strlen",    .handler=new corevm::runtime::instr_handler_strlen()    } },
   { corevm::runtime::instr_enum::STRCLR,    { .num_oprd=0, .str="strclr",    .handler=new corevm::runtime::instr_handler_strclr()    } },
@@ -156,7 +156,7 @@ corevm::runtime::instr_handler_meta::instr_info_map = {
   { corevm::runtime::instr_enum::STRRFND,   { .num_oprd=0, .str="strrfnd",   .handler=new corevm::runtime::instr_handler_strrfnd()   } },
   { corevm::runtime::instr_enum::STRRFND2,  { .num_oprd=0, .str="strrfnd2",  .handler=new corevm::runtime::instr_handler_strrfnd2()  } },
 
-  //----------------------- Array type instructions ---------------------------/
+  /* --------------------- Array type instructions -------------------------- */
 
   { corevm::runtime::instr_enum::ARYLEN,    { .num_oprd=0, .str="arylen",    .handler=new corevm::runtime::instr_handler_arylen()    } },
   { corevm::runtime::instr_enum::ARYEMP,    { .num_oprd=0, .str="aryemp",    .handler=new corevm::runtime::instr_handler_aryemp()    } },
@@ -168,7 +168,7 @@ corevm::runtime::instr_handler_meta::instr_info_map = {
   { corevm::runtime::instr_enum::ARYSWP,    { .num_oprd=0, .str="aryswp",    .handler=new corevm::runtime::instr_handler_aryswp()    } },
   { corevm::runtime::instr_enum::ARYCLR,    { .num_oprd=0, .str="aryclr",    .handler=new corevm::runtime::instr_handler_aryclr()    } },
 
-  //----------------------- Map type instructions -----------------------------/
+  /* --------------------- Map type instructions ---------------------------- */
 
   { corevm::runtime::instr_enum::MAPLEN,    { .num_oprd=0, .str="maplen",    .handler=new corevm::runtime::instr_handler_maplen()    } },
   { corevm::runtime::instr_enum::MAPEMP,    { .num_oprd=0, .str="mapemp",    .handler=new corevm::runtime::instr_handler_mapemp()    } },
@@ -177,6 +177,7 @@ corevm::runtime::instr_handler_meta::instr_info_map = {
   { corevm::runtime::instr_enum::MAPERS,    { .num_oprd=0, .str="mapers",    .handler=new corevm::runtime::instr_handler_mapers()    } },
   { corevm::runtime::instr_enum::MAPCLR,    { .num_oprd=0, .str="mapclr",    .handler=new corevm::runtime::instr_handler_mapclr()    } },
   { corevm::runtime::instr_enum::MAPSWP,    { .num_oprd=0, .str="mapswp",    .handler=new corevm::runtime::instr_handler_mapswp()    } },
+
 };
 
 // -----------------------------------------------------------------------------
