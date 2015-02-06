@@ -31,7 +31,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 template<class GarbageCollectionScheme>
 class garbage_collection_unittest : public ::testing::Test
 {
-public:
+protected:
   using _GarbageCollectorType = typename corevm::gc::garbage_collector<GarbageCollectionScheme>;
 
   using _ObjectType = typename corevm::dyobj::dynamic_object<
@@ -56,7 +56,6 @@ public:
     }
   }
 
-protected:
   corevm::dyobj::dyobj_id help_create_obj()
   {
     corevm::dyobj::dyobj_id id = m_heap.create_dyobj();
@@ -96,7 +95,7 @@ TYPED_TEST_CASE(garbage_collection_unittest, GarbageCollectionSchemeTypes);
 
 TYPED_TEST(garbage_collection_unittest, TestOneObject)
 {
-  /*
+  /**
    * Tests GC on the following object graph:
    *
    *  obj
@@ -112,7 +111,7 @@ TYPED_TEST(garbage_collection_unittest, TestOneObject)
 
 TYPED_TEST(garbage_collection_unittest, TestSelfReferencedObject)
 {
-  /*
+  /**
    * Tests GC on the following object graph:
    *
    * obj --->
@@ -132,7 +131,7 @@ TYPED_TEST(garbage_collection_unittest, TestSelfReferencedObject)
 
 TYPED_TEST(garbage_collection_unittest, TestSelfReferenceOnNonGarbageCollectibleObject)
 {
-  /*
+  /**
    * Tests GC on the following object graph:
    *
    * obj* -->
@@ -153,7 +152,7 @@ TYPED_TEST(garbage_collection_unittest, TestSelfReferenceOnNonGarbageCollectible
 
 TYPED_TEST(garbage_collection_unittest, TestLinearChain)
 {
-  /*
+  /**
    * Tests GC on the following object graph:
    *
    *  obj1 -> obj2 -> obj3 -> obj4
@@ -176,7 +175,7 @@ TYPED_TEST(garbage_collection_unittest, TestLinearChain)
 
 TYPED_TEST(garbage_collection_unittest, TestLinearChainWithNonGarbageCollectibleObject)
 {
-  /*
+  /**
    * Tests GC on the following object graph:
    *
    *  obj1* -> obj2 -> obj3 -> obj4
@@ -201,7 +200,7 @@ TYPED_TEST(garbage_collection_unittest, TestLinearChainWithNonGarbageCollectible
 
 TYPED_TEST(garbage_collection_unittest, TestLinearChainWithNonGarbageCollectibleObjects)
 {
-  /*
+  /**
    * Tests GC on the following object graph:
    *
    *  obj1 -> obj2* -> obj3* -> obj4
@@ -227,7 +226,7 @@ TYPED_TEST(garbage_collection_unittest, TestLinearChainWithNonGarbageCollectible
 
 TYPED_TEST(garbage_collection_unittest, TestSingleCycle)
 {
-  /*
+  /**
    * Tests GC on the following object graph:
    *
    * obj1 -> obj2 -> obj3 ->
@@ -251,7 +250,7 @@ TYPED_TEST(garbage_collection_unittest, TestSingleCycle)
 
 TYPED_TEST(garbage_collection_unittest, TestMultipleObjectsPointToOne)
 {
-  /*
+  /**
    * Tests GC on the following object graph
    *
    * obj1 --->\
@@ -278,7 +277,7 @@ TYPED_TEST(garbage_collection_unittest, TestMultipleObjectsPointToOne)
 
 TYPED_TEST(garbage_collection_unittest, TestOnePointsToMultipleObjects)
 {
-  /*
+  /**
    * Tests GC on the following object graph
    *
    *        ----> obj2
@@ -307,7 +306,7 @@ TYPED_TEST(garbage_collection_unittest, TestOnePointsToMultipleObjects)
 
 TYPED_TEST(garbage_collection_unittest, TestNonGarbageCollectibleObjectPointsToMultipleObjects)
 {
-  /*
+  /**
    * Tests GC on the following object graph
    *
    *         ----> obj2
@@ -338,7 +337,7 @@ TYPED_TEST(garbage_collection_unittest, TestNonGarbageCollectibleObjectPointsToM
 
 TYPED_TEST(garbage_collection_unittest, TestAdjacentCycles)
 {
-  /*
+  /**
    * Tests GC on the following object graph
    *
    *        ----> obj2 --->
@@ -371,7 +370,7 @@ TYPED_TEST(garbage_collection_unittest, TestAdjacentCycles)
 
 TYPED_TEST(garbage_collection_unittest, TestTwoIsolatedCycles)
 {
-  /*
+  /**
    * Tests GC on the following object graph
    *
    * obj1 -> obj2 -> obj3  obj4 -> obj5 -> obj6
@@ -449,7 +448,7 @@ TYPED_TEST(garbage_collection_unittest, TestNestedCycles)
 
 TYPED_TEST(garbage_collection_unittest, TestCycleWithInwardStub)
 {
-  /*
+  /**
    * Tests GC on the following object graph
    *
    * obj1 -> obj2 -> obj3 <- obj4
@@ -475,7 +474,7 @@ TYPED_TEST(garbage_collection_unittest, TestCycleWithInwardStub)
 
 TYPED_TEST(garbage_collection_unittest, TestCycleWithOutwardStub)
 {
-  /*
+  /**
    * Tests GC on the following object graph
    *
    * obj1 -> obj2 -> obj3 -> obj4
@@ -501,7 +500,7 @@ TYPED_TEST(garbage_collection_unittest, TestCycleWithOutwardStub)
 
 TYPED_TEST(garbage_collection_unittest, TestCycleWithNonGarbageCollectibleInwardStub)
 {
-  /*
+  /**
    * Tests GC on the following object graph
    *
    * obj1 -> obj2 -> obj3 <- obj4*
@@ -529,7 +528,7 @@ TYPED_TEST(garbage_collection_unittest, TestCycleWithNonGarbageCollectibleInward
 
 TYPED_TEST(garbage_collection_unittest, TestCycleWithTwoInwardStubs)
 {
-  /*
+  /**
    * Tests GC on the following object graph
    *
    * obj5-> obj1 -> obj2 -> obj3 <- obj4*
@@ -559,7 +558,7 @@ TYPED_TEST(garbage_collection_unittest, TestCycleWithTwoInwardStubs)
 
 TYPED_TEST(garbage_collection_unittest, TestCycleWithNonGarbageCollectibleOutwardStub)
 {
-  /*
+  /**
    * Tests GC on the following object graph
    *
    * obj1 -> obj2 -> obj3 -> obj4*
@@ -587,7 +586,7 @@ TYPED_TEST(garbage_collection_unittest, TestCycleWithNonGarbageCollectibleOutwar
 
 TYPED_TEST(garbage_collection_unittest, TestCycleWithTwoOutwardStubs)
 {
-  /*
+  /**
    * Tests GC on the following object graph
    *
    * obj5 <- obj1 -> obj2 -> obj3 -> obj4*
@@ -617,7 +616,7 @@ TYPED_TEST(garbage_collection_unittest, TestCycleWithTwoOutwardStubs)
 
 TYPED_TEST(garbage_collection_unittest, TestSingleCycleWithNonGarbageCollectibleObject)
 {
-  /*
+  /**
    * Tests GC on the following object graph:
    *
    * obj1 -> obj2* -> obj3 ->
