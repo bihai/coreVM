@@ -27,6 +27,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 class native_array_type_interfaces_test : public native_type_interfaces_test_base {};
 
+// -----------------------------------------------------------------------------
 
 TEST_F(native_array_type_interfaces_test, TestGetSize)
 {
@@ -42,6 +43,8 @@ TEST_F(native_array_type_interfaces_test, TestGetSize)
   );
 }
 
+// -----------------------------------------------------------------------------
+
 TEST_F(native_array_type_interfaces_test, TestEmpty)
 {
   corevm::types::native_array array = {1, 2, 3};
@@ -55,6 +58,8 @@ TEST_F(native_array_type_interfaces_test, TestEmpty)
     expected_result
   );
 }
+
+// -----------------------------------------------------------------------------
 
 TEST_F(native_array_type_interfaces_test, TestAt)
 {
@@ -72,6 +77,8 @@ TEST_F(native_array_type_interfaces_test, TestAt)
   );
 }
 
+// -----------------------------------------------------------------------------
+
 TEST_F(native_array_type_interfaces_test, TestFront)
 {
   corevm::types::native_array array = {1, 2, 3};
@@ -86,6 +93,8 @@ TEST_F(native_array_type_interfaces_test, TestFront)
   );
 }
 
+// -----------------------------------------------------------------------------
+
 TEST_F(native_array_type_interfaces_test, TestBack)
 {
   corevm::types::native_array array = {1, 2, 3};
@@ -99,6 +108,8 @@ TEST_F(native_array_type_interfaces_test, TestBack)
     expected_result
   );
 }
+
+// -----------------------------------------------------------------------------
 
 TEST_F(native_array_type_interfaces_test, TestAppend)
 {
@@ -116,6 +127,8 @@ TEST_F(native_array_type_interfaces_test, TestAppend)
   );
 }
 
+// -----------------------------------------------------------------------------
+
 TEST_F(native_array_type_interfaces_test, TestPop)
 {
   corevm::types::native_array array = {1, 2, 3};
@@ -129,6 +142,8 @@ TEST_F(native_array_type_interfaces_test, TestPop)
     expected_result
   );
 }
+
+// -----------------------------------------------------------------------------
 
 TEST_F(native_array_type_interfaces_test, TestSwap)
 {
@@ -147,6 +162,8 @@ TEST_F(native_array_type_interfaces_test, TestSwap)
   );
 }
 
+// -----------------------------------------------------------------------------
+
 TEST_F(native_array_type_interfaces_test, TestClear)
 {
   corevm::types::native_array array = {1, 2, 3};
@@ -160,3 +177,5 @@ TEST_F(native_array_type_interfaces_test, TestClear)
     expected_result
   );
 }
+
+// -----------------------------------------------------------------------------

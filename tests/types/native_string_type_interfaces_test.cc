@@ -43,6 +43,7 @@ public:
   }
 };
 
+// -----------------------------------------------------------------------------
 
 TEST_F(native_string_type_interfaces_test, TestGetSize)
 {
@@ -57,6 +58,8 @@ TEST_F(native_string_type_interfaces_test, TestGetSize)
   );
 }
 
+// -----------------------------------------------------------------------------
+
 TEST_F(native_string_type_interfaces_test, TestClear)
 {
   corevm::types::native_type_handle operand = corevm::types::string("Hello world!");
@@ -69,6 +72,8 @@ TEST_F(native_string_type_interfaces_test, TestClear)
     expected_result
   );
 }
+
+// -----------------------------------------------------------------------------
 
 TEST_F(native_string_type_interfaces_test, TestAt)
 {
@@ -85,6 +90,8 @@ TEST_F(native_string_type_interfaces_test, TestAt)
   );
 }
 
+// -----------------------------------------------------------------------------
+
 TEST_F(native_string_type_interfaces_test, TestAppend)
 {
   corevm::types::native_type_handle operand = corevm::types::string("Hello ");
@@ -100,6 +107,8 @@ TEST_F(native_string_type_interfaces_test, TestAppend)
   );
 }
 
+// -----------------------------------------------------------------------------
+
 TEST_F(native_string_type_interfaces_test, TestPushBack)
 {
   corevm::types::native_type_handle operand = corevm::types::string("Hello world");
@@ -114,6 +123,8 @@ TEST_F(native_string_type_interfaces_test, TestPushBack)
     expected_result
   );
 }
+
+// -----------------------------------------------------------------------------
 
 TEST_F(native_string_type_interfaces_test, TestInsertStr)
 {
@@ -132,6 +143,8 @@ TEST_F(native_string_type_interfaces_test, TestInsertStr)
   );
 }
 
+// -----------------------------------------------------------------------------
+
 TEST_F(native_string_type_interfaces_test, TestInsertChar)
 {
   corevm::types::native_type_handle operand = corevm::types::string("Helloworld!");
@@ -149,6 +162,8 @@ TEST_F(native_string_type_interfaces_test, TestInsertChar)
   );
 }
 
+// -----------------------------------------------------------------------------
+
 TEST_F(native_string_type_interfaces_test, TestErase)
 {
   corevm::types::native_type_handle operand = corevm::types::string("Hello  world!");
@@ -163,6 +178,8 @@ TEST_F(native_string_type_interfaces_test, TestErase)
     expected_result
   );
 }
+
+// -----------------------------------------------------------------------------
 
 TEST_F(native_string_type_interfaces_test, TestErase2)
 {
@@ -180,6 +197,8 @@ TEST_F(native_string_type_interfaces_test, TestErase2)
     expected_result
   );
 }
+
+// -----------------------------------------------------------------------------
 
 TEST_F(native_string_type_interfaces_test, TestReplaceStr)
 {
@@ -200,6 +219,8 @@ TEST_F(native_string_type_interfaces_test, TestReplaceStr)
   );
 }
 
+// -----------------------------------------------------------------------------
+
 TEST_F(native_string_type_interfaces_test, TestSwap)
 {
   corevm::types::native_type_handle operand = corevm::types::string("Hello world!");
@@ -215,6 +236,8 @@ TEST_F(native_string_type_interfaces_test, TestSwap)
   );
 }
 
+// -----------------------------------------------------------------------------
+
 TEST_F(native_string_type_interfaces_test, TestSubstr)
 {
   corevm::types::native_type_handle operand = corevm::types::string("Hello world!");
@@ -229,6 +252,8 @@ TEST_F(native_string_type_interfaces_test, TestSubstr)
     expected_result
   );
 }
+
+// -----------------------------------------------------------------------------
 
 TEST_F(native_string_type_interfaces_test, TestSubstr2)
 {
@@ -247,6 +272,8 @@ TEST_F(native_string_type_interfaces_test, TestSubstr2)
   );
 }
 
+// -----------------------------------------------------------------------------
+
 TEST_F(native_string_type_interfaces_test, TestFind)
 {
   corevm::types::native_type_handle operand = corevm::types::string("Hello world!");
@@ -261,6 +288,8 @@ TEST_F(native_string_type_interfaces_test, TestFind)
     expected_result
   );
 }
+
+// -----------------------------------------------------------------------------
 
 TEST_F(native_string_type_interfaces_test, TestFind2)
 {
@@ -279,6 +308,8 @@ TEST_F(native_string_type_interfaces_test, TestFind2)
   );
 }
 
+// -----------------------------------------------------------------------------
+
 TEST_F(native_string_type_interfaces_test, TestRFind)
 {
   corevm::types::native_type_handle operand = corevm::types::string("Hello world!");
@@ -293,6 +324,8 @@ TEST_F(native_string_type_interfaces_test, TestRFind)
     expected_result
   );
 }
+
+// -----------------------------------------------------------------------------
 
 TEST_F(native_string_type_interfaces_test, TestRFind2)
 {
@@ -310,3 +343,5 @@ TEST_F(native_string_type_interfaces_test, TestRFind2)
     expected_result
   );
 }
+
+// -----------------------------------------------------------------------------

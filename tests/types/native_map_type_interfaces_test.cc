@@ -27,6 +27,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 class native_map_type_interfaces_test : public native_type_interfaces_test_base {};
 
+// -----------------------------------------------------------------------------
 
 TEST_F(native_map_type_interfaces_test, TestSize)
 {
@@ -47,6 +48,8 @@ TEST_F(native_map_type_interfaces_test, TestSize)
   );
 }
 
+// -----------------------------------------------------------------------------
+
 TEST_F(native_map_type_interfaces_test, TestEmpty)
 {
   corevm::types::native_map map = {
@@ -63,6 +66,8 @@ TEST_F(native_map_type_interfaces_test, TestEmpty)
     expected_result
   );
 }
+
+// -----------------------------------------------------------------------------
 
 TEST_F(native_map_type_interfaces_test, TestAt)
 {
@@ -83,6 +88,8 @@ TEST_F(native_map_type_interfaces_test, TestAt)
   );
 }
 
+// -----------------------------------------------------------------------------
+
 TEST_F(native_map_type_interfaces_test, TestPut)
 {
   corevm::types::native_map map;
@@ -102,6 +109,8 @@ TEST_F(native_map_type_interfaces_test, TestPut)
     expected_result
   );
 }
+
+// -----------------------------------------------------------------------------
 
 TEST_F(native_map_type_interfaces_test, TestErase)
 {
@@ -124,6 +133,8 @@ TEST_F(native_map_type_interfaces_test, TestErase)
   );
 }
 
+// -----------------------------------------------------------------------------
+
 TEST_F(native_map_type_interfaces_test, TestClear)
 {
   corevm::types::native_map map = {
@@ -140,6 +151,8 @@ TEST_F(native_map_type_interfaces_test, TestClear)
     expected_result
   );
 }
+
+// -----------------------------------------------------------------------------
 
 TEST_F(native_map_type_interfaces_test, TestSwap)
 {
@@ -159,3 +172,5 @@ TEST_F(native_map_type_interfaces_test, TestSwap)
     expected_result
   );
 }
+
+// -----------------------------------------------------------------------------

@@ -82,14 +82,17 @@ protected:
     typename GarbageCollectionScheme::dynamic_object_manager> m_heap;
 };
 
+// -----------------------------------------------------------------------------
 
 typedef ::testing::Types<
   corevm::gc::reference_count_garbage_collection_scheme
 > GarbageCollectionSchemeTypes;
 
+// -----------------------------------------------------------------------------
 
 TYPED_TEST_CASE(garbage_collection_unittest, GarbageCollectionSchemeTypes);
 
+// -----------------------------------------------------------------------------
 
 TYPED_TEST(garbage_collection_unittest, TestOneObject)
 {
@@ -104,6 +107,8 @@ TYPED_TEST(garbage_collection_unittest, TestOneObject)
 
   this->do_gc_and_check_results({});
 }
+
+// -----------------------------------------------------------------------------
 
 TYPED_TEST(garbage_collection_unittest, TestSelfReferencedObject)
 {
@@ -123,6 +128,8 @@ TYPED_TEST(garbage_collection_unittest, TestSelfReferencedObject)
   this->do_gc_and_check_results({});
 }
 
+// -----------------------------------------------------------------------------
+
 TYPED_TEST(garbage_collection_unittest, TestSelfReferenceOnNonGarbageCollectibleObject)
 {
   /*
@@ -141,6 +148,8 @@ TYPED_TEST(garbage_collection_unittest, TestSelfReferenceOnNonGarbageCollectible
 
   this->do_gc_and_check_results({id});
 }
+
+// -----------------------------------------------------------------------------
 
 TYPED_TEST(garbage_collection_unittest, TestLinearChain)
 {
@@ -162,6 +171,8 @@ TYPED_TEST(garbage_collection_unittest, TestLinearChain)
 
   this->do_gc_and_check_results({});
 }
+
+// -----------------------------------------------------------------------------
 
 TYPED_TEST(garbage_collection_unittest, TestLinearChainWithNonGarbageCollectibleObject)
 {
@@ -185,6 +196,8 @@ TYPED_TEST(garbage_collection_unittest, TestLinearChainWithNonGarbageCollectible
 
   this->do_gc_and_check_results({id1, id2, id3, id4});
 }
+
+// -----------------------------------------------------------------------------
 
 TYPED_TEST(garbage_collection_unittest, TestLinearChainWithNonGarbageCollectibleObjects)
 {
@@ -210,6 +223,8 @@ TYPED_TEST(garbage_collection_unittest, TestLinearChainWithNonGarbageCollectible
   this->do_gc_and_check_results({id2, id3, id4});
 }
 
+// -----------------------------------------------------------------------------
+
 TYPED_TEST(garbage_collection_unittest, TestSingleCycle)
 {
   /*
@@ -231,6 +246,8 @@ TYPED_TEST(garbage_collection_unittest, TestSingleCycle)
 
   this->do_gc_and_check_results({});
 }
+
+// -----------------------------------------------------------------------------
 
 TYPED_TEST(garbage_collection_unittest, TestMultipleObjectsPointToOne)
 {
@@ -256,6 +273,8 @@ TYPED_TEST(garbage_collection_unittest, TestMultipleObjectsPointToOne)
 
   this->do_gc_and_check_results({});
 }
+
+// -----------------------------------------------------------------------------
 
 TYPED_TEST(garbage_collection_unittest, TestOnePointsToMultipleObjects)
 {
@@ -283,6 +302,8 @@ TYPED_TEST(garbage_collection_unittest, TestOnePointsToMultipleObjects)
 
   this->do_gc_and_check_results({});
 }
+
+// -----------------------------------------------------------------------------
 
 TYPED_TEST(garbage_collection_unittest, TestNonGarbageCollectibleObjectPointsToMultipleObjects)
 {
@@ -312,6 +333,8 @@ TYPED_TEST(garbage_collection_unittest, TestNonGarbageCollectibleObjectPointsToM
 
   this->do_gc_and_check_results({id1, id2, id3, id4});
 }
+
+// -----------------------------------------------------------------------------
 
 TYPED_TEST(garbage_collection_unittest, TestAdjacentCycles)
 {
@@ -344,6 +367,8 @@ TYPED_TEST(garbage_collection_unittest, TestAdjacentCycles)
   this->do_gc_and_check_results({});
 }
 
+// -----------------------------------------------------------------------------
+
 TYPED_TEST(garbage_collection_unittest, TestTwoIsolatedCycles)
 {
   /*
@@ -372,6 +397,8 @@ TYPED_TEST(garbage_collection_unittest, TestTwoIsolatedCycles)
 
   this->do_gc_and_check_results({});
 }
+
+// -----------------------------------------------------------------------------
 
 TYPED_TEST(garbage_collection_unittest, TestNestedCycles)
 {
@@ -418,6 +445,8 @@ TYPED_TEST(garbage_collection_unittest, TestNestedCycles)
   this->do_gc_and_check_results({});
 }
 
+// -----------------------------------------------------------------------------
+
 TYPED_TEST(garbage_collection_unittest, TestCycleWithInwardStub)
 {
   /*
@@ -442,6 +471,8 @@ TYPED_TEST(garbage_collection_unittest, TestCycleWithInwardStub)
   this->do_gc_and_check_results({});
 }
 
+// -----------------------------------------------------------------------------
+
 TYPED_TEST(garbage_collection_unittest, TestCycleWithOutwardStub)
 {
   /*
@@ -465,6 +496,8 @@ TYPED_TEST(garbage_collection_unittest, TestCycleWithOutwardStub)
 
   this->do_gc_and_check_results({});
 }
+
+// -----------------------------------------------------------------------------
 
 TYPED_TEST(garbage_collection_unittest, TestCycleWithNonGarbageCollectibleInwardStub)
 {
@@ -491,6 +524,8 @@ TYPED_TEST(garbage_collection_unittest, TestCycleWithNonGarbageCollectibleInward
 
   this->do_gc_and_check_results({id1, id2, id3, id4});
 }
+
+// -----------------------------------------------------------------------------
 
 TYPED_TEST(garbage_collection_unittest, TestCycleWithTwoInwardStubs)
 {
@@ -520,6 +555,8 @@ TYPED_TEST(garbage_collection_unittest, TestCycleWithTwoInwardStubs)
   this->do_gc_and_check_results({id1, id2, id3, id4});
 }
 
+// -----------------------------------------------------------------------------
+
 TYPED_TEST(garbage_collection_unittest, TestCycleWithNonGarbageCollectibleOutwardStub)
 {
   /*
@@ -545,6 +582,8 @@ TYPED_TEST(garbage_collection_unittest, TestCycleWithNonGarbageCollectibleOutwar
 
   this->do_gc_and_check_results({id4});
 }
+
+// -----------------------------------------------------------------------------
 
 TYPED_TEST(garbage_collection_unittest, TestCycleWithTwoOutwardStubs)
 {
@@ -574,6 +613,8 @@ TYPED_TEST(garbage_collection_unittest, TestCycleWithTwoOutwardStubs)
   this->do_gc_and_check_results({id4});
 }
 
+// -----------------------------------------------------------------------------
+
 TYPED_TEST(garbage_collection_unittest, TestSingleCycleWithNonGarbageCollectibleObject)
 {
   /*
@@ -597,3 +638,5 @@ TYPED_TEST(garbage_collection_unittest, TestSingleCycleWithNonGarbageCollectible
 
   this->do_gc_and_check_results({id1, id2, id3});
 }
+
+// -----------------------------------------------------------------------------
