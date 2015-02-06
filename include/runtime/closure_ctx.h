@@ -20,12 +20,10 @@ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 *******************************************************************************/
-#ifndef COREVM_RUNTIME_COMMON_H_
-#define COREVM_RUNTIME_COMMON_H_
+#ifndef COREVM_CLOSURE_CTX_H_
+#define COREVM_CLOSURE_CTX_H_
 
-#include <cstdint>
-#include <string>
-#include <unordered_map>
+#include "common.h"
 
 
 namespace corevm {
@@ -34,41 +32,20 @@ namespace corevm {
 namespace runtime {
 
 
-typedef int32_t instr_addr;
+typedef struct closure_ctx
+{
+  bool operator==(const closure_ctx& rhs)
+  {
+    return (
+      compartment_id == rhs.compartment_id &&
+      closure_id == rhs.closure_id
+    );
+  }
 
+  compartment_id compartment_id;
+  closure_id closure_id;
 
-typedef uint16_t instr_code;
-
-
-typedef uint64_t instr_oprd;
-
-
-typedef int32_t variable_key;
-
-
-typedef uint8_t gc_bitfield_t;
-
-
-typedef int64_t closure_id;
-
-
-typedef int32_t compartment_id;
-
-
-const compartment_id NONESET_COMPARTMENT_ID = -1;
-
-
-const closure_id NONESET_CLOSURE_ID = -1;
-
-
-const instr_addr NONESET_INSTR_ADDR = -1;
-
-
-typedef std::unordered_map<uint64_t, std::string> encoding_map;
-
-
-// Default size of native types pool: 128 MB.
-const uint64_t COREVM_DEFAULT_NATIVE_TYPES_POOL_SIZE = 1024 * 1024 * 128;
+} closure_ctx;
 
 
 } /* end namespace runtime */
@@ -77,4 +54,4 @@ const uint64_t COREVM_DEFAULT_NATIVE_TYPES_POOL_SIZE = 1024 * 1024 * 128;
 } /* end namespace corevm */
 
 
-#endif /* COREVM_RUNTIME_COMMON_H_ */
+#endif /* COREVM_CLOSURE_CTX_H_ */

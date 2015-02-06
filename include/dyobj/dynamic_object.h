@@ -27,7 +27,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "dyobj_id.h"
 #include "flags.h"
 #include "errors.h"
-#include "../runtime/common.h"
+#include "../runtime/closure_ctx.h"
 
 #include <boost/format.hpp>
 #include <sneaker/libc/utils.h>

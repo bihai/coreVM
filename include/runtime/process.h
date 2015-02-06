@@ -25,6 +25,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "compartment.h"
 #include "closure.h"
+#include "closure_ctx.h"
 #include "common.h"
 #include "errors.h"
 #include "frame.h"
