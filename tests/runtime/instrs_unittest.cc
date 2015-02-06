@@ -40,7 +40,7 @@ using corevm::runtime::process;
 
 // -----------------------------------------------------------------------------
 
-class process_instrs_unittest : public ::testing::Test
+class instrs_unittest : public ::testing::Test
 {
 protected:
   corevm::runtime::closure_ctx m_ctx {
@@ -51,7 +51,7 @@ protected:
 
 // -----------------------------------------------------------------------------
 
-class process_obj_instrs_test : public process_instrs_unittest
+class instrs_obj_unittest : public instrs_unittest
 {
 protected:
   virtual void SetUp()
@@ -77,7 +77,7 @@ protected:
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_obj_instrs_test, TestInstrNEW)
+TEST_F(instrs_obj_unittest, TestInstrNEW)
 {
   corevm::runtime::instr instr;
   this->execute_instr<corevm::runtime::instr_handler_new>(instr);
@@ -85,7 +85,7 @@ TEST_F(process_obj_instrs_test, TestInstrNEW)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_obj_instrs_test, TestInstrLDOBJ)
+TEST_F(instrs_obj_unittest, TestInstrLDOBJ)
 {
   corevm::runtime::compartment_id compartment_id = 0;
   corevm::runtime::closure_id closure_id = 10;
@@ -148,7 +148,7 @@ TEST_F(process_obj_instrs_test, TestInstrLDOBJ)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_obj_instrs_test, TestInstrSTOBJ)
+TEST_F(instrs_obj_unittest, TestInstrSTOBJ)
 {
   corevm::runtime::instr instr = { .code=0, .oprd1=1, .oprd2=0 };
 
@@ -171,7 +171,7 @@ TEST_F(process_obj_instrs_test, TestInstrSTOBJ)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_obj_instrs_test, TestInstrGETATTR)
+TEST_F(instrs_obj_unittest, TestInstrGETATTR)
 {
   corevm::dyobj::attr_key attr_key = 333;
   corevm::runtime::instr instr = { .code=0, .oprd1=attr_key, .oprd2=0 };
@@ -193,7 +193,7 @@ TEST_F(process_obj_instrs_test, TestInstrGETATTR)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_obj_instrs_test, TestInstrSETATTR)
+TEST_F(instrs_obj_unittest, TestInstrSETATTR)
 {
   corevm::dyobj::attr_key attr_key = 789;
   corevm::runtime::instr instr = { .code=0, .oprd1=attr_key, .oprd2=0 };
@@ -220,7 +220,7 @@ TEST_F(process_obj_instrs_test, TestInstrSETATTR)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_obj_instrs_test, TestInstrDELATTR)
+TEST_F(instrs_obj_unittest, TestInstrDELATTR)
 {
   corevm::dyobj::attr_key attr_key = 777;
   corevm::runtime::instr instr = { .code=0, .oprd1=attr_key, .oprd2=0 };
@@ -249,7 +249,7 @@ TEST_F(process_obj_instrs_test, TestInstrDELATTR)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_obj_instrs_test, TestInstrPOP)
+TEST_F(instrs_obj_unittest, TestInstrPOP)
 {
   corevm::dyobj::dyobj_id id = process::adapter(m_process).help_create_dyobj();
   m_process.push_stack(id);
@@ -267,7 +267,7 @@ TEST_F(process_obj_instrs_test, TestInstrPOP)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_obj_instrs_test, TestInstrLDOBJ2)
+TEST_F(instrs_obj_unittest, TestInstrLDOBJ2)
 {
   corevm::runtime::compartment_id compartment_id = 0;
   corevm::runtime::closure_id closure_id = 10;
@@ -330,7 +330,7 @@ TEST_F(process_obj_instrs_test, TestInstrLDOBJ2)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_obj_instrs_test, TestInstrSTOBJ2)
+TEST_F(instrs_obj_unittest, TestInstrSTOBJ2)
 {
   corevm::runtime::instr instr = { .code=0, .oprd1=1, .oprd2=0 };
 
@@ -353,7 +353,7 @@ TEST_F(process_obj_instrs_test, TestInstrSTOBJ2)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_obj_instrs_test, TestInstrDELOBJ)
+TEST_F(instrs_obj_unittest, TestInstrDELOBJ)
 {
   corevm::runtime::variable_key key = 1;
   corevm::dyobj::dyobj_id id = process::adapter(m_process).help_create_dyobj();
@@ -377,7 +377,7 @@ TEST_F(process_obj_instrs_test, TestInstrDELOBJ)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_obj_instrs_test, TestInstrDELOBJ2)
+TEST_F(instrs_obj_unittest, TestInstrDELOBJ2)
 {
   corevm::runtime::variable_key key = 1;
   corevm::dyobj::dyobj_id id = process::adapter(m_process).help_create_dyobj();
@@ -401,7 +401,7 @@ TEST_F(process_obj_instrs_test, TestInstrDELOBJ2)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_obj_instrs_test, TestInstrGETHNDL)
+TEST_F(instrs_obj_unittest, TestInstrGETHNDL)
 {
   uint32_t expected_value = 123;
 
@@ -432,7 +432,7 @@ TEST_F(process_obj_instrs_test, TestInstrGETHNDL)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_obj_instrs_test, TestInstrSETHNDL)
+TEST_F(instrs_obj_unittest, TestInstrSETHNDL)
 {
   uint32_t expected_value = 123;
 
@@ -454,7 +454,7 @@ TEST_F(process_obj_instrs_test, TestInstrSETHNDL)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_obj_instrs_test, TestInstrCLRHNDL)
+TEST_F(instrs_obj_unittest, TestInstrCLRHNDL)
 {
   corevm::dyobj::dyobj_id id = process::adapter(m_process).help_create_dyobj();
   m_process.push_stack(id);
@@ -476,7 +476,7 @@ TEST_F(process_obj_instrs_test, TestInstrCLRHNDL)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_obj_instrs_test, TestInstrOBJEQ)
+TEST_F(instrs_obj_unittest, TestInstrOBJEQ)
 {
   corevm::dyobj::dyobj_id id1 = 1;
   corevm::dyobj::dyobj_id id2 = 1;
@@ -503,7 +503,7 @@ TEST_F(process_obj_instrs_test, TestInstrOBJEQ)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_obj_instrs_test, TestInstrOBJNEQ)
+TEST_F(instrs_obj_unittest, TestInstrOBJNEQ)
 {
   corevm::dyobj::dyobj_id id1 = 1;
   corevm::dyobj::dyobj_id id2 = 2;
@@ -530,7 +530,7 @@ TEST_F(process_obj_instrs_test, TestInstrOBJNEQ)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_obj_instrs_test, TestInstrSETCXT)
+TEST_F(instrs_obj_unittest, TestInstrSETCXT)
 {
   corevm::dyobj::dyobj_id id = process::adapter(m_process).help_create_dyobj();
 
@@ -562,14 +562,14 @@ TEST_F(process_obj_instrs_test, TestInstrSETCXT)
 
 // -----------------------------------------------------------------------------
 
-class process_functions_instrs_test : public process_instrs_unittest {
+class instrs_functions_instrs_test : public instrs_unittest {
 protected:
   corevm::runtime::process m_process;
 };
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_functions_instrs_test, TestInstrPUTARG)
+TEST_F(instrs_functions_instrs_test, TestInstrPUTARG)
 {
   corevm::runtime::frame frame(m_ctx);
   m_process.push_frame(frame);
@@ -597,7 +597,7 @@ TEST_F(process_functions_instrs_test, TestInstrPUTARG)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_functions_instrs_test, TestInstrPUTKWARG)
+TEST_F(instrs_functions_instrs_test, TestInstrPUTKWARG)
 {
   corevm::runtime::frame frame(m_ctx);
   m_process.push_frame(frame);
@@ -631,7 +631,7 @@ TEST_F(process_functions_instrs_test, TestInstrPUTKWARG)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_functions_instrs_test, TestInstrGETARG)
+TEST_F(instrs_functions_instrs_test, TestInstrGETARG)
 {
   corevm::dyobj::dyobj_id id = 1;
   corevm::runtime::frame frame(m_ctx);
@@ -650,7 +650,7 @@ TEST_F(process_functions_instrs_test, TestInstrGETARG)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_functions_instrs_test, TestInstrGETKWARG)
+TEST_F(instrs_functions_instrs_test, TestInstrGETKWARG)
 {
   corevm::runtime::variable_key key = 22;
   corevm::dyobj::dyobj_id id = 100;
@@ -675,7 +675,7 @@ TEST_F(process_functions_instrs_test, TestInstrGETKWARG)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_functions_instrs_test, TestInstrGETARGS)
+TEST_F(instrs_functions_instrs_test, TestInstrGETARGS)
 {
   corevm::dyobj::dyobj_id id1 = 100;
   corevm::dyobj::dyobj_id id2 = 200;
@@ -723,7 +723,7 @@ TEST_F(process_functions_instrs_test, TestInstrGETARGS)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_functions_instrs_test, TestInstrGETKWARGS)
+TEST_F(instrs_functions_instrs_test, TestInstrGETKWARGS)
 {
   corevm::runtime::variable_key key1 = 1;
   corevm::runtime::variable_key key2 = 22;
@@ -773,7 +773,7 @@ TEST_F(process_functions_instrs_test, TestInstrGETKWARGS)
 
 // -----------------------------------------------------------------------------
 
-class process_control_instrs_test : public process_instrs_unittest
+class instrs_control_instrs_test : public instrs_unittest
 {
 public:
   static bool signal_fired;
@@ -801,11 +801,11 @@ protected:
 
 // -----------------------------------------------------------------------------
 
-bool process_control_instrs_test::signal_fired = false;
+bool instrs_control_instrs_test::signal_fired = false;
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_control_instrs_test, TestInstrPINVK)
+TEST_F(instrs_control_instrs_test, TestInstrPINVK)
 {
   corevm::dyobj::dyobj_id id = process::adapter(m_process).help_create_dyobj();
   auto& obj = process::adapter(m_process).help_get_dyobj(id);
@@ -834,7 +834,7 @@ TEST_F(process_control_instrs_test, TestInstrPINVK)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_control_instrs_test, TestInstrINVK)
+TEST_F(instrs_control_instrs_test, TestInstrINVK)
 {
   corevm::runtime::closure_id closure_id = 1;
   corevm::runtime::compartment_id compartment_id = 0;
@@ -877,14 +877,14 @@ TEST_F(process_control_instrs_test, TestInstrINVK)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_control_instrs_test, TestInstrRTRN)
+TEST_F(instrs_control_instrs_test, TestInstrRTRN)
 {
   // TODO: [COREVM-49] Complete instruction set and implementations
 }
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_control_instrs_test, TestInstrJMP)
+TEST_F(instrs_control_instrs_test, TestInstrJMP)
 {
   corevm::runtime::frame frame(m_ctx);
   m_process.push_frame(frame);
@@ -908,7 +908,7 @@ TEST_F(process_control_instrs_test, TestInstrJMP)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_control_instrs_test, TestInstrJMPIF)
+TEST_F(instrs_control_instrs_test, TestInstrJMPIF)
 {
   corevm::runtime::frame frame(m_ctx);
 
@@ -935,7 +935,7 @@ TEST_F(process_control_instrs_test, TestInstrJMPIF)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_control_instrs_test, TestInstrJMPIF_OnFalseCondition)
+TEST_F(instrs_control_instrs_test, TestInstrJMPIF_OnFalseCondition)
 {
   corevm::runtime::frame frame(m_ctx);
 
@@ -962,30 +962,30 @@ TEST_F(process_control_instrs_test, TestInstrJMPIF_OnFalseCondition)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_control_instrs_test, TestInstrEXC)
+TEST_F(instrs_control_instrs_test, TestInstrEXC)
 {
   // TODO: [COREVM-49] Complete instruction set and implementations
 }
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_control_instrs_test, TestInstrEXC2)
+TEST_F(instrs_control_instrs_test, TestInstrEXC2)
 {
   // TODO: [COREVM-49] Complete instruction set and implementations
 }
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_control_instrs_test, TestInstrEXIT)
+TEST_F(instrs_control_instrs_test, TestInstrEXIT)
 {
   auto sig_handler = [](int signum) {
-    process_control_instrs_test::signal_fired = true;
+    instrs_control_instrs_test::signal_fired = true;
     signal(SIGTERM, SIG_IGN);
   };
 
   signal(SIGTERM, sig_handler);
 
-  ASSERT_EQ(false, process_control_instrs_test::signal_fired);
+  ASSERT_EQ(false, instrs_control_instrs_test::signal_fired);
 
   corevm::runtime::instr instr = {
     .code=0,
@@ -996,12 +996,12 @@ TEST_F(process_control_instrs_test, TestInstrEXIT)
   corevm::runtime::instr_handler_exit handler;
   handler.execute(instr, m_process);
 
-  ASSERT_EQ(true, process_control_instrs_test::signal_fired);
+  ASSERT_EQ(true, instrs_control_instrs_test::signal_fired);
 }
 
 // -----------------------------------------------------------------------------
 
-class process_eval_stack_instrs_test : public process_instrs_unittest
+class instrs_eval_stack_instrs_test : public instrs_unittest
 {
 public:
   typedef uint32_t IntrinsicType;
@@ -1052,11 +1052,11 @@ protected:
 
 // -----------------------------------------------------------------------------
 
-class process_arithmetic_instrs_test : public process_eval_stack_instrs_test {};
+class instrs_arithmetic_instrs_test : public instrs_eval_stack_instrs_test {};
 
 // -----------------------------------------------------------------------------
 
-class process_unary_arithmetic_instrs_test : public process_arithmetic_instrs_test
+class instrs_unary_arithmetic_instrs_test : public instrs_arithmetic_instrs_test
 {
 public:
   virtual void SetUp()
@@ -1071,49 +1071,49 @@ protected:
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_unary_arithmetic_instrs_test, TestInstrPOS)
+TEST_F(instrs_unary_arithmetic_instrs_test, TestInstrPOS)
 {
   execute_instr_and_assert_result<corevm::runtime::instr_handler_pos>(+m_oprd);
 }
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_unary_arithmetic_instrs_test, TestInstrNEG)
+TEST_F(instrs_unary_arithmetic_instrs_test, TestInstrNEG)
 {
   execute_instr_and_assert_result<corevm::runtime::instr_handler_neg>(-m_oprd);
 }
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_unary_arithmetic_instrs_test, TestInstrINC)
+TEST_F(instrs_unary_arithmetic_instrs_test, TestInstrINC)
 {
   execute_instr_and_assert_result<corevm::runtime::instr_handler_inc>(++m_oprd);
 }
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_unary_arithmetic_instrs_test, TestInstrDEC)
+TEST_F(instrs_unary_arithmetic_instrs_test, TestInstrDEC)
 {
   execute_instr_and_assert_result<corevm::runtime::instr_handler_dec>(--m_oprd);
 }
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_unary_arithmetic_instrs_test, TestInstrBNOT)
+TEST_F(instrs_unary_arithmetic_instrs_test, TestInstrBNOT)
 {
   execute_instr_and_assert_result<corevm::runtime::instr_handler_bnot>(~m_oprd);
 }
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_unary_arithmetic_instrs_test, TestInstrLNOT)
+TEST_F(instrs_unary_arithmetic_instrs_test, TestInstrLNOT)
 {
   execute_instr_and_assert_result<corevm::runtime::instr_handler_lnot>(!m_oprd);
 }
 
 // -----------------------------------------------------------------------------
 
-class process_binary_arithmetic_instrs_test : public process_arithmetic_instrs_test
+class instrs_binary_arithmetic_instrs_test : public instrs_arithmetic_instrs_test
 {
 public:
   virtual void SetUp()
@@ -1130,7 +1130,7 @@ protected:
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_binary_arithmetic_instrs_test, TestInstrADD)
+TEST_F(instrs_binary_arithmetic_instrs_test, TestInstrADD)
 {
   execute_instr_and_assert_result<
     corevm::runtime::instr_handler_add>(m_oprd1 + m_oprd2);
@@ -1138,7 +1138,7 @@ TEST_F(process_binary_arithmetic_instrs_test, TestInstrADD)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_binary_arithmetic_instrs_test, TestInstrSUB)
+TEST_F(instrs_binary_arithmetic_instrs_test, TestInstrSUB)
 {
   execute_instr_and_assert_result<
     corevm::runtime::instr_handler_sub>(m_oprd1 - m_oprd2);
@@ -1146,7 +1146,7 @@ TEST_F(process_binary_arithmetic_instrs_test, TestInstrSUB)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_binary_arithmetic_instrs_test, TestInstrMUL)
+TEST_F(instrs_binary_arithmetic_instrs_test, TestInstrMUL)
 {
   execute_instr_and_assert_result<
     corevm::runtime::instr_handler_mul>(m_oprd1 * m_oprd2);
@@ -1154,7 +1154,7 @@ TEST_F(process_binary_arithmetic_instrs_test, TestInstrMUL)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_binary_arithmetic_instrs_test, TestInstrDIV)
+TEST_F(instrs_binary_arithmetic_instrs_test, TestInstrDIV)
 {
   execute_instr_and_assert_result<
     corevm::runtime::instr_handler_div>(m_oprd1 / m_oprd2);
@@ -1162,7 +1162,7 @@ TEST_F(process_binary_arithmetic_instrs_test, TestInstrDIV)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_binary_arithmetic_instrs_test, TestInstrMOD)
+TEST_F(instrs_binary_arithmetic_instrs_test, TestInstrMOD)
 {
   execute_instr_and_assert_result<
     corevm::runtime::instr_handler_mod>(m_oprd1 % m_oprd2);
@@ -1170,7 +1170,7 @@ TEST_F(process_binary_arithmetic_instrs_test, TestInstrMOD)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_binary_arithmetic_instrs_test, TestInstrPOW)
+TEST_F(instrs_binary_arithmetic_instrs_test, TestInstrPOW)
 {
   execute_instr_and_assert_result<
     corevm::runtime::instr_handler_pow>(pow(m_oprd1, m_oprd2));
@@ -1178,7 +1178,7 @@ TEST_F(process_binary_arithmetic_instrs_test, TestInstrPOW)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_binary_arithmetic_instrs_test, TestInstrBAND)
+TEST_F(instrs_binary_arithmetic_instrs_test, TestInstrBAND)
 {
   execute_instr_and_assert_result<
     corevm::runtime::instr_handler_band>(m_oprd1 & m_oprd2);
@@ -1186,7 +1186,7 @@ TEST_F(process_binary_arithmetic_instrs_test, TestInstrBAND)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_binary_arithmetic_instrs_test, TestInstrBOR)
+TEST_F(instrs_binary_arithmetic_instrs_test, TestInstrBOR)
 {
   execute_instr_and_assert_result<
     corevm::runtime::instr_handler_bor>(m_oprd1 | m_oprd2);
@@ -1194,7 +1194,7 @@ TEST_F(process_binary_arithmetic_instrs_test, TestInstrBOR)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_binary_arithmetic_instrs_test, TestInstrBXOR)
+TEST_F(instrs_binary_arithmetic_instrs_test, TestInstrBXOR)
 {
   execute_instr_and_assert_result<
     corevm::runtime::instr_handler_bxor>(m_oprd1 ^ m_oprd2);
@@ -1202,7 +1202,7 @@ TEST_F(process_binary_arithmetic_instrs_test, TestInstrBXOR)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_binary_arithmetic_instrs_test, TestInstrBLS)
+TEST_F(instrs_binary_arithmetic_instrs_test, TestInstrBLS)
 {
   execute_instr_and_assert_result<
     corevm::runtime::instr_handler_bls>(m_oprd1 << m_oprd2);
@@ -1210,7 +1210,7 @@ TEST_F(process_binary_arithmetic_instrs_test, TestInstrBLS)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_binary_arithmetic_instrs_test, TestInstrBRS)
+TEST_F(instrs_binary_arithmetic_instrs_test, TestInstrBRS)
 {
   execute_instr_and_assert_result<
     corevm::runtime::instr_handler_brs>(m_oprd1 >> m_oprd2);
@@ -1218,7 +1218,7 @@ TEST_F(process_binary_arithmetic_instrs_test, TestInstrBRS)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_binary_arithmetic_instrs_test, TestInstrEQ)
+TEST_F(instrs_binary_arithmetic_instrs_test, TestInstrEQ)
 {
   execute_instr_and_assert_result<
     corevm::runtime::instr_handler_eq>(m_oprd1 == m_oprd2);
@@ -1226,7 +1226,7 @@ TEST_F(process_binary_arithmetic_instrs_test, TestInstrEQ)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_binary_arithmetic_instrs_test, TestInstrNEQ)
+TEST_F(instrs_binary_arithmetic_instrs_test, TestInstrNEQ)
 {
   execute_instr_and_assert_result<
     corevm::runtime::instr_handler_neq>(m_oprd1 != m_oprd2);
@@ -1234,7 +1234,7 @@ TEST_F(process_binary_arithmetic_instrs_test, TestInstrNEQ)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_binary_arithmetic_instrs_test, TestInstrGT)
+TEST_F(instrs_binary_arithmetic_instrs_test, TestInstrGT)
 {
   execute_instr_and_assert_result<
     corevm::runtime::instr_handler_gt>(m_oprd1 > m_oprd2);
@@ -1242,7 +1242,7 @@ TEST_F(process_binary_arithmetic_instrs_test, TestInstrGT)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_binary_arithmetic_instrs_test, TestInstrLT)
+TEST_F(instrs_binary_arithmetic_instrs_test, TestInstrLT)
 {
   execute_instr_and_assert_result<
     corevm::runtime::instr_handler_lt>(m_oprd1 < m_oprd2);
@@ -1250,7 +1250,7 @@ TEST_F(process_binary_arithmetic_instrs_test, TestInstrLT)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_binary_arithmetic_instrs_test, TestInstrGTE)
+TEST_F(instrs_binary_arithmetic_instrs_test, TestInstrGTE)
 {
   execute_instr_and_assert_result<
     corevm::runtime::instr_handler_gte>(m_oprd1 >= m_oprd2);
@@ -1258,7 +1258,7 @@ TEST_F(process_binary_arithmetic_instrs_test, TestInstrGTE)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_binary_arithmetic_instrs_test, TestInstrLTE)
+TEST_F(instrs_binary_arithmetic_instrs_test, TestInstrLTE)
 {
   execute_instr_and_assert_result<
     corevm::runtime::instr_handler_lte>(m_oprd1 <= m_oprd2);
@@ -1266,7 +1266,7 @@ TEST_F(process_binary_arithmetic_instrs_test, TestInstrLTE)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_binary_arithmetic_instrs_test, TestInstrLAND)
+TEST_F(instrs_binary_arithmetic_instrs_test, TestInstrLAND)
 {
   execute_instr_and_assert_result<
     corevm::runtime::instr_handler_land>(m_oprd1 && m_oprd2);
@@ -1274,7 +1274,7 @@ TEST_F(process_binary_arithmetic_instrs_test, TestInstrLAND)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_binary_arithmetic_instrs_test, TestInstrLOR)
+TEST_F(instrs_binary_arithmetic_instrs_test, TestInstrLOR)
 {
   execute_instr_and_assert_result<
     corevm::runtime::instr_handler_lor>(m_oprd1 || m_oprd2);
@@ -1282,11 +1282,11 @@ TEST_F(process_binary_arithmetic_instrs_test, TestInstrLOR)
 
 // -----------------------------------------------------------------------------
 
-class process_native_type_instrs_test : public process_eval_stack_instrs_test {};
+class instrs_native_types_instrs_test : public instrs_eval_stack_instrs_test {};
 
 // -----------------------------------------------------------------------------
 
-class process_native_type_creation_instrs_test : public process_native_type_instrs_test
+class instrs_native_type_creation_instrs_test : public instrs_native_types_instrs_test
 {
 public:
   virtual void SetUp()
@@ -1297,84 +1297,84 @@ public:
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_creation_instrs_test, TestInstrINT8)
+TEST_F(instrs_native_type_creation_instrs_test, TestInstrINT8)
 {
   execute_instr_and_assert_result<corevm::runtime::instr_handler_int8, int8_t>(0);
 }
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_creation_instrs_test, TestInstrUINT8)
+TEST_F(instrs_native_type_creation_instrs_test, TestInstrUINT8)
 {
   execute_instr_and_assert_result<corevm::runtime::instr_handler_uint8, uint8_t>(0);
 }
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_creation_instrs_test, TestInstrINT16)
+TEST_F(instrs_native_type_creation_instrs_test, TestInstrINT16)
 {
   execute_instr_and_assert_result<corevm::runtime::instr_handler_int16, int16_t>(0);
 }
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_creation_instrs_test, TestInstrUINT16)
+TEST_F(instrs_native_type_creation_instrs_test, TestInstrUINT16)
 {
   execute_instr_and_assert_result<corevm::runtime::instr_handler_uint16, uint16_t>(0);
 }
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_creation_instrs_test, TestInstrINT32)
+TEST_F(instrs_native_type_creation_instrs_test, TestInstrINT32)
 {
   execute_instr_and_assert_result<corevm::runtime::instr_handler_int32, int32_t>(0);
 }
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_creation_instrs_test, TestInstrUINT32)
+TEST_F(instrs_native_type_creation_instrs_test, TestInstrUINT32)
 {
   execute_instr_and_assert_result<corevm::runtime::instr_handler_uint32, uint32_t>(0);
 }
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_creation_instrs_test, TestInstrINT64)
+TEST_F(instrs_native_type_creation_instrs_test, TestInstrINT64)
 {
   execute_instr_and_assert_result<corevm::runtime::instr_handler_int64, int64_t>(0);
 }
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_creation_instrs_test, TestInstrUINT64)
+TEST_F(instrs_native_type_creation_instrs_test, TestInstrUINT64)
 {
   execute_instr_and_assert_result<corevm::runtime::instr_handler_uint64, uint64_t>(0);
 }
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_creation_instrs_test, TestInstrBOOL)
+TEST_F(instrs_native_type_creation_instrs_test, TestInstrBOOL)
 {
   execute_instr_and_assert_result<corevm::runtime::instr_handler_bool, bool>(true);
 }
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_creation_instrs_test, TestInstrDEC1)
+TEST_F(instrs_native_type_creation_instrs_test, TestInstrDEC1)
 {
   execute_instr_and_assert_result<corevm::runtime::instr_handler_dec1, float>(0.0);
 }
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_creation_instrs_test, TestInstrDEC2)
+TEST_F(instrs_native_type_creation_instrs_test, TestInstrDEC2)
 {
   execute_instr_and_assert_result<corevm::runtime::instr_handler_dec2, double>(0.0);
 }
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_creation_instrs_test, TestInstrSTR)
+TEST_F(instrs_native_type_creation_instrs_test, TestInstrSTR)
 {
   corevm::types::native_string expected_result;
   execute_instr_and_assert_result<
@@ -1383,7 +1383,7 @@ TEST_F(process_native_type_creation_instrs_test, TestInstrSTR)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_creation_instrs_test, TestInstrARY)
+TEST_F(instrs_native_type_creation_instrs_test, TestInstrARY)
 {
   corevm::types::native_array expected_result;
   execute_instr_and_assert_result<corevm::runtime::instr_handler_ary,
@@ -1392,7 +1392,7 @@ TEST_F(process_native_type_creation_instrs_test, TestInstrARY)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_creation_instrs_test, TestInstrMAP)
+TEST_F(instrs_native_type_creation_instrs_test, TestInstrMAP)
 {
   corevm::types::native_map expected_result;
   execute_instr_and_assert_result<corevm::runtime::instr_handler_map,
@@ -1401,7 +1401,7 @@ TEST_F(process_native_type_creation_instrs_test, TestInstrMAP)
 
 // -----------------------------------------------------------------------------
 
-class process_native_type_conversion_instrs_test : public process_native_type_instrs_test
+class instrs_native_type_conversion_instrs_test : public instrs_native_types_instrs_test
 {
 public:
   virtual void SetUp()
@@ -1442,7 +1442,7 @@ private:
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_conversion_instrs_test, TestInstr2INT8)
+TEST_F(instrs_native_type_conversion_instrs_test, TestInstr2INT8)
 {
   execute_instr_and_assert_result<
     corevm::runtime::instr_handler_2int8, corevm::types::int8>();
@@ -1450,7 +1450,7 @@ TEST_F(process_native_type_conversion_instrs_test, TestInstr2INT8)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_conversion_instrs_test, TestInstr2INT16)
+TEST_F(instrs_native_type_conversion_instrs_test, TestInstr2INT16)
 {
   execute_instr_and_assert_result<
     corevm::runtime::instr_handler_2int16, corevm::types::int16>();
@@ -1458,7 +1458,7 @@ TEST_F(process_native_type_conversion_instrs_test, TestInstr2INT16)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_conversion_instrs_test, TestInstr2UINT16)
+TEST_F(instrs_native_type_conversion_instrs_test, TestInstr2UINT16)
 {
   execute_instr_and_assert_result<
     corevm::runtime::instr_handler_2uint16, corevm::types::uint16>();
@@ -1466,7 +1466,7 @@ TEST_F(process_native_type_conversion_instrs_test, TestInstr2UINT16)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_conversion_instrs_test, TestInstr2INT32)
+TEST_F(instrs_native_type_conversion_instrs_test, TestInstr2INT32)
 {
   execute_instr_and_assert_result<
     corevm::runtime::instr_handler_2int32, corevm::types::int32>();
@@ -1474,7 +1474,7 @@ TEST_F(process_native_type_conversion_instrs_test, TestInstr2INT32)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_conversion_instrs_test, TestInstr2UINT64)
+TEST_F(instrs_native_type_conversion_instrs_test, TestInstr2UINT64)
 {
   execute_instr_and_assert_result<
     corevm::runtime::instr_handler_2uint64, corevm::types::uint64>();
@@ -1482,7 +1482,7 @@ TEST_F(process_native_type_conversion_instrs_test, TestInstr2UINT64)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_conversion_instrs_test, TestInstr2INT64)
+TEST_F(instrs_native_type_conversion_instrs_test, TestInstr2INT64)
 {
   execute_instr_and_assert_result<
     corevm::runtime::instr_handler_2int64, corevm::types::int64>();
@@ -1490,7 +1490,7 @@ TEST_F(process_native_type_conversion_instrs_test, TestInstr2INT64)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_conversion_instrs_test, TestInstr2BOOL)
+TEST_F(instrs_native_type_conversion_instrs_test, TestInstr2BOOL)
 {
   execute_instr_and_assert_result<
     corevm::runtime::instr_handler_2bool, corevm::types::boolean>();
@@ -1498,7 +1498,7 @@ TEST_F(process_native_type_conversion_instrs_test, TestInstr2BOOL)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_conversion_instrs_test, TestInstr2DEC1)
+TEST_F(instrs_native_type_conversion_instrs_test, TestInstr2DEC1)
 {
   execute_instr_and_assert_result<
     corevm::runtime::instr_handler_2dec1, corevm::types::decimal>();
@@ -1506,7 +1506,7 @@ TEST_F(process_native_type_conversion_instrs_test, TestInstr2DEC1)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_conversion_instrs_test, TestInstr2DEC2)
+TEST_F(instrs_native_type_conversion_instrs_test, TestInstr2DEC2)
 {
   execute_instr_and_assert_result<
     corevm::runtime::instr_handler_2dec2, corevm::types::decimal2>();
@@ -1514,7 +1514,7 @@ TEST_F(process_native_type_conversion_instrs_test, TestInstr2DEC2)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_conversion_instrs_test, TestInstr2STR)
+TEST_F(instrs_native_type_conversion_instrs_test, TestInstr2STR)
 {
   /* Lambda defined to avoid compilation error on the `ASSERT_THROW` macro.
    * (Somehow calling a templated function wrapped in a code block makes
@@ -1535,7 +1535,7 @@ TEST_F(process_native_type_conversion_instrs_test, TestInstr2STR)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_conversion_instrs_test, TestInstr2ARY)
+TEST_F(instrs_native_type_conversion_instrs_test, TestInstr2ARY)
 {
   /* Lambda defined to avoid compilation error on the `ASSERT_THROW` macro.
    * (Somehow calling a templated function wrapped in a code block makes
@@ -1556,7 +1556,7 @@ TEST_F(process_native_type_conversion_instrs_test, TestInstr2ARY)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_conversion_instrs_test, TestInstr2MAP)
+TEST_F(instrs_native_type_conversion_instrs_test, TestInstr2MAP)
 {
   /* Lambda defined to avoid compilation error on the `ASSERT_THROW` macro.
    * (Somehow calling a templated function wrapped in a code block makes
@@ -1577,7 +1577,7 @@ TEST_F(process_native_type_conversion_instrs_test, TestInstr2MAP)
 
 // -----------------------------------------------------------------------------
 
-class process_native_type_complex_instrs_test : public process_native_type_instrs_test
+class instrs_native_type_complex_instrs_test : public instrs_native_types_instrs_test
 {
 public:
   virtual void SetUp()
@@ -1588,11 +1588,11 @@ public:
 
 // -----------------------------------------------------------------------------
 
-class process_native_type_complex_instrs_for_str_type_test : public process_native_type_complex_instrs_test {};
+class instrs_native_string_type_complex_instrs_test : public instrs_native_type_complex_instrs_test {};
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_complex_instrs_for_str_type_test, TestInstrSTRLEN)
+TEST_F(instrs_native_string_type_complex_instrs_test, TestInstrSTRLEN)
 {
   corevm::types::native_string hello_world = "Hello world!";
   corevm::types::native_string::size_type expected_result = hello_world.size();
@@ -1606,7 +1606,7 @@ TEST_F(process_native_type_complex_instrs_for_str_type_test, TestInstrSTRLEN)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_complex_instrs_for_str_type_test, TestInstrSTRCLR)
+TEST_F(instrs_native_string_type_complex_instrs_test, TestInstrSTRCLR)
 {
   corevm::types::native_string hello_world = "Hello world!";
   corevm::types::native_string expected_result = "";
@@ -1620,7 +1620,7 @@ TEST_F(process_native_type_complex_instrs_for_str_type_test, TestInstrSTRCLR)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_complex_instrs_for_str_type_test, TestInstrSTRAPD)
+TEST_F(instrs_native_string_type_complex_instrs_test, TestInstrSTRAPD)
 {
   corevm::types::native_string hello_world = "Hello world";
   corevm::types::native_string exclamation = "!";
@@ -1636,7 +1636,7 @@ TEST_F(process_native_type_complex_instrs_for_str_type_test, TestInstrSTRAPD)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_complex_instrs_for_str_type_test, TestInstrSTRPSH)
+TEST_F(instrs_native_string_type_complex_instrs_test, TestInstrSTRPSH)
 {
   corevm::types::native_string hello_world = "Hello world";
   corevm::types::int8 exclamation = static_cast<corevm::types::int8::value_type>('!');
@@ -1652,7 +1652,7 @@ TEST_F(process_native_type_complex_instrs_for_str_type_test, TestInstrSTRPSH)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_complex_instrs_for_str_type_test, TestInstrSTRIST)
+TEST_F(instrs_native_string_type_complex_instrs_test, TestInstrSTRIST)
 {
   corevm::types::native_string hello_world = "Helloworld";
   corevm::types::int8 pos = static_cast<corevm::types::int8::value_type>(5);
@@ -1670,7 +1670,7 @@ TEST_F(process_native_type_complex_instrs_for_str_type_test, TestInstrSTRIST)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_complex_instrs_for_str_type_test, TestInstrSTRIST2)
+TEST_F(instrs_native_string_type_complex_instrs_test, TestInstrSTRIST2)
 {
   corevm::types::native_string hello_world = "Helloworld";
   corevm::types::int8 pos = static_cast<corevm::types::int8::value_type>(5);
@@ -1688,7 +1688,7 @@ TEST_F(process_native_type_complex_instrs_for_str_type_test, TestInstrSTRIST2)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_complex_instrs_for_str_type_test, TestInstrSTRERS)
+TEST_F(instrs_native_string_type_complex_instrs_test, TestInstrSTRERS)
 {
   corevm::types::native_string hello_world = "Hello world";
   corevm::types::int8 pos = static_cast<corevm::types::int8::value_type>(5);
@@ -1704,7 +1704,7 @@ TEST_F(process_native_type_complex_instrs_for_str_type_test, TestInstrSTRERS)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_complex_instrs_for_str_type_test, TestInstrSTRERS2)
+TEST_F(instrs_native_string_type_complex_instrs_test, TestInstrSTRERS2)
 {
   corevm::types::native_string hello_world = "Hello  world";
   corevm::types::int8 pos = static_cast<corevm::types::int8::value_type>(5);
@@ -1722,7 +1722,7 @@ TEST_F(process_native_type_complex_instrs_for_str_type_test, TestInstrSTRERS2)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_complex_instrs_for_str_type_test, TestInstrSTRRPLC)
+TEST_F(instrs_native_string_type_complex_instrs_test, TestInstrSTRRPLC)
 {
   corevm::types::native_string hello_world = "Hello world";
   corevm::types::int8 pos = static_cast<corevm::types::int8::value_type>(5);
@@ -1742,7 +1742,7 @@ TEST_F(process_native_type_complex_instrs_for_str_type_test, TestInstrSTRRPLC)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_complex_instrs_for_str_type_test, TestInstrSTRSWP)
+TEST_F(instrs_native_string_type_complex_instrs_test, TestInstrSTRSWP)
 {
   corevm::types::native_string hello_world = "Hello world";
   corevm::types::native_string okla = "OKLA!";
@@ -1758,7 +1758,7 @@ TEST_F(process_native_type_complex_instrs_for_str_type_test, TestInstrSTRSWP)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_complex_instrs_for_str_type_test, TestInstrSTRSUB)
+TEST_F(instrs_native_string_type_complex_instrs_test, TestInstrSTRSUB)
 {
   corevm::types::native_string hello_world = "Hello world";
   corevm::types::int8 pos = 6;
@@ -1774,7 +1774,7 @@ TEST_F(process_native_type_complex_instrs_for_str_type_test, TestInstrSTRSUB)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_complex_instrs_for_str_type_test, TestInstrSTRSUB2)
+TEST_F(instrs_native_string_type_complex_instrs_test, TestInstrSTRSUB2)
 {
   corevm::types::native_string hello_world = "Hello world";
   corevm::types::int8 pos = 6;
@@ -1792,7 +1792,7 @@ TEST_F(process_native_type_complex_instrs_for_str_type_test, TestInstrSTRSUB2)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_complex_instrs_for_str_type_test, TestInstrFND)
+TEST_F(instrs_native_string_type_complex_instrs_test, TestInstrFND)
 {
   corevm::types::native_string hello_world = "Hello world";
   corevm::types::native_string word = "world";
@@ -1809,7 +1809,7 @@ TEST_F(process_native_type_complex_instrs_for_str_type_test, TestInstrFND)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_complex_instrs_for_str_type_test, TestInstrFND2)
+TEST_F(instrs_native_string_type_complex_instrs_test, TestInstrFND2)
 {
   corevm::types::native_string hello_world = "Hello world";
   corevm::types::native_string word = "world";
@@ -1828,7 +1828,7 @@ TEST_F(process_native_type_complex_instrs_for_str_type_test, TestInstrFND2)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_complex_instrs_for_str_type_test, TestInstrRFND)
+TEST_F(instrs_native_string_type_complex_instrs_test, TestInstrRFND)
 {
   corevm::types::native_string hello_world = "Hello world";
   corevm::types::native_string word = "world";
@@ -1845,7 +1845,7 @@ TEST_F(process_native_type_complex_instrs_for_str_type_test, TestInstrRFND)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_complex_instrs_for_str_type_test, TestInstrRFND2)
+TEST_F(instrs_native_string_type_complex_instrs_test, TestInstrRFND2)
 {
   corevm::types::native_string hello_world = "Hello world";
   corevm::types::native_string word = "world";
@@ -1864,11 +1864,11 @@ TEST_F(process_native_type_complex_instrs_for_str_type_test, TestInstrRFND2)
 
 // -----------------------------------------------------------------------------
 
-class process_native_type_complex_instrs_for_array_type_test : public process_native_type_complex_instrs_test {};
+class instrs_native_array_type_complex_instrs_test : public instrs_native_type_complex_instrs_test {};
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_complex_instrs_for_array_type_test, TestInstrARYLEN)
+TEST_F(instrs_native_array_type_complex_instrs_test, TestInstrARYLEN)
 {
   corevm::types::native_array array = { 1, 2, 3 };
   corevm::types::native_array::size_type expected_result = array.size();
@@ -1882,7 +1882,7 @@ TEST_F(process_native_type_complex_instrs_for_array_type_test, TestInstrARYLEN)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_complex_instrs_for_array_type_test, TestInstrARYEMP)
+TEST_F(instrs_native_array_type_complex_instrs_test, TestInstrARYEMP)
 {
   corevm::types::native_array array = { 1, 2, 3 };
   bool expected_result = false;
@@ -1895,7 +1895,7 @@ TEST_F(process_native_type_complex_instrs_for_array_type_test, TestInstrARYEMP)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_complex_instrs_for_array_type_test, TestInstrARYAT)
+TEST_F(instrs_native_array_type_complex_instrs_test, TestInstrARYAT)
 {
   corevm::types::native_array array = { 1, 2, 3 };
   corevm::types::uint32 index = 1;
@@ -1912,7 +1912,7 @@ TEST_F(process_native_type_complex_instrs_for_array_type_test, TestInstrARYAT)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_complex_instrs_for_array_type_test, TestInstrARYFRT)
+TEST_F(instrs_native_array_type_complex_instrs_test, TestInstrARYFRT)
 {
   corevm::types::native_array array = { 1, 2, 3 };
   corevm::types::native_array::value_type expected_result = 1;
@@ -1926,7 +1926,7 @@ TEST_F(process_native_type_complex_instrs_for_array_type_test, TestInstrARYFRT)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_complex_instrs_for_array_type_test, TestInstrARYBAK)
+TEST_F(instrs_native_array_type_complex_instrs_test, TestInstrARYBAK)
 {
   corevm::types::native_array array = { 1, 2, 3 };
   corevm::types::native_array::value_type expected_result = 3;
@@ -1940,7 +1940,7 @@ TEST_F(process_native_type_complex_instrs_for_array_type_test, TestInstrARYBAK)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_complex_instrs_for_array_type_test, TestInstrARYAPND)
+TEST_F(instrs_native_array_type_complex_instrs_test, TestInstrARYAPND)
 {
   corevm::types::native_array array = { 1, 2, 3 };
   corevm::types::uint64 data = 4;
@@ -1957,7 +1957,7 @@ TEST_F(process_native_type_complex_instrs_for_array_type_test, TestInstrARYAPND)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_complex_instrs_for_array_type_test, TestInstrARYPOP)
+TEST_F(instrs_native_array_type_complex_instrs_test, TestInstrARYPOP)
 {
   corevm::types::native_array array = { 1, 2, 3 };
   corevm::types::native_array expected_result = { 1, 2 };
@@ -1971,7 +1971,7 @@ TEST_F(process_native_type_complex_instrs_for_array_type_test, TestInstrARYPOP)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_complex_instrs_for_array_type_test, TestInstrARYSWP)
+TEST_F(instrs_native_array_type_complex_instrs_test, TestInstrARYSWP)
 {
   corevm::types::native_array array = { 1, 2, 3 };
   corevm::types::native_array other = { 4, 5, 6 };
@@ -1988,7 +1988,7 @@ TEST_F(process_native_type_complex_instrs_for_array_type_test, TestInstrARYSWP)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_complex_instrs_for_array_type_test, TestInstrARYCLR)
+TEST_F(instrs_native_array_type_complex_instrs_test, TestInstrARYCLR)
 {
   corevm::types::native_array array = { 1, 2, 3 };
   corevm::types::native_array expected_result;
@@ -2003,11 +2003,11 @@ TEST_F(process_native_type_complex_instrs_for_array_type_test, TestInstrARYCLR)
 
 // -----------------------------------------------------------------------------
 
-class process_native_type_complex_instrs_for_map_type_test : public process_native_type_complex_instrs_test {};
+class instrs_native_map_type_complex_instrs_test : public instrs_native_type_complex_instrs_test {};
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_complex_instrs_for_map_type_test, TestInstrMAPLEN)
+TEST_F(instrs_native_map_type_complex_instrs_test, TestInstrMAPLEN)
 {
   corevm::types::native_map map = {
     { 1, 1 }
@@ -2024,7 +2024,7 @@ TEST_F(process_native_type_complex_instrs_for_map_type_test, TestInstrMAPLEN)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_complex_instrs_for_map_type_test, TestInstrMAPEMP)
+TEST_F(instrs_native_map_type_complex_instrs_test, TestInstrMAPEMP)
 {
   corevm::types::native_map map = {
     { 1, 1 }
@@ -2042,7 +2042,7 @@ TEST_F(process_native_type_complex_instrs_for_map_type_test, TestInstrMAPEMP)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_complex_instrs_for_map_type_test, TestInstrMAPAT)
+TEST_F(instrs_native_map_type_complex_instrs_test, TestInstrMAPAT)
 {
   corevm::types::native_map map = {
     { 1, 100 }
@@ -2061,7 +2061,7 @@ TEST_F(process_native_type_complex_instrs_for_map_type_test, TestInstrMAPAT)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_complex_instrs_for_map_type_test, TestInstrMAPPUT)
+TEST_F(instrs_native_map_type_complex_instrs_test, TestInstrMAPPUT)
 {
   corevm::types::native_map map;
   corevm::types::uint64 key = 1;
@@ -2081,7 +2081,7 @@ TEST_F(process_native_type_complex_instrs_for_map_type_test, TestInstrMAPPUT)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_complex_instrs_for_map_type_test, TestInstrMAPERS)
+TEST_F(instrs_native_map_type_complex_instrs_test, TestInstrMAPERS)
 {
   corevm::types::native_map map = {
     { 1, 11 },
@@ -2103,7 +2103,7 @@ TEST_F(process_native_type_complex_instrs_for_map_type_test, TestInstrMAPERS)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_complex_instrs_for_map_type_test, TestInstrMAPCLR)
+TEST_F(instrs_native_map_type_complex_instrs_test, TestInstrMAPCLR)
 {
   corevm::types::native_map map = {
     { 1, 11 },
@@ -2121,7 +2121,7 @@ TEST_F(process_native_type_complex_instrs_for_map_type_test, TestInstrMAPCLR)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(process_native_type_complex_instrs_for_map_type_test, TestInstrMAPSWP)
+TEST_F(instrs_native_map_type_complex_instrs_test, TestInstrMAPSWP)
 {
   corevm::types::native_map map = {
     { 1, 11 },
