@@ -35,7 +35,7 @@ const double corevm::runtime::gc_rule_by_ntvhndl_pool_size::DEFAULT_CUTOFF = 0.7
 // -----------------------------------------------------------------------------
 
 const std::unordered_map<corevm::runtime::gc_bitfield_t, corevm::runtime::gc_rule_wrapper>
-corevm::runtime::gc_rule_meta::gc_rule_map = {
+corevm::runtime::gc_rule_meta::gc_rule_map {
   {
     corevm::runtime::gc_rule_meta::gc_bitfields::GC_ALWAYS,
     { .gc_rule=new corevm::runtime::gc_rule_always() }

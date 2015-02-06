@@ -31,7 +31,7 @@ class native_map_type_interfaces_test : public native_type_interfaces_test_base 
 
 TEST_F(native_map_type_interfaces_test, TestSize)
 {
-  corevm::types::native_map map = {
+  corevm::types::native_map map {
     { 1, 1 },
     { 2, 2 },
     { 3, 3 },
@@ -52,7 +52,7 @@ TEST_F(native_map_type_interfaces_test, TestSize)
 
 TEST_F(native_map_type_interfaces_test, TestEmpty)
 {
-  corevm::types::native_map map = {
+  corevm::types::native_map map {
     { 1, 1 }
   };
 
@@ -71,7 +71,7 @@ TEST_F(native_map_type_interfaces_test, TestEmpty)
 
 TEST_F(native_map_type_interfaces_test, TestAt)
 {
-  corevm::types::native_map map = {
+  corevm::types::native_map map {
     { 1, 101 }
   };
 
@@ -97,7 +97,7 @@ TEST_F(native_map_type_interfaces_test, TestPut)
   corevm::types::native_type_handle key = corevm::types::uint64(1);
   corevm::types::native_type_handle value = corevm::types::uint64(101);
 
-  corevm::types::native_map expected_result = {
+  corevm::types::native_map expected_result {
     { 1, 101 }
   };
 
@@ -114,14 +114,14 @@ TEST_F(native_map_type_interfaces_test, TestPut)
 
 TEST_F(native_map_type_interfaces_test, TestErase)
 {
-  corevm::types::native_map map = {
+  corevm::types::native_map map {
     { 1, 101 },
     { 2, 2002 },
   };
 
   corevm::types::native_type_handle operand = map;
   corevm::types::native_type_handle key = corevm::types::uint64(1);
-  corevm::types::native_map expected_result = {
+  corevm::types::native_map expected_result {
     { 2, 2002 }
   };
 
@@ -137,7 +137,7 @@ TEST_F(native_map_type_interfaces_test, TestErase)
 
 TEST_F(native_map_type_interfaces_test, TestClear)
 {
-  corevm::types::native_map map = {
+  corevm::types::native_map map {
     { 1, 101 },
     { 2, 2002 },
   };
@@ -157,7 +157,7 @@ TEST_F(native_map_type_interfaces_test, TestClear)
 TEST_F(native_map_type_interfaces_test, TestSwap)
 {
   corevm::types::native_map map;
-  corevm::types::native_map other_map = {
+  corevm::types::native_map other_map {
     { 1001, 2002 }
   };
 

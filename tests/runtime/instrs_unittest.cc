@@ -93,7 +93,7 @@ TEST_F(instrs_obj_unittest, TestInstrLDOBJ)
   corevm::runtime::compartment compartment;
   corevm::runtime::vector vector;
 
-  corevm::runtime::closure_ctx ctx1 = {
+  corevm::runtime::closure_ctx ctx1 {
     .compartment_id = compartment_id,
     .closure_id = closure_id
   };
@@ -135,7 +135,7 @@ TEST_F(instrs_obj_unittest, TestInstrLDOBJ)
   m_process.push_frame(parent_frame);
   m_process.push_frame(frame);
 
-  corevm::runtime::instr instr = {
+  corevm::runtime::instr instr {
     .code=0,
     .oprd1=static_cast<corevm::runtime::instr_oprd>(key),
     .oprd2=0
@@ -150,7 +150,7 @@ TEST_F(instrs_obj_unittest, TestInstrLDOBJ)
 
 TEST_F(instrs_obj_unittest, TestInstrSTOBJ)
 {
-  corevm::runtime::instr instr = { .code=0, .oprd1=1, .oprd2=0 };
+  corevm::runtime::instr instr { .code=0, .oprd1=1, .oprd2=0 };
 
   corevm::runtime::frame frame(m_ctx);
   m_process.push_frame(frame);
@@ -174,7 +174,7 @@ TEST_F(instrs_obj_unittest, TestInstrSTOBJ)
 TEST_F(instrs_obj_unittest, TestInstrGETATTR)
 {
   corevm::dyobj::attr_key attr_key = 333;
-  corevm::runtime::instr instr = { .code=0, .oprd1=attr_key, .oprd2=0 };
+  corevm::runtime::instr instr { .code=0, .oprd1=attr_key, .oprd2=0 };
 
   corevm::dyobj::dyobj_id id1 = process::adapter(m_process).help_create_dyobj();
   corevm::dyobj::dyobj_id id2 = process::adapter(m_process).help_create_dyobj();
@@ -196,7 +196,7 @@ TEST_F(instrs_obj_unittest, TestInstrGETATTR)
 TEST_F(instrs_obj_unittest, TestInstrSETATTR)
 {
   corevm::dyobj::attr_key attr_key = 789;
-  corevm::runtime::instr instr = { .code=0, .oprd1=attr_key, .oprd2=0 };
+  corevm::runtime::instr instr { .code=0, .oprd1=attr_key, .oprd2=0 };
 
   corevm::dyobj::dyobj_id id1 = process::adapter(m_process).help_create_dyobj();
   corevm::dyobj::dyobj_id id2 = process::adapter(m_process).help_create_dyobj();
@@ -223,7 +223,7 @@ TEST_F(instrs_obj_unittest, TestInstrSETATTR)
 TEST_F(instrs_obj_unittest, TestInstrDELATTR)
 {
   corevm::dyobj::attr_key attr_key = 777;
-  corevm::runtime::instr instr = { .code=0, .oprd1=attr_key, .oprd2=0 };
+  corevm::runtime::instr instr { .code=0, .oprd1=attr_key, .oprd2=0 };
 
   corevm::dyobj::dyobj_id id = process::adapter(m_process).help_create_dyobj();
   corevm::dyobj::dyobj_id attr_id = process::adapter(m_process).help_create_dyobj();
@@ -275,7 +275,7 @@ TEST_F(instrs_obj_unittest, TestInstrLDOBJ2)
   corevm::runtime::compartment compartment;
   corevm::runtime::vector vector;
 
-  corevm::runtime::closure_ctx ctx1 = {
+  corevm::runtime::closure_ctx ctx1 {
     .compartment_id = compartment_id,
     .closure_id = closure_id
   };
@@ -317,7 +317,7 @@ TEST_F(instrs_obj_unittest, TestInstrLDOBJ2)
   m_process.push_frame(parent_frame);
   m_process.push_frame(frame);
 
-  corevm::runtime::instr instr = {
+  corevm::runtime::instr instr {
     .code=0,
     .oprd1=static_cast<corevm::runtime::instr_oprd>(key),
     .oprd2=0
@@ -332,7 +332,7 @@ TEST_F(instrs_obj_unittest, TestInstrLDOBJ2)
 
 TEST_F(instrs_obj_unittest, TestInstrSTOBJ2)
 {
-  corevm::runtime::instr instr = { .code=0, .oprd1=1, .oprd2=0 };
+  corevm::runtime::instr instr { .code=0, .oprd1=1, .oprd2=0 };
 
   corevm::runtime::frame frame(m_ctx);
   m_process.push_frame(frame);
@@ -358,7 +358,7 @@ TEST_F(instrs_obj_unittest, TestInstrDELOBJ)
   corevm::runtime::variable_key key = 1;
   corevm::dyobj::dyobj_id id = process::adapter(m_process).help_create_dyobj();
 
-  corevm::runtime::instr instr = {
+  corevm::runtime::instr instr {
     .code=0,
     .oprd1=static_cast<corevm::runtime::instr_oprd>(key),
     .oprd2=0
@@ -382,7 +382,7 @@ TEST_F(instrs_obj_unittest, TestInstrDELOBJ2)
   corevm::runtime::variable_key key = 1;
   corevm::dyobj::dyobj_id id = process::adapter(m_process).help_create_dyobj();
 
-  corevm::runtime::instr instr = {
+  corevm::runtime::instr instr {
     .code=0,
     .oprd1=static_cast<corevm::runtime::instr_oprd>(key),
     .oprd2=0
@@ -615,7 +615,7 @@ TEST_F(instrs_functions_instrs_test, TestInstrPUTKWARG)
     corevm::runtime::missing_parameter_error
   );
 
-  corevm::runtime::instr instr = {
+  corevm::runtime::instr instr {
     .code=0,
     .oprd1=static_cast<corevm::runtime::instr_oprd>(key),
     .oprd2=2
@@ -659,7 +659,7 @@ TEST_F(instrs_functions_instrs_test, TestInstrGETKWARG)
   frame.put_param_value_pair(key, id);
   m_process.push_frame(frame);
 
-  corevm::runtime::instr instr = {
+  corevm::runtime::instr instr {
     .code=0,
     .oprd1=static_cast<corevm::runtime::instr_oprd>(key),
     .oprd2=0
@@ -892,7 +892,7 @@ TEST_F(instrs_control_instrs_test, TestInstrJMP)
   corevm::runtime::instr_addr current_addr = m_process.current_addr();
   ASSERT_EQ(0, current_addr);
 
-  corevm::runtime::instr instr = {
+  corevm::runtime::instr instr {
     .code=0,
     .oprd1=static_cast<corevm::runtime::instr_oprd>(8),
     .oprd2=0
@@ -919,7 +919,7 @@ TEST_F(instrs_control_instrs_test, TestInstrJMPIF)
   corevm::runtime::instr_addr current_addr = m_process.current_addr();
   ASSERT_EQ(0, current_addr);
 
-  corevm::runtime::instr instr = {
+  corevm::runtime::instr instr {
     .code=0,
     .oprd1=static_cast<corevm::runtime::instr_oprd>(8),
     .oprd2=0
@@ -946,7 +946,7 @@ TEST_F(instrs_control_instrs_test, TestInstrJMPIF_OnFalseCondition)
   corevm::runtime::instr_addr current_addr = m_process.current_addr();
   ASSERT_EQ(0, current_addr);
 
-  corevm::runtime::instr instr = {
+  corevm::runtime::instr instr {
     .code=0,
     .oprd1=static_cast<corevm::runtime::instr_oprd>(8),
     .oprd2=0
@@ -987,7 +987,7 @@ TEST_F(instrs_control_instrs_test, TestInstrEXIT)
 
   ASSERT_EQ(false, instrs_control_instrs_test::signal_fired);
 
-  corevm::runtime::instr instr = {
+  corevm::runtime::instr instr {
     .code=0,
     .oprd1=EXIT_SUCCESS,
     .oprd2=0
@@ -1870,7 +1870,7 @@ class instrs_native_array_type_complex_instrs_test : public instrs_native_type_c
 
 TEST_F(instrs_native_array_type_complex_instrs_test, TestInstrARYLEN)
 {
-  corevm::types::native_array array = { 1, 2, 3 };
+  corevm::types::native_array array { 1, 2, 3 };
   corevm::types::native_array::size_type expected_result = array.size();
   corevm::types::native_type_handle oprd = array;
 
@@ -1884,7 +1884,7 @@ TEST_F(instrs_native_array_type_complex_instrs_test, TestInstrARYLEN)
 
 TEST_F(instrs_native_array_type_complex_instrs_test, TestInstrARYEMP)
 {
-  corevm::types::native_array array = { 1, 2, 3 };
+  corevm::types::native_array array { 1, 2, 3 };
   bool expected_result = false;
   corevm::types::native_type_handle oprd = array;
 
@@ -1897,7 +1897,7 @@ TEST_F(instrs_native_array_type_complex_instrs_test, TestInstrARYEMP)
 
 TEST_F(instrs_native_array_type_complex_instrs_test, TestInstrARYAT)
 {
-  corevm::types::native_array array = { 1, 2, 3 };
+  corevm::types::native_array array { 1, 2, 3 };
   corevm::types::uint32 index = 1;
   corevm::types::native_array::value_type expected_result = 2;
 
@@ -1914,7 +1914,7 @@ TEST_F(instrs_native_array_type_complex_instrs_test, TestInstrARYAT)
 
 TEST_F(instrs_native_array_type_complex_instrs_test, TestInstrARYFRT)
 {
-  corevm::types::native_array array = { 1, 2, 3 };
+  corevm::types::native_array array { 1, 2, 3 };
   corevm::types::native_array::value_type expected_result = 1;
   corevm::types::native_type_handle oprd = array;
 
@@ -1928,7 +1928,7 @@ TEST_F(instrs_native_array_type_complex_instrs_test, TestInstrARYFRT)
 
 TEST_F(instrs_native_array_type_complex_instrs_test, TestInstrARYBAK)
 {
-  corevm::types::native_array array = { 1, 2, 3 };
+  corevm::types::native_array array { 1, 2, 3 };
   corevm::types::native_array::value_type expected_result = 3;
   corevm::types::native_type_handle oprd = array;
 
@@ -1942,9 +1942,9 @@ TEST_F(instrs_native_array_type_complex_instrs_test, TestInstrARYBAK)
 
 TEST_F(instrs_native_array_type_complex_instrs_test, TestInstrARYAPND)
 {
-  corevm::types::native_array array = { 1, 2, 3 };
+  corevm::types::native_array array { 1, 2, 3 };
   corevm::types::uint64 data = 4;
-  corevm::types::native_array expected_result = { 1, 2, 3, 4 };
+  corevm::types::native_array expected_result { 1, 2, 3, 4 };
 
   corevm::types::native_type_handle oprd1 = array;
   corevm::types::native_type_handle oprd2 = data;
@@ -1959,8 +1959,8 @@ TEST_F(instrs_native_array_type_complex_instrs_test, TestInstrARYAPND)
 
 TEST_F(instrs_native_array_type_complex_instrs_test, TestInstrARYPOP)
 {
-  corevm::types::native_array array = { 1, 2, 3 };
-  corevm::types::native_array expected_result = { 1, 2 };
+  corevm::types::native_array array { 1, 2, 3 };
+  corevm::types::native_array expected_result { 1, 2 };
   corevm::types::native_type_handle oprd = array;
 
   push_eval_stack_and_frame(eval_oprds_list{oprd});
@@ -1973,8 +1973,8 @@ TEST_F(instrs_native_array_type_complex_instrs_test, TestInstrARYPOP)
 
 TEST_F(instrs_native_array_type_complex_instrs_test, TestInstrARYSWP)
 {
-  corevm::types::native_array array = { 1, 2, 3 };
-  corevm::types::native_array other = { 4, 5, 6 };
+  corevm::types::native_array array { 1, 2, 3 };
+  corevm::types::native_array other { 4, 5, 6 };
   corevm::types::native_array expected_result = other;
 
   corevm::types::native_type_handle oprd1 = array;
@@ -1990,7 +1990,7 @@ TEST_F(instrs_native_array_type_complex_instrs_test, TestInstrARYSWP)
 
 TEST_F(instrs_native_array_type_complex_instrs_test, TestInstrARYCLR)
 {
-  corevm::types::native_array array = { 1, 2, 3 };
+  corevm::types::native_array array { 1, 2, 3 };
   corevm::types::native_array expected_result;
 
   corevm::types::native_type_handle oprd = array;
@@ -2009,7 +2009,7 @@ class instrs_native_map_type_complex_instrs_test : public instrs_native_type_com
 
 TEST_F(instrs_native_map_type_complex_instrs_test, TestInstrMAPLEN)
 {
-  corevm::types::native_map map = {
+  corevm::types::native_map map {
     { 1, 1 }
   };
 
@@ -2026,7 +2026,7 @@ TEST_F(instrs_native_map_type_complex_instrs_test, TestInstrMAPLEN)
 
 TEST_F(instrs_native_map_type_complex_instrs_test, TestInstrMAPEMP)
 {
-  corevm::types::native_map map = {
+  corevm::types::native_map map {
     { 1, 1 }
   };
 
@@ -2044,7 +2044,7 @@ TEST_F(instrs_native_map_type_complex_instrs_test, TestInstrMAPEMP)
 
 TEST_F(instrs_native_map_type_complex_instrs_test, TestInstrMAPAT)
 {
-  corevm::types::native_map map = {
+  corevm::types::native_map map {
     { 1, 100 }
   };
 
@@ -2083,7 +2083,7 @@ TEST_F(instrs_native_map_type_complex_instrs_test, TestInstrMAPPUT)
 
 TEST_F(instrs_native_map_type_complex_instrs_test, TestInstrMAPERS)
 {
-  corevm::types::native_map map = {
+  corevm::types::native_map map {
     { 1, 11 },
     { 2, 22 },
   };
@@ -2105,7 +2105,7 @@ TEST_F(instrs_native_map_type_complex_instrs_test, TestInstrMAPERS)
 
 TEST_F(instrs_native_map_type_complex_instrs_test, TestInstrMAPCLR)
 {
-  corevm::types::native_map map = {
+  corevm::types::native_map map {
     { 1, 11 },
     { 2, 222 },
   };
@@ -2123,17 +2123,17 @@ TEST_F(instrs_native_map_type_complex_instrs_test, TestInstrMAPCLR)
 
 TEST_F(instrs_native_map_type_complex_instrs_test, TestInstrMAPSWP)
 {
-  corevm::types::native_map map = {
+  corevm::types::native_map map {
     { 1, 11 },
     { 2, 22 },
   };
 
-  corevm::types::native_map other = {
+  corevm::types::native_map other {
     { 1, 22 },
     { 2, 11 },
   };
 
-  corevm::types::native_map expected_result = {
+  corevm::types::native_map expected_result {
     { 1, 22 },
     { 2, 11 },
   };

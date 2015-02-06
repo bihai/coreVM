@@ -386,7 +386,7 @@ TEST_F(process_signal_handling_unittest, TestHandleSIGFPE)
 
   ASSERT_EQ(0, process.stack_size());
 
-  std::vector<corevm::runtime::instr> instrs = {
+  std::vector<corevm::runtime::instr> instrs {
     { .code=corevm::runtime::instr_enum::DIV, .oprd1=0, .oprd2=0 },
     { .code=corevm::runtime::instr_enum::DIV, .oprd1=0, .oprd2=0 },
   };

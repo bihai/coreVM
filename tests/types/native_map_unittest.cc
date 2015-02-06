@@ -44,7 +44,7 @@ TEST_F(native_map_unittest, TestEmptyInitialization)
 
 TEST_F(native_map_unittest, TestCopyConstructor)
 {
-  corevm::types::native_map map1 = {
+  corevm::types::native_map map1 {
     { 1, 1 },
     { 2, 2 },
     { 3, 3 },
@@ -89,7 +89,7 @@ TEST_F(native_map_unittest, TestConvertingToIntegerType)
 
 TEST_F(native_map_unittest, TestAssignmentOperator)
 {
-  corevm::types::native_map map1 = {
+  corevm::types::native_map map1 {
     { 1, 1 },
     { 2, 2 },
     { 3, 3 },
@@ -124,7 +124,7 @@ TEST_F(native_map_unittest, TestEqualityBetweenEmptyInstances)
 
 TEST_F(native_map_unittest, TestEqualityBetweenNonEmptyInstances)
 {
-  corevm::types::native_map map1 = {
+  corevm::types::native_map map1 {
     { 1, 1 },
     { 2, 2 },
     { 3, 3 },
@@ -139,12 +139,12 @@ TEST_F(native_map_unittest, TestEqualityBetweenNonEmptyInstances)
 
 TEST_F(native_map_unittest, TestEqualityBetweenIdenticalInstances)
 {
-  corevm::types::native_map map1 = {
+  corevm::types::native_map map1 {
     { 1, 1 },
     { 2, 2 },
     { 3, 3 },
   };
-  corevm::types::native_map map2 = {
+  corevm::types::native_map map2 {
     { 1, 1 },
     { 2, 2 },
     { 3, 3 },
@@ -164,7 +164,7 @@ class native_map_functionality_unittest : public native_map_unittest {};
 
 TEST_F(native_map_functionality_unittest, TestAtSuccessful)
 {
-  corevm::types::native_map map = {
+  corevm::types::native_map map {
     { 1, 1 }
   };
 

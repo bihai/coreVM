@@ -202,7 +202,7 @@ TEST_F(frame_unittest, TestListParamValuePairKeys)
 {
   corevm::runtime::frame frame(m_closure_ctx);
 
-  std::list<corevm::runtime::variable_key> expected_keys = {};
+  std::list<corevm::runtime::variable_key> expected_keys {};
   std::list<corevm::runtime::variable_key> actual_keys = frame.param_value_pair_keys();
 
   ASSERT_EQ(expected_keys, actual_keys);
@@ -215,7 +215,7 @@ TEST_F(frame_unittest, TestListParamValuePairKeys)
   frame.put_param_value_pair(key1, id1);
   frame.put_param_value_pair(key2, id2);
 
-  expected_keys = {key1, key2};
+  expected_keys = { key1, key2 };
   actual_keys = frame.param_value_pair_keys();
 
   expected_keys.sort();

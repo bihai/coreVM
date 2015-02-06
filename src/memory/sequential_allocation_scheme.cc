@@ -591,7 +591,7 @@ corevm::memory::buddy_allocation_scheme::combine_free_blocks() noexcept
             set_nth_bit_uint8(&flags, FLAG_SPLIT);
           }
 
-          block_descriptor_type combined_block = {
+          block_descriptor_type combined_block {
             .size = current_block.size + next_block.size,
             .actual_size = 0,
             .offset = current_block.offset,

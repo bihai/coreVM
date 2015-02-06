@@ -51,7 +51,7 @@ TEST_F(native_array_unittest, TestEmptyInitialization)
 
 TEST_F(native_array_unittest, TestCopyConstructor)
 {
-  const corevm::types::native_array array1 = {
+  const corevm::types::native_array array1 {
     fixture_element1,
     fixture_element2,
     fixture_element3
@@ -96,7 +96,7 @@ TEST_F(native_array_unittest, TestConvertingToIntegerType)
 
 TEST_F(native_array_unittest, TestAssignmentOperator)
 {
-  const corevm::types::native_array array1 = {
+  const corevm::types::native_array array1 {
     fixture_element1,
     fixture_element2,
     fixture_element3
@@ -130,7 +130,7 @@ TEST_F(native_array_unittest, TestEqualityBetweenEmptyArrays)
 
 TEST_F(native_array_unittest, TestEqualityBetweenNonEmptyArrays)
 {
-  const corevm::types::native_array array1 = {
+  const corevm::types::native_array array1 {
     fixture_element1,
     fixture_element2,
     fixture_element3
@@ -145,12 +145,12 @@ TEST_F(native_array_unittest, TestEqualityBetweenNonEmptyArrays)
 
 TEST_F(native_array_unittest, TestEqualityBetweenIdenticalArrays)
 {
-  const corevm::types::native_array array1 = {
+  const corevm::types::native_array array1 {
     fixture_element1,
     fixture_element2,
     fixture_element3
   };
-  const corevm::types::native_array array2 = {
+  const corevm::types::native_array array2 {
     fixture_element1,
     fixture_element2,
     fixture_element3
@@ -199,7 +199,7 @@ TEST_F(native_array_functionality_unittest, TestPushBack)
 
 TEST_F(native_array_functionality_unittest, TestAtSuccessful)
 {
-  const corevm::types::native_array array = {1, 2, 3};
+  const corevm::types::native_array array {1, 2, 3};
 
   corevm::types::native_array::value_type expected_result = 3;
   corevm::types::native_array::value_type actual_result = array.at(2);
@@ -211,7 +211,7 @@ TEST_F(native_array_functionality_unittest, TestAtSuccessful)
 
 TEST_F(native_array_functionality_unittest, TestAtFailure)
 {
-  const corevm::types::native_array array = {1, 2, 3};
+  const corevm::types::native_array array {1, 2, 3};
 
   ASSERT_THROW(
     {

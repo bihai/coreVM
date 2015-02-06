@@ -100,7 +100,7 @@ TEST_F(dynamic_object_unittest, TestGetAndSetAttrs)
   corevm::dyobj::dyobj_id obj_id2 = 2;
   corevm::dyobj::dyobj_id obj_id3 = 3;
 
-  std::map<corevm::dyobj::attr_key, corevm::dyobj::dyobj_id> mock_attrs = {
+  std::map<corevm::dyobj::attr_key, corevm::dyobj::dyobj_id> mock_attrs {
     { key1, obj_id1 },
     { key2, obj_id2 },
     { key3, obj_id3 }
