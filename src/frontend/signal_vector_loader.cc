@@ -140,7 +140,7 @@ const std::string corevm::frontend::signal_vector_loader::raw_schema = \
               "\"$ref\": \"#/definitions/instr\""
             "}"
           "],"
-          "\"minItems\": 1,"
+          "\"minItems\": 3,"
           "\"maxItems\": 3,"
           "\"additionalItems\": false"
         "}"

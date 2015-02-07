@@ -44,27 +44,21 @@ corevm::frontend::get_vector_from_json(const JSON& json)
     const JSON& instr_json = *itr;
     const JSON::array& instr_tuple = instr_json.array_items();
 
-    corevm::runtime::instr_code code = 0;
-    corevm::runtime::instr_oprd oprd1 = 0;
-    corevm::runtime::instr_oprd oprd2 = 0;
+    assert(instr_tuple.size() == 3);
 
     const JSON& code_raw = instr_tuple[0];
-    code = static_cast<corevm::runtime::instr_code>(code_raw.int_value());
+    const JSON& oprd1_raw = instr_tuple[1];
+    const JSON& oprd2_raw = instr_tuple[2];
 
-    if (instr_tuple.size() >= 2)
-    {
-      const JSON& oprd1_raw = instr_tuple[1];
-      oprd1 = static_cast<corevm::runtime::instr_oprd>(oprd1_raw.int_value());
-    }
+    corevm::runtime::instr_code code = \
+      static_cast<corevm::runtime::instr_code>(code_raw.int_value());
+    corevm::runtime::instr_oprd oprd1 = \
+      static_cast<corevm::runtime::instr_oprd>(oprd1_raw.int_value());
+    corevm::runtime::instr_oprd oprd2 = \
+      static_cast<corevm::runtime::instr_oprd>(oprd2_raw.int_value());
 
-    if (instr_tuple.size() == 3)
-    {
-      const JSON& oprd2_raw = instr_tuple[2];
-      oprd2 = static_cast<corevm::runtime::instr_oprd>(oprd2_raw.int_value());
-    }
-
-    vector.push_back(corevm::runtime::instr
-      {
+    vector.push_back(
+      corevm::runtime::instr {
         .code = code,
         .oprd1 = oprd1,
         .oprd2 = oprd2,

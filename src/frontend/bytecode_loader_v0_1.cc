@@ -148,7 +148,7 @@ corevm::frontend::bytecode_loader_v0_1::schema() const
                 "\"$ref\": \"#/definitions/instr\""
               "}"
             "],"
-            "\"minItems\": 1,"
+            "\"minItems\": 3,"
             "\"maxItems\": 3,"
             "\"additionalItems\": false"
           "}"
