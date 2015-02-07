@@ -332,7 +332,7 @@ void
 corevm::memory::object_container<T, AllocatorType>::check_ptr(pointer p) const
   throw(corevm::memory::invalid_address_error)
 {
-  uint64_t addr = static_cast<uint64_t>( (char*)p - (char*)(0) );
+  uint64_t addr = static_cast<uint64_t>( (uint8_t*)p - (uint8_t*)(0) );
 
   if (m_addrs.find(p) == m_addrs.end())
   {
