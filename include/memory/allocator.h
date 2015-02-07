@@ -44,7 +44,12 @@ class allocator
 {
 public:
   allocator();
+
   ~allocator();
+
+  /* Allocators should not be copyable. */
+  allocator(const allocator&) = delete;
+  allocator& operator=(const allocator&) = delete;
 
   void* allocate(size_t) noexcept;
   int deallocate(void*) noexcept;
