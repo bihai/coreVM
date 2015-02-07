@@ -398,7 +398,7 @@ corevm::runtime::process::start()
 
     sigsetjmp(corevm::runtime::sighandler_registrar::get_sigjmp_env(), 1);
 
-    if (!corevm::runtime::sighandler_registrar::sig_raised)
+    if (!corevm::runtime::sighandler_registrar::is_sig_raised())
     {
       handler->execute(instr, *this);
     }
@@ -409,7 +409,8 @@ corevm::runtime::process::start()
         break;
       }
     }
-    corevm::runtime::sighandler_registrar::sig_raised = false;
+
+    corevm::runtime::sighandler_registrar::clear_sig_raised();
 
     ++m_pc;
 
