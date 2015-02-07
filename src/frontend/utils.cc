@@ -28,6 +28,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <sneaker/json/json.h>
 
 #include <cassert>
+#include <string>
 #include <utility>
 
 
@@ -68,3 +69,52 @@ corevm::frontend::get_vector_from_json(const JSON& json)
 
   return std::move(vector);
 }
+
+// -----------------------------------------------------------------------------
+
+const std::string
+corevm::frontend::get_v0_1_instr_schema_definition()
+{
+  static const std::string def(
+    "{"
+      "\"type\": \"integer\","
+      "\"minimum\": 0,"
+      "\"maximum\": 4294967295"
+    "}"
+  );
+
+  return def;
+}
+
+// -----------------------------------------------------------------------------
+
+const std::string
+corevm::frontend::get_v0_1_vector_schema_definition()
+{
+  static const std::string def(
+    "{"
+      "\"type:\": \"array\","
+      "\"items\": {"
+        "\"type:\": \"array\","
+        "\"items\": ["
+          "{"
+            "\"$ref\": \"#/definitions/instr\""
+          "},"
+          "{"
+            "\"$ref\": \"#/definitions/instr\""
+          "},"
+          "{"
+            "\"$ref\": \"#/definitions/instr\""
+          "}"
+        "],"
+        "\"minItems\": 3,"
+        "\"maxItems\": 3,"
+        "\"additionalItems\": false"
+      "}"
+    "}"
+  );
+
+  return def;
+}
+
+// -----------------------------------------------------------------------------
