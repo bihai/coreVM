@@ -151,8 +151,8 @@ const std::string corevm::frontend::signal_vector_loader::raw_schema = \
 // -----------------------------------------------------------------------------
 
 corevm::frontend::signal_vector_loader::signal_vector_loader(
-  const std::string& path
-) :
+  const std::string& path)
+  :
   m_path(path)
 {
   // Do nothing here.

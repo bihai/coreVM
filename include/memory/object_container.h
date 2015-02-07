@@ -79,7 +79,8 @@ public:
       typedef typename AllocatorType::difference_type difference_type;
       typedef typename AllocatorType::size_type size_type;
 
-      iterator(_ContainerType& container, _Inner inner):
+      iterator(_ContainerType& container, _Inner inner)
+        :
         m_container(&container),
         m_inner(inner)
       {
@@ -151,7 +152,8 @@ public:
       typedef typename AllocatorType::difference_type difference_type;
       typedef typename AllocatorType::size_type size_type;
 
-      const_iterator(_ContainerType& container, _Inner inner):
+      const_iterator(_ContainerType& container, _Inner inner)
+        :
         m_container(&container),
         m_inner(inner)
       {

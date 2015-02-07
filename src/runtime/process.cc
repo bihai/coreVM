@@ -111,11 +111,17 @@ corevm::runtime::process::adapter::help_get_dyobj(corevm::dyobj::dyobj_id id)
 
 // -----------------------------------------------------------------------------
 
-
-corevm::runtime::process::process():
+corevm::runtime::process::process()
+  :
   m_pause_exec(false),
   m_gc_flag(0),
-  m_pc(0)
+  m_pc(0),
+  m_dynamic_object_heap(),
+  m_dyobj_stack(),
+  m_call_stack(),
+  m_ntvhndl_pool(),
+  m_sig_instr_map(),
+  m_compartments()
 {
   // Do nothing here.
 }
