@@ -482,6 +482,14 @@ corevm::runtime::instr_handler_setattr::execute(
   corevm::dyobj::dyobj_id target_id = process.pop_stack();
 
   auto &obj = corevm::runtime::process::adapter(process).help_get_dyobj(target_id);
+
+  if (obj.get_flag(corevm::dyobj::flags::IS_MUTABLE))
+  {
+    throw corevm::runtime::invalid_operation_error(
+      str(format("cannot mutate immutable object 0x%08x") % target_id)
+    );
+  }
+
   auto &attr_obj = corevm::runtime::process::adapter(process).help_get_dyobj(attr_id);
   obj.putattr(attr_key, attr_id);
   attr_obj.manager().on_setattr();
