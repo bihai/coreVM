@@ -87,13 +87,13 @@ enum instr_enum : uint32_t
 
   /**
    * <mute, _, _>
-   * Sets the `IS_MUTABLE` flag on the object on top of the stack.
+   * Clears the `IS_IMMUTABLE` flag on the object on top of the stack.
    */
   MUTE,
 
   /**
    * <unmute, _, _>
-   * Cleats the `IS_MUTABLE` flag on the object on top of the stack.
+   * Sets the `IS_IMMUTABLE` flag on the object on top of the stack.
    */
   UNMUTE,
 
