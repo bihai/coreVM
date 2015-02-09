@@ -60,7 +60,7 @@ enum flags : uint8_t
 
   IS_CALLABLE = 7,
 
-  IS_MUTABLE = 8,
+  IS_IMMUTABLE = 8,
 
   /* ------------------------ Max value allowed ----------------------------- */
 
