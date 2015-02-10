@@ -30,8 +30,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <cassert>
 #include <cstdint>
 
-#include <sys/types.h>
-
 
 namespace corevm {
 
@@ -127,8 +125,7 @@ corevm::memory::allocation_policy<T, AllocationScheme, N>::deallocate(
   typename allocation_policy<T, AllocationScheme, N>::size_type
 )
 {
-  ssize_t res = m_allocator.deallocate(p);
-
+  int res = m_allocator.deallocate(p);
   assert(res == 1);
 }
 
