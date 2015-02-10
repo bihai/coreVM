@@ -42,7 +42,10 @@ using sneaker::json::JSON;
 corevm::runtime::vector get_vector_from_json(const JSON&);
 
 
-const std::string get_v0_1_instr_schema_definition();
+const std::string get_v0_1_instr_code_schema_definition();
+
+
+const std::string get_v0_1_instr_oprd_schema_definition();
 
 
 const std::string get_v0_1_vector_schema_definition();

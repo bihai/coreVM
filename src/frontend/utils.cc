@@ -75,13 +75,37 @@ corevm::frontend::get_vector_from_json(const JSON& json)
 // -----------------------------------------------------------------------------
 
 const std::string
-corevm::frontend::get_v0_1_instr_schema_definition()
+corevm::frontend::get_v0_1_instr_code_schema_definition()
 {
   static const std::string unformatted_def(
     "{"
       "\"type\": \"integer\","
       "\"minimum\": %lu,"
       "\"maximum\": %lu"
+    "}"
+  );
+
+  const std::string def(
+    str(
+      boost::format(unformatted_def)
+        % std::numeric_limits<corevm::runtime::instr_code>::min()
+        % std::numeric_limits<corevm::runtime::instr_code>::max()
+    )
+  );
+
+  return def;
+}
+
+// -----------------------------------------------------------------------------
+
+const std::string
+corevm::frontend::get_v0_1_instr_oprd_schema_definition()
+{
+  static const std::string unformatted_def(
+    "{"
+      "\"type\": \"integer\","
+      "\"minimum\": %llu,"
+      "\"maximum\": %llu"
     "}"
   );
 
@@ -108,13 +132,13 @@ corevm::frontend::get_v0_1_vector_schema_definition()
         "\"type:\": \"array\","
         "\"items\": ["
           "{"
-            "\"$ref\": \"#/definitions/instr\""
+            "\"$ref\": \"#/definitions/instr/code\""
           "},"
           "{"
-            "\"$ref\": \"#/definitions/instr\""
+            "\"$ref\": \"#/definitions/instr/oprd\""
           "},"
           "{"
-            "\"$ref\": \"#/definitions/instr\""
+            "\"$ref\": \"#/definitions/instr/oprd\""
           "}"
         "],"
         "\"minItems\": 3,"
