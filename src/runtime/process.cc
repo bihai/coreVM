@@ -136,14 +136,6 @@ corevm::runtime::process::~process()
 // -----------------------------------------------------------------------------
 
 const corevm::runtime::instr_addr
-corevm::runtime::process::top_addr() const
-{
-  return m_instrs.size() - 1;
-}
-
-// -----------------------------------------------------------------------------
-
-const corevm::runtime::instr_addr
 corevm::runtime::process::current_addr() const
 {
   return m_pc;
