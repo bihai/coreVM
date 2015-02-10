@@ -557,10 +557,10 @@ corevm::runtime::process::set_sig_vector(
 // -----------------------------------------------------------------------------
 
 void
-corevm::runtime::process::insert_vector(corevm::runtime::vector& block)
+corevm::runtime::process::insert_vector(corevm::runtime::vector& vector)
 {
   std::vector<corevm::runtime::instr>::iterator pos = m_instrs.begin() + m_pc + 1;
-  m_instrs.insert(pos, block.begin(), block.end());
+  m_instrs.insert(pos, vector.begin(), vector.end());
 }
 
 // -----------------------------------------------------------------------------
