@@ -63,7 +63,7 @@ using _GarbageCollectorType = typename corevm::gc::garbage_collector<
 
 // -----------------------------------------------------------------------------
 
-class garbage_collector_callback : public _GarbageCollectorType::callback
+class ntvhndl_collector_gc_callback : public _GarbageCollectorType::callback
 {
 private:
   using dynamic_object_type = typename _GarbageCollectorType::dynamic_object_type;
@@ -459,7 +459,7 @@ corevm::runtime::process::maybe_gc()
   corevm::gc::garbage_collector<garbage_collection_scheme> garbage_collector(
     m_dynamic_object_heap);
 
-  corevm::runtime::internal::garbage_collector_callback callback;
+  corevm::runtime::internal::ntvhndl_collector_gc_callback callback;
   garbage_collector.gc(&callback);
 
   std::for_each(
