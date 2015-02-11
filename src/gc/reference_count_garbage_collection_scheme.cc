@@ -63,29 +63,48 @@ corevm::gc::reference_count_garbage_collection_scheme::gc(
 
 // -----------------------------------------------------------------------------
 
+template<typename dynamic_object_heap_type>
+struct object_ref_count_decrementor
+{
+private:
+  using dynamic_object_type = typename dynamic_object_heap_type::dynamic_object_type;
+
+public:
+  object_ref_count_decrementor(dynamic_object_heap_type& heap)
+    :
+    m_heap(heap)
+  {
+  }
+
+  void operator()(
+    const typename dynamic_object_type::attr_key_type& attr_key,
+    const typename dynamic_object_type::dyobj_id_type& dyobj_id)
+  {
+    dynamic_object_type& referenced_object = m_heap.at(dyobj_id);
+    referenced_object.manager().dec_ref_count();
+  }
+
+private:
+  dynamic_object_heap_type& m_heap;
+};
+
+// -----------------------------------------------------------------------------
+
 void
 corevm::gc::reference_count_garbage_collection_scheme::check_and_dec_ref_count(
   corevm::gc::reference_count_garbage_collection_scheme::dynamic_object_heap_type& heap,
   corevm::gc::reference_count_garbage_collection_scheme::dynamic_object_type& object) const
 {
-  using _dynamic_object_type = typename
-    corevm::gc::reference_count_garbage_collection_scheme::dynamic_object_type;
+  using _dynamic_object_heap_type = typename
+    corevm::gc::reference_count_garbage_collection_scheme::dynamic_object_heap_type;
 
   if (!object.is_garbage_collectible())
   {
     return;
   }
 
-  object.iterate(
-    [this, &heap](
-      _dynamic_object_type::attr_key_type attr_key,
-      _dynamic_object_type::dyobj_id_type dyobj_id)
-    {
-      _dynamic_object_type& referenced_object = heap.at(dyobj_id);
-
-      referenced_object.manager().dec_ref_count();
-    }
-  );
+  object_ref_count_decrementor<_dynamic_object_heap_type> m(heap);
+  object.iterate(m);
 }
 
 // -----------------------------------------------------------------------------
