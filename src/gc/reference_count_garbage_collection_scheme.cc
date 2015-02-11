@@ -103,9 +103,49 @@ corevm::gc::reference_count_garbage_collection_scheme::check_and_dec_ref_count(
     return;
   }
 
-  object_ref_count_decrementor<_dynamic_object_heap_type> m(heap);
-  object.iterate(m);
+  object_ref_count_decrementor<_dynamic_object_heap_type> decrementor(heap);
+  object.iterate(decrementor);
 }
+
+// -----------------------------------------------------------------------------
+
+template<typename dynamic_object_heap_type>
+struct cycled_object_reference_decrementor
+{
+private:
+  using dynamic_object_type = typename dynamic_object_heap_type::dynamic_object_type;
+
+public:
+  cycled_object_reference_decrementor(
+    dynamic_object_heap_type& heap,
+    dynamic_object_type& object)
+    :
+    m_heap(heap),
+    m_object(object)
+  {
+  }
+
+  void operator()(
+    const typename dynamic_object_type::attr_key_type& attr_key,
+    const typename dynamic_object_type::dyobj_id_type& dyobj_id)
+  {
+    dynamic_object_type& referenced_object = m_heap.at(dyobj_id);
+
+    auto ref_count1 = m_object.manager().ref_count();
+    auto ref_count2 = referenced_object.manager().ref_count();
+
+    if (referenced_object.has_ref(m_object.id()) && ref_count1 == 1 && ref_count2 == 1)
+    {
+      m_object.manager().dec_ref_count();
+      referenced_object.manager().dec_ref_count();
+    }
+  }
+
+private:
+  dynamic_object_heap_type& m_heap;
+  dynamic_object_type& m_object;
+
+}; /* end of `cycled_object_reference_decrementor` */
 
 // -----------------------------------------------------------------------------
 
@@ -114,26 +154,11 @@ corevm::gc::reference_count_garbage_collection_scheme::resolve_self_reference_cy
   corevm::gc::reference_count_garbage_collection_scheme::dynamic_object_heap_type& heap,
   corevm::gc::reference_count_garbage_collection_scheme::dynamic_object_type& object) const
 {
-  using _dynamic_object_type = typename
-    corevm::gc::reference_count_garbage_collection_scheme::dynamic_object_type;
+  using _dynamic_object_heap_type = typename
+    corevm::gc::reference_count_garbage_collection_scheme::dynamic_object_heap_type;
 
-  object.iterate(
-    [this, &heap, &object](
-      _dynamic_object_type::attr_key_type attr_key,
-      _dynamic_object_type::dyobj_id_type dyobj_id)
-    {
-      _dynamic_object_type& referenced_object = heap.at(dyobj_id);
-
-      auto ref_count1 = object.manager().ref_count();
-      auto ref_count2 = referenced_object.manager().ref_count();
-
-      if (referenced_object.has_ref(object.id()) && ref_count1 == 1 && ref_count2 == 1)
-      {
-        object.manager().dec_ref_count();
-        referenced_object.manager().dec_ref_count();
-      }
-    }
-  );
+  cycled_object_reference_decrementor<_dynamic_object_heap_type> decrementor(heap, object);
+  object.iterate(decrementor);
 }
 
 // -----------------------------------------------------------------------------
