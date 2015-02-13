@@ -478,7 +478,7 @@ corevm::runtime::instr_handler_setattr::execute(
 
   auto &obj = corevm::runtime::process::adapter(process).help_get_dyobj(target_id);
 
-  if (obj.get_flag(corevm::dyobj::flags::IS_IMMUTABLE))
+  if (obj.get_flag(corevm::dyobj::flags::DYOBJ_IS_IMMUTABLE))
   {
     throw corevm::runtime::invalid_operation_error(
       str(format("cannot mutate immutable object 0x%08x") % target_id)
@@ -503,7 +503,7 @@ corevm::runtime::instr_handler_delattr::execute(
   corevm::dyobj::dyobj_id id = process.pop_stack();
   auto &obj = corevm::runtime::process::adapter(process).help_get_dyobj(id);
 
-  if (obj.get_flag(corevm::dyobj::flags::IS_IMMUTABLE))
+  if (obj.get_flag(corevm::dyobj::flags::DYOBJ_IS_IMMUTABLE))
   {
     throw corevm::runtime::invalid_operation_error(
       str(format("cannot mutate immutable object 0x%08x") % id)
@@ -527,7 +527,7 @@ corevm::runtime::instr_handler_mute::execute(
   corevm::dyobj::dyobj_id id = process.top_stack();
   auto &obj = corevm::runtime::process::adapter(process).help_get_dyobj(id);
 
-  obj.clear_flag(corevm::dyobj::flags::IS_IMMUTABLE);
+  obj.clear_flag(corevm::dyobj::flags::DYOBJ_IS_IMMUTABLE);
 }
 
 // -----------------------------------------------------------------------------
@@ -539,7 +539,7 @@ corevm::runtime::instr_handler_unmute::execute(
   corevm::dyobj::dyobj_id id = process.top_stack();
   auto &obj = corevm::runtime::process::adapter(process).help_get_dyobj(id);
 
-  obj.set_flag(corevm::dyobj::flags::IS_IMMUTABLE);
+  obj.set_flag(corevm::dyobj::flags::DYOBJ_IS_IMMUTABLE);
 }
 
 // -----------------------------------------------------------------------------
