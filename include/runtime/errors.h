@@ -164,7 +164,21 @@ public:
       )
     )
   {
+  }
+};
 
+// -----------------------------------------------------------------------------
+
+class invocation_error : public corevm::runtime::runtime_error
+{
+public:
+  explicit invocation_error(const corevm::dyobj::dyobj_id id):
+    corevm::runtime::runtime_error(
+      str(
+        format("Cannot invoke call on object %s") % corevm::dyobj::id_to_string(id)
+      )
+    )
+  {
   }
 };
 

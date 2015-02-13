@@ -775,6 +775,11 @@ corevm::runtime::instr_handler_pinvk::execute(
   corevm::dyobj::dyobj_id id = process.top_stack();
   auto& obj = corevm::runtime::process::adapter(process).help_get_dyobj(id);
 
+  if (obj.get_flag(corevm::dyobj::flags::DYOBJ_IS_NON_CALLABLE))
+  {
+    throw corevm::runtime::invocation_error(id);
+  }
+
   corevm::runtime::closure_ctx ctx;
   obj.closure_ctx(&ctx);
 

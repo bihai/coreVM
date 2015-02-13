@@ -54,7 +54,7 @@ enum flags : uint32_t
 
   /* ------- Bits that pertain to the various attributes of objects --------- */
 
-  DYOBJ_IS_CALLABLE,
+  DYOBJ_IS_NON_CALLABLE,
 
   DYOBJ_IS_IMMUTABLE,
 
