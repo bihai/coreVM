@@ -420,9 +420,9 @@ TEST_F(object_container_unittest, TestAllocationOverMaxSize)
 
   for (auto i = 0; i < max_size; ++i)
   {
-      T* ptr = m_container.create();
-      ASSERT_NE(nullptr, ptr);
-      ptrs[i] = ptr;
+    T* ptr = m_container.create();
+    ASSERT_NE(nullptr, ptr);
+    ptrs[i] = ptr;
   }
 
   T* ptr = m_container.create();
