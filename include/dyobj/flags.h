@@ -48,8 +48,6 @@ enum flags : uint32_t
 
   /* ------------- Bits that pertain to the scope of objects ---------------- */
 
-  DYOBJ_IS_GLOBAL_OBJ,
-
   DYOBJ_IS_INVISIBLE_TO_USER,
 
   /* ------- Bits that pertain to the various attributes of objects --------- */
