@@ -626,6 +626,12 @@ corevm::runtime::instr_handler_delobj::execute(
 
   corevm::dyobj::dyobj_id id = frame.pop_visible_var(key);
   auto &obj = corevm::runtime::process::adapter(process).help_get_dyobj(id);
+
+  if (obj.get_flag(corevm::dyobj::flags::DYOBJ_IS_INDELIBLE))
+  {
+    throw corevm::runtime::object_deletion_error(id);
+  }
+
   obj.manager().on_delete();
 }
 
@@ -640,6 +646,12 @@ corevm::runtime::instr_handler_delobj2::execute(
 
   corevm::dyobj::dyobj_id id = frame.pop_invisible_var(key);
   auto &obj = corevm::runtime::process::adapter(process).help_get_dyobj(id);
+
+  if (obj.get_flag(corevm::dyobj::flags::DYOBJ_IS_INDELIBLE))
+  {
+    throw corevm::runtime::object_deletion_error(id);
+  }
+
   obj.manager().on_delete();
 }
 
