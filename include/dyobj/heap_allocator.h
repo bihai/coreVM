@@ -62,7 +62,7 @@ public:
   heap_allocator(heap_allocator const&);
 
   template<typename U, typename OtherAllocationScheme>
-  heap_allocator(heap_allocator<U, OtherAllocationScheme> const&);
+  heap_allocator(heap_allocator<U, OtherAllocationScheme> const&) = delete;
 };
 
 // -----------------------------------------------------------------------------
@@ -98,19 +98,9 @@ corevm::dyobj::heap_allocator<T, AllocationScheme>::~heap_allocator()
 
 template<typename T, typename AllocationScheme>
 corevm::dyobj::heap_allocator<T, AllocationScheme>::heap_allocator(
-  heap_allocator<T, AllocationScheme> const&)
+  heap_allocator<T, AllocationScheme> const& other)
   :
-  AllocationPolicyType(COREVM_DEFAULT_HEAP_SIZE)
-{
-  // Do nothing here.
-}
-
-// -----------------------------------------------------------------------------
-
-template<typename T, typename AllocationScheme>
-template<typename U, typename OtherAllocationScheme>
-corevm::dyobj::heap_allocator<T, AllocationScheme>::heap_allocator(
-  heap_allocator<U, OtherAllocationScheme> const&)
+  AllocationPolicyType(other.total_size())
 {
   // Do nothing here.
 }
