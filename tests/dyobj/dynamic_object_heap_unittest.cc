@@ -20,6 +20,7 @@ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 *******************************************************************************/
+#include "../../include/dyobj/common.h"
 #include "../../include/dyobj/dynamic_object.h"
 #include "../../include/dyobj/dynamic_object_heap.h"
 #include "../../include/gc/garbage_collector.h"
@@ -37,6 +38,12 @@ class dummy_dynamic_object_manager {};
 class dynamic_object_heap_unittest : public ::testing::Test
 {
 protected:
+  dynamic_object_heap_unittest()
+    :
+    m_heap(1024)
+  {
+  }
+
   corevm::dyobj::dynamic_object_heap<dummy_dynamic_object_manager> m_heap;
 };
 
@@ -80,10 +87,7 @@ TEST_F(dynamic_object_heap_unittest, TestAtOnNonExistentKeys)
 
 TEST_F(dynamic_object_heap_unittest, TestAllocationOverMaxSize)
 {
-  auto max_size = 1024;
-
-  // TODO: [COREVM-146] Make dynamic object heap take max size as parameter
-  // auto max_size = m_heap.max_size();
+  auto max_size = m_heap.max_size();
 
   std::vector<corevm::dyobj::dyobj_id> ids(max_size);
 
@@ -92,15 +96,12 @@ TEST_F(dynamic_object_heap_unittest, TestAllocationOverMaxSize)
     ids[i] = m_heap.create_dyobj();
   }
 
-  // TODO: [COREVM-146] Make dynamic object heap take max size as parameter
-  /*
   ASSERT_THROW(
     {
       m_heap.create_dyobj();
     },
     corevm::dyobj::object_heap_insertion_failed_error
   );
-  */
 
   // Clean up.
   for (auto i = 0; i < ids.size(); ++i)
