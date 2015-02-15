@@ -102,7 +102,7 @@ template<typename T, typename AllocationScheme>
 corevm::memory::allocation_policy<T, AllocationScheme>::allocation_policy(
   allocation_policy const& other)
   :
-  m_allocator(111) // TODO
+  m_allocator(other.total_size())
 {
   // Do nothing here.
 }
