@@ -126,7 +126,7 @@ bool operator==(
   return operator==(
     static_cast<corevm::memory::allocation_policy<T, AllocationScheme>>(lhs),
     static_cast<corevm::memory::allocation_policy<T, AllocationScheme>>(rhs)
-  );
+  ) && lhs.total_size() == rhs.total_size();
 }
 
 // -----------------------------------------------------------------------------

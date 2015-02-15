@@ -175,7 +175,7 @@ bool operator==(
   allocation_policy<T, AllocationScheme> const& lhs,
   allocation_policy<T, AllocationScheme> const& rhs)
 {
-  return true;
+  return lhs.total_size() == rhs.total_size();
 }
 
 // -----------------------------------------------------------------------------
