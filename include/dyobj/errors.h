@@ -144,17 +144,6 @@ public:
 
 // -----------------------------------------------------------------------------
 
-class object_id_exceed_limit_error : public corevm::dyobj::runtime_error
-{
-public:
-  explicit object_id_exceed_limit_error():
-    corevm::dyobj::runtime_error("The maximum limit of dynamic object ID has been exceeded")
-  {
-  }
-};
-
-// -----------------------------------------------------------------------------
-
 class object_creation_error : public corevm::dyobj::runtime_error
 {
 public:
