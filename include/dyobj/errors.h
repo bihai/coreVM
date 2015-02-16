@@ -155,11 +155,11 @@ public:
 
 // -----------------------------------------------------------------------------
 
-class object_heap_insertion_failed_error : public corevm::dyobj::runtime_error
+class object_creation_error : public corevm::dyobj::runtime_error
 {
 public:
-  explicit object_heap_insertion_failed_error():
-    corevm::dyobj::runtime_error("Dynamic object has failed to be inserted into the heap")
+  explicit object_creation_error():
+    corevm::dyobj::runtime_error("Failed to create dynamic object")
   {
   }
 };
