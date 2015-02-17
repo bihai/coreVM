@@ -23,10 +23,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef COREVM_GARBAGE_COLLECTION_SCHEME_H_
 #define COREVM_GARBAGE_COLLECTION_SCHEME_H_
 
-#include "../dyobj/dynamic_object.h"
-#include "../dyobj/dynamic_object_heap.h"
-#include "../dyobj/dynamic_object_manager.h"
-
 #include <cstdint>
 
 
@@ -37,81 +33,6 @@ namespace gc {
 
 
 class garbage_collection_scheme {};
-
-// -----------------------------------------------------------------------------
-
-class mark_and_sweep_garbage_collection_scheme : public garbage_collection_scheme
-{
-public:
-  typedef class dynamic_object_manager : public corevm::dyobj::dynamic_object_manager
-  {
-    public:
-      dynamic_object_manager()
-        :
-        m_marked(false)
-      {
-      }
-
-      virtual inline bool garbage_collectible() const noexcept
-      {
-        return marked();
-      }
-
-      virtual inline void on_create() noexcept
-      {
-        // Do nothing here.
-      }
-
-      virtual inline void on_setattr() noexcept
-      {
-        // Do nothing here.
-      }
-
-      virtual inline void on_delattr() noexcept
-      {
-        // Do nothing here.
-      }
-
-      virtual inline void on_delete() noexcept
-      {
-        // Do nothing here.
-      }
-
-      virtual inline void on_exit() noexcept
-      {
-        // Do nothing here.
-      }
-
-      virtual inline bool marked() const noexcept
-      {
-        return m_marked;
-      }
-
-      virtual inline void mark() noexcept
-      {
-        m_marked = true;
-      }
-
-      virtual inline void unmark() noexcept
-      {
-        m_marked = false;
-      }
-
-    protected:
-      bool m_marked;
-  } mark_and_sweep_dynamic_object_manager;
-
-  using dynamic_object_type = typename corevm::dyobj::dynamic_object<mark_and_sweep_dynamic_object_manager>;
-  using dynamic_object_heap_type = typename corevm::dyobj::dynamic_object_heap<mark_and_sweep_dynamic_object_manager>;
-
-  virtual void gc(dynamic_object_heap_type&) const;
-
-protected:
-  virtual bool is_root_object(const dynamic_object_type&) const noexcept;
-  virtual void mark(dynamic_object_heap_type&, dynamic_object_type&) const;
-};
-
-// -----------------------------------------------------------------------------
 
 
 } /* end namespace gc */
