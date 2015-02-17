@@ -20,8 +20,10 @@ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 *******************************************************************************/
-#ifndef COREVM_GARBAGE_COLLECTION_SCHEME_H_
-#define COREVM_GARBAGE_COLLECTION_SCHEME_H_
+#ifndef COREVM_REFERENCE_COUNT_GARBAGE_COLLECTION_SCHEME_H_
+#define COREVM_REFERENCE_COUNT_GARBAGE_COLLECTION_SCHEME_H_
+
+#include "garbage_collection_scheme.h"
 
 #include "../dyobj/dynamic_object.h"
 #include "../dyobj/dynamic_object_heap.h"
@@ -36,11 +38,7 @@ namespace corevm {
 namespace gc {
 
 
-class garbage_collection_scheme {};
-
-// -----------------------------------------------------------------------------
-
-class mark_and_sweep_garbage_collection_scheme : public garbage_collection_scheme
+class reference_count_garbage_collection_scheme : public garbage_collection_scheme
 {
 public:
   typedef class dynamic_object_manager : public corevm::dyobj::dynamic_object_manager
@@ -48,70 +46,101 @@ public:
     public:
       dynamic_object_manager()
         :
-        m_marked(false)
+        m_count(0)
       {
       }
 
       virtual inline bool garbage_collectible() const noexcept
       {
-        return marked();
+        return m_count == 0;
       }
 
       virtual inline void on_create() noexcept
       {
-        // Do nothing here.
+        this->inc_ref_count();
       }
 
       virtual inline void on_setattr() noexcept
       {
-        // Do nothing here.
+        this->inc_ref_count();
       }
 
       virtual inline void on_delattr() noexcept
       {
-        // Do nothing here.
+        this->dec_ref_count();
       }
 
       virtual inline void on_delete() noexcept
       {
-        // Do nothing here.
+        this->dec_ref_count();
       }
 
       virtual inline void on_exit() noexcept
       {
-        // Do nothing here.
+        this->dec_ref_count();
       }
 
-      virtual inline bool marked() const noexcept
+      virtual inline uint64_t ref_count() const noexcept
       {
-        return m_marked;
+        return m_count;
       }
 
-      virtual inline void mark() noexcept
+      virtual inline void inc_ref_count() noexcept
       {
-        m_marked = true;
+        ++m_count;
       }
 
-      virtual inline void unmark() noexcept
+      virtual inline void dec_ref_count() noexcept
       {
-        m_marked = false;
+        if (m_count > 0)
+        {
+          --m_count;
+        }
       }
 
     protected:
-      bool m_marked;
-  } mark_and_sweep_dynamic_object_manager;
+      uint64_t m_count;
+  } reference_count_dynamic_object_manager;
 
-  using dynamic_object_type = typename corevm::dyobj::dynamic_object<mark_and_sweep_dynamic_object_manager>;
-  using dynamic_object_heap_type = typename corevm::dyobj::dynamic_object_heap<mark_and_sweep_dynamic_object_manager>;
+  using dynamic_object_type = typename corevm::dyobj::dynamic_object<reference_count_dynamic_object_manager>;
+  using dynamic_object_heap_type = typename corevm::dyobj::dynamic_object_heap<reference_count_dynamic_object_manager>;
 
   virtual void gc(dynamic_object_heap_type&) const;
 
-protected:
-  virtual bool is_root_object(const dynamic_object_type&) const noexcept;
-  virtual void mark(dynamic_object_heap_type&, dynamic_object_type&) const;
-};
+  template<typename dynamic_object_heap_type>
+  class ref_count_heap_iterator
+  {
+  public:
+    explicit ref_count_heap_iterator(
+      dynamic_object_heap_type& heap,
+      const corevm::gc::reference_count_garbage_collection_scheme& scheme)
+      :
+      m_heap(heap),
+      m_scheme(scheme)
+    {
+    }
 
-// -----------------------------------------------------------------------------
+    void operator()(
+      typename dynamic_object_heap_type::dynamic_object_id_type id,
+      typename dynamic_object_heap_type::dynamic_object_type& object)
+    {
+      m_scheme.check_and_dec_ref_count(m_heap, object);
+      m_scheme.resolve_self_reference_cycles(m_heap, object);
+    }
+
+  private:
+    dynamic_object_heap_type& m_heap;
+    const corevm::gc::reference_count_garbage_collection_scheme& m_scheme;
+  };
+
+  friend class ref_count_heap_iterator<dynamic_object_heap_type>;
+
+protected:
+  void check_and_dec_ref_count(dynamic_object_heap_type&, dynamic_object_type&) const;
+
+  void resolve_self_reference_cycles(dynamic_object_heap_type&, dynamic_object_type&) const;
+  void remove_cycles(dynamic_object_heap_type&) const;
+};
 
 
 } /* end namespace gc */
@@ -120,4 +149,4 @@ protected:
 } /* end namespace corevm */
 
 
-#endif /* COREVM_GARBAGE_COLLECTION_SCHEME_H_ */
+#endif /* COREVM_REFERENCE_COUNT_GARBAGE_COLLECTION_SCHEME_H_ */
