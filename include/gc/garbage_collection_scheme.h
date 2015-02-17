@@ -109,6 +109,34 @@ public:
 
   virtual void gc(dynamic_object_heap_type&) const;
 
+  template<typename dynamic_object_heap_type>
+  class ref_count_heap_iterator
+  {
+  public:
+    explicit ref_count_heap_iterator(
+      dynamic_object_heap_type& heap,
+      const corevm::gc::reference_count_garbage_collection_scheme& scheme)
+      :
+      m_heap(heap),
+      m_scheme(scheme)
+    {
+    }
+
+    void operator()(
+      typename dynamic_object_heap_type::dynamic_object_id_type id,
+      typename dynamic_object_heap_type::dynamic_object_type& object)
+    {
+      m_scheme.check_and_dec_ref_count(m_heap, object);
+      m_scheme.resolve_self_reference_cycles(m_heap, object);
+    }
+
+  private:
+    dynamic_object_heap_type& m_heap;
+    const corevm::gc::reference_count_garbage_collection_scheme& m_scheme;
+  };
+
+  friend class ref_count_heap_iterator<dynamic_object_heap_type>;
+
 protected:
   void check_and_dec_ref_count(dynamic_object_heap_type&, dynamic_object_type&) const;
 
