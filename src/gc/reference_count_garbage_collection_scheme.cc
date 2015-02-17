@@ -40,7 +40,10 @@ corevm::gc::reference_count_garbage_collection_scheme::gc(
   using _dynamic_object_heap_type = typename
     corevm::gc::reference_count_garbage_collection_scheme::dynamic_object_heap_type;
 
-  ref_count_heap_iterator<_dynamic_object_heap_type> heap_iterator(heap, *this);
+  using heap_iterator_type = typename \
+    corevm::gc::reference_count_garbage_collection_scheme::heap_iterator<_dynamic_object_heap_type>;
+
+  heap_iterator_type heap_iterator(heap, *this);
 
   _dynamic_object_heap_type::size_type prev_active_size = heap.active_size();
 
