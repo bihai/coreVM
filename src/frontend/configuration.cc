@@ -28,6 +28,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <sneaker/json/json.h>
 #include <sneaker/json/json_schema.h>
 
+#include <cassert>
 #include <fstream>
 #include <ios>
 #include <sstream>
@@ -53,14 +54,23 @@ const std::string corevm::frontend::configuration::schema = \
 
 corevm::frontend::configuration::configuration(const std::string& path)
   :
+  m_alloc_size(0),
   m_path(path)
 {
 }
 
 // -----------------------------------------------------------------------------
 
+uint64_t
+corevm::frontend::configuration::alloc_size() const
+{
+  return m_alloc_size;
+}
+
+// -----------------------------------------------------------------------------
+
 void
-corevm::frontend::configuration::load_config(JSON* res) const
+corevm::frontend::configuration::load_config()
   throw(corevm::frontend::configuration_loading_error)
 {
   std::ifstream fs(m_path, std::ios::binary);
@@ -119,7 +129,24 @@ corevm::frontend::configuration::load_config(JSON* res) const
     );
   }
 
-  *res = content_json;
+  set_values(content_json);
+}
+
+// -----------------------------------------------------------------------------
+
+void
+corevm::frontend::configuration::set_values(const JSON& config_json)
+{
+  assert(config_json.is_object());
+
+  JSON::object config_obj = config_json.object_items();
+
+  // Set alloc size.
+  if (config_obj.find("alloc-size") != config_obj.end())
+  {
+    JSON alloc_size_raw = config_obj.at("alloc-size");
+    m_alloc_size = static_cast<uint64_t>(alloc_size_raw.int_value());
+  }
 }
 
 // -----------------------------------------------------------------------------

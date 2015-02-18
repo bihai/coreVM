@@ -44,8 +44,16 @@ class configuration
 public:
   explicit configuration(const std::string&);
 
-  void load_config(JSON*) const
-    throw(corevm::frontend::configuration_loading_error);
+  void load_config() throw(corevm::frontend::configuration_loading_error);
+
+public:
+  /* Value accessors. */
+  uint64_t alloc_size() const;
+
+private:
+  void set_values(const JSON&);
+
+  uint64_t m_alloc_size;
 
 private:
   static const std::string schema;

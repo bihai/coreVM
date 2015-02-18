@@ -22,7 +22,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 *******************************************************************************/
 #include "../../include/frontend/configuration.h"
 
-#include <sneaker/json/json.h>
 #include <sneaker/testing/_unittest.h>
 
 #include <fstream>
@@ -66,33 +65,22 @@ const char* configuration_unittest::PATH = "./sample-config.config";
 
 TEST_F(configuration_unittest, TestLoadSuccessful)
 {
-  JSON config_json;
-
   corevm::frontend::configuration configuration(PATH);
 
-  configuration.load_config(&config_json);
+  configuration.load_config();
 
-  ASSERT_EQ(JSON::Type::OBJECT, config_json.type());
-
-  JSON::object config_obj = config_json.object_items();
-
-  JSON alloc_size_raw = config_obj.at("alloc-size");
-  int alloc_size = static_cast<int>(alloc_size_raw.int_value());
-
-  ASSERT_EQ(1024, alloc_size);
+  ASSERT_EQ(1024, configuration.alloc_size());
 }
 
 // -----------------------------------------------------------------------------
 
 TEST_F(configuration_unittest, TestLoadFailsWithInvalidPath)
 {
-  JSON config_json;
-
   corevm::frontend::configuration configuration("$%^some-invalid-path!@#");
 
   ASSERT_THROW(
     {
-      configuration.load_config(&config_json);
+      configuration.load_config();
     },
     corevm::frontend::configuration_loading_error
   );
