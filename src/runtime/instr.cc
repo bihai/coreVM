@@ -30,6 +30,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <cassert>
 #include <csignal>
 #include <cstdlib>
+#include <iomanip>
 #include <memory>
 #include <ostream>
 #include <stdexcept>
@@ -47,7 +48,9 @@ std::ostream& operator<<(
   std::ostream& ost, const corevm::runtime::instr& instr)
 {
   ost << std::hex << std::showbase;
-  ost << instr.code << " " << instr.oprd1 << " " << instr.oprd2;
+  ost << std::setiosflags(std::ios::left);
+  ost << std::setw(6) << instr.code << " " << std::setw(6) << instr.oprd1 << " " << std::setw(6) << instr.oprd2;
+  ost << std::resetiosflags(std::ios::adjustfield);
   ost << std::noshowbase << std::dec;
   return ost;
 }
