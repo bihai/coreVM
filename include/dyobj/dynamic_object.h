@@ -90,9 +90,7 @@ public:
 
   bool is_garbage_collectible() const noexcept;
 
-  uint32_t attr_count() const {
-    return m_attrs.size();
-  }
+  uint32_t attr_count() const;
 
   bool hasattr(attr_key_type) const noexcept;
 
@@ -332,6 +330,15 @@ corevm::dyobj::dynamic_object<dynamic_object_manager>::is_garbage_collectible() 
     get_flag(corevm::dyobj::flags::DYOBJ_IS_NOT_GARBAGE_COLLECTIBLE) == false &&
     m_manager.garbage_collectible()
   );
+}
+
+// -----------------------------------------------------------------------------
+
+template<typename dynamic_object_manager>
+uint32_t
+corevm::dyobj::dynamic_object<dynamic_object_manager>::attr_count() const
+{
+  return m_attrs.size();
 }
 
 // -----------------------------------------------------------------------------
