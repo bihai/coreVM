@@ -32,7 +32,7 @@ class runner_unittest : public ::testing::Test {};
 
 TEST_F(runner_unittest, TestRun)
 {
-  corevm::frontend::configuration configuration("./sample.config");
+  corevm::frontend::configuration configuration;
 
   int res = corevm::frontend::runner("./sample.core", configuration).run();
 
