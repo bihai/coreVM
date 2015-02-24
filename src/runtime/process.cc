@@ -129,7 +129,7 @@ corevm::runtime::process::process()
 
 // -----------------------------------------------------------------------------
 
-corevm::runtime::process::process(uint64_t heap_alloc_size)
+corevm::runtime::process::process(uint64_t heap_alloc_size, uint64_t pool_alloc_size)
   :
   m_pause_exec(false),
   m_gc_flag(0),
@@ -137,7 +137,7 @@ corevm::runtime::process::process(uint64_t heap_alloc_size)
   m_dynamic_object_heap(heap_alloc_size),
   m_dyobj_stack(),
   m_call_stack(),
-  m_ntvhndl_pool(),
+  m_ntvhndl_pool(pool_alloc_size),
   m_sig_instr_map(),
   m_compartments()
 {
