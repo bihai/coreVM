@@ -52,6 +52,8 @@ corevm::frontend::runner::runner(
 int
 corevm::frontend::runner::run() const noexcept
 {
+  // TODO: [COREVM-163] Refactor configuration default values ingestion
+  // TODO: [COREVM-164] Make native types handle allocation size configurable
   uint64_t alloc_size = (
     m_configuration.alloc_size() || corevm::dyobj::COREVM_DEFAULT_HEAP_SIZE);
 
