@@ -113,7 +113,7 @@ extract_instr_info::do_run()
 
 // -----------------------------------------------------------------------------
 
-int main(int argc, char**argv)
+int main(int argc, char** argv)
 {
   extract_instr_info program;
   return program.run(argc, argv);
