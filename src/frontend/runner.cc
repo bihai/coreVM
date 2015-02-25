@@ -69,9 +69,12 @@ corevm::frontend::runner::run() const noexcept
   {
     corevm::frontend::bytecode_loader::load(m_path, process);
 
-    bool res = corevm::runtime::process_runner(process, gc_interval).start();
+    // TODO: [COREVM-166] Investigate "pure virtual method called" issue when running coreVM binary
+    //bool res = corevm::runtime::process_runner(process, gc_interval).start();
 
-    if (!res)
+    process.start();
+
+    if (true) //(!res)
     {
       std::cerr << "Run failed: " << strerror(errno) << std::endl;
       return -1;
