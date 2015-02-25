@@ -54,14 +54,14 @@ corevm::frontend::runner::run() const noexcept
 {
   // TODO: [COREVM-163] Refactor configuration default values ingestion
 
-  uint64_t heap_alloc_size = (
-    m_configuration.heap_alloc_size() || corevm::dyobj::COREVM_DEFAULT_HEAP_SIZE);
+  uint64_t heap_alloc_size = m_configuration.heap_alloc_size() ? \
+    m_configuration.heap_alloc_size() : corevm::dyobj::COREVM_DEFAULT_HEAP_SIZE;
 
-  uint64_t pool_alloc_size = (
-    m_configuration.pool_alloc_size() || corevm::runtime::COREVM_DEFAULT_NATIVE_TYPES_POOL_SIZE);
+  uint64_t pool_alloc_size = m_configuration.pool_alloc_size() ? \
+    m_configuration.pool_alloc_size() : corevm::runtime::COREVM_DEFAULT_NATIVE_TYPES_POOL_SIZE;
 
-  uint32_t gc_interval = (
-    m_configuration.gc_interval() || corevm::runtime::COREVM_DEFAULT_GC_INTERVAL);
+  uint32_t gc_interval = m_configuration.gc_interval() ? \
+    m_configuration.gc_interval() : corevm::runtime::COREVM_DEFAULT_GC_INTERVAL;
 
   corevm::runtime::process process(heap_alloc_size, pool_alloc_size);
 
@@ -69,12 +69,9 @@ corevm::frontend::runner::run() const noexcept
   {
     corevm::frontend::bytecode_loader::load(m_path, process);
 
-    // TODO: [COREVM-166] Investigate "pure virtual method called" issue when running coreVM binary
-    //bool res = corevm::runtime::process_runner(process, gc_interval).start();
+    bool res = corevm::runtime::process_runner(process, gc_interval).start();
 
-    process.start();
-
-    if (true) //(!res)
+    if (!res)
     {
       std::cerr << "Run failed: " << strerror(errno) << std::endl;
       return -1;

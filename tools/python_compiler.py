@@ -49,6 +49,11 @@ class BytecodeGenerator(ast.NodeVisitor):
         self.instr_str_to_code_map = instr_str_to_code_map
         self.vector = []
 
+        self.__add_instr('new', 0, 0)
+        self.__add_instr('exit', 0, 0)
+        #self.__add_instr('setctx', 0, 0)
+        #self.__add_instr('pinvk', 0, 0)
+
     def finalize(self):
         structured_bytecode = {
             'format': self.format,
@@ -64,9 +69,9 @@ class BytecodeGenerator(ast.NodeVisitor):
                     '__name__': '__main__',
                     '__vector__': [
                         [
-                            str(instr.code),
-                            str(instr.oprd1),
-                            str(instr.oprd2)
+                            instr.code,
+                            instr.oprd1,
+                            instr.oprd2
                         ] for instr in self.vector
                     ]
                 },
@@ -126,9 +131,10 @@ class BytecodeGenerator(ast.NodeVisitor):
     """ ----------------------------- expr --------------------------------- """
 
     def visit_BinOp(self, node):
-        self.visit_Num(node.left)
-        self.visit_Num(node.right)
-        self.visit_Add(node.op)
+        #self.visit_Num(node.left)
+        #self.visit_Num(node.right)
+        #self.visit_Add(node.op)
+        pass
 
     def visit_Num(self, node):
         self.__add_instr('uint32', node.n, 0)
