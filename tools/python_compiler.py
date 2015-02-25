@@ -88,13 +88,47 @@ class BytecodeGenerator(ast.NodeVisitor):
             )
         )
 
+    """ --------------------------- operator ------------------------------- """
+
+    def visit_Add(self, node):
+        self.__add_instr('add', 0, 0)
+
+    def visit_Sub(self, node):
+        self.__add_instr('sub', 0, 0)
+
+    def visit_Mult(self, node):
+        self.__add_instr('mul', 0, 0)
+
+    def visit_Div(self, node):
+        self.__add_instr('div', 0, 0)
+
+    def visit_Mod(self, node):
+        self.__add_instr('mod', 0, 0)
+
+    def visit_Pow(self, node):
+        self.__add_instr('pow', 0, 0)
+
+    def visit_LShift(self, node):
+        self.__add_instr('bls', 0, 0)
+
+    def visit_RShift(self, node):
+        self.__add_instr('rls', 0, 0)
+
+    def visit_BitOr(self, node):
+        self.__add_instr('bor', 0, 0)
+
+    def visit_BitXor(self, node):
+        self.__add_instr('bxor', 0, 0)
+
+    def visit_BitAnd(self, node):
+        self.__add_instr('band', 0, 0)
+
+    """ ----------------------------- expr --------------------------------- """
+
     def visit_BinOp(self, node):
         self.visit_Num(node.left)
         self.visit_Num(node.right)
         self.visit_Add(node.op)
-
-    def visit_Add(self, node):
-        self.__add_instr('add', 0, 0)
 
     def visit_Num(self, node):
         self.__add_instr('uint32', node.n, 0)
