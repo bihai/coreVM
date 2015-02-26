@@ -37,6 +37,15 @@ class Instr(object):
 
 
 class BytecodeGenerator(ast.NodeVisitor):
+    """Traverses through Python AST and generates version and format specific
+    coreVM bytecode.
+
+    The traversal follows the abstract grammar of Python, defined here:
+    https://docs.python.org/2/library/ast.html#abstract-grammar
+
+    The visit_XXX methods defined below follow the same order in the grammar
+    spec.
+    """
 
     format = 'application/json'
     format_version = '0.1'
@@ -88,6 +97,16 @@ class BytecodeGenerator(ast.NodeVisitor):
             )
         )
 
+    """ ----------------------------- expr --------------------------------- """
+
+    def visit_BinOp(self, node):
+        self.visit_Num(node.left)
+        self.visit_Num(node.right)
+        self.visit_Add(node.op)
+
+    def visit_Num(self, node):
+        self.__add_instr('uint32', node.n, 0)
+
     """ --------------------------- operator ------------------------------- """
 
     def visit_Add(self, node):
@@ -123,15 +142,51 @@ class BytecodeGenerator(ast.NodeVisitor):
     def visit_BitAnd(self, node):
         self.__add_instr('band', 0, 0)
 
-    """ ----------------------------- expr --------------------------------- """
+    """ ---------------------------- unaryop ------------------------------- """
 
-    def visit_BinOp(self, node):
-        self.visit_Num(node.left)
-        self.visit_Num(node.right)
-        self.visit_Add(node.op)
+    def visit_Invert(self, node):
+        self.__add_instr('bnot', 0, 0)
 
-    def visit_Num(self, node):
-        self.__add_instr('uint32', node.n, 0)
+    def visit_Not(self, node):
+        self.__add_instr('lnot', 0, 0)
+
+    def visit_UAdd(self, node):
+        self.__add_instr('pos', 0, 0)
+
+    def visit_USub(self, node):
+        self.__add_instr('neg', 0, 0)
+
+    """ ----------------------------- cmpop -------------------------------- """
+
+    def visit_Eq(self, node):
+        self.__add_instr('eq', 0, 0)
+
+    def visit_NotEq(self, node):
+        self.__add_instr('neq', 0, 0)
+
+    def visit_Lt(self, node):
+        self.__add_instr('lt', 0, 0)
+
+    def visit_LtE(self, node):
+        self.__add_instr('lte', 0, 0)
+
+    def visit_Gt(self, node):
+        self.__add_instr('gt', 0, 0)
+
+    def visit_GtE(self, node):
+        self.__add_instr('gte', 0, 0)
+
+    def visit_Is(self, node):
+        pass
+
+    def visit_IsNot(self, node):
+        pass
+
+    def visit_In(self, node):
+        pass
+
+    def visit_NotIn(self, node):
+        pass
 
 
 def main():
