@@ -25,7 +25,6 @@ import simplejson
 import sys
 
 from datetime import datetime
-from pprint import pprint
 
 
 class Instr(object):
@@ -82,9 +81,6 @@ class BytecodeGenerator(ast.NodeVisitor):
             ]
         }
 
-        print 'Writing the following to %s:\n' % self.output_file
-        pprint(structured_bytecode)
-
         with open(self.output_file, 'w') as fd:
             fd.write(simplejson.dumps(structured_bytecode))
 
@@ -100,9 +96,9 @@ class BytecodeGenerator(ast.NodeVisitor):
     """ ----------------------------- expr --------------------------------- """
 
     def visit_BinOp(self, node):
-        self.visit_Num(node.left)
-        self.visit_Num(node.right)
-        self.visit_Add(node.op)
+        self.visit(node.left)
+        self.visit(node.right)
+        self.visit(node.op)
 
     def visit_Num(self, node):
         self.__add_instr('uint32', node.n, 0)
@@ -191,11 +187,19 @@ class BytecodeGenerator(ast.NodeVisitor):
 
 def main():
     parser = optparse.OptionParser(
-        usage='usage: %prog filename [options]',
+        usage='usage: %prog [options]',
         version='%prog v0.1')
 
     parser.add_option(
         '-i',
+        '--input',
+        action='store',
+        dest='input_file',
+        help='Input file'
+    )
+
+    parser.add_option(
+        '-n',
         '--instr-info-file',
         action='store',
         dest='instr_info_file',
@@ -205,17 +209,21 @@ def main():
         '-o',
         '--output',
         action='store',
-        dest='output',
+        dest='output_file',
         help='Output file'
     )
 
-    (options, args) = parser.parse_args()
+    options, _ = parser.parse_args()
+
+    if not options.input_file:
+        sys.stderr.write('Input file not specified\n')
+        return -1
 
     if not options.instr_info_file:
         sys.stderr.write('Instruction info file not specified\n')
         return -1
 
-    if not args:
+    if not options.output_file:
         sys.stderr.write('Output file not specified\n')
         return -1
 
@@ -224,12 +232,17 @@ def main():
     with open(options.instr_info_file, 'r') as fd:
         instr_str_to_code_map = simplejson.load(fd)
 
-    output_file = args[0]
+    with open(options.input_file, 'r') as fd:
+        tree = ast.parse(fd.read())
 
-    tree = ast.parse('1 + 2')
-    generator = BytecodeGenerator(output_file, instr_str_to_code_map)
-    generator.visit(tree)
-    generator.finalize()
+    try:
+        generator = BytecodeGenerator(options.output_file, instr_str_to_code_map)
+        generator.visit(tree)
+        generator.finalize()
+    except Exception as ex:
+        sys.stderr.write('Failed to compile %s' % options.input_file)
+        sys.stderr.write(ex)
+        sys.exit(-1)
 
 
 if __name__ == '__main__':
