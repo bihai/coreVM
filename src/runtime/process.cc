@@ -411,8 +411,18 @@ corevm::runtime::process::pre_start()
 
   bool res = m_compartments.front().get_starting_closure(&closure);
 
+  // If we found the starting compartment and closure, create a frame with the
+  // closure context, and loads and vector into the process.
   if (res)
   {
+    corevm::runtime::closure_ctx ctx {
+      .compartment_id = 0,
+      .closure_id = closure.id
+    };
+
+    corevm::runtime::frame frame(ctx);
+    push_frame(frame);
+
     insert_vector(closure.vector);
   }
 
