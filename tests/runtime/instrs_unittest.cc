@@ -1146,6 +1146,26 @@ protected:
     ASSERT_EQ(expected_result, actual_result);
   }
 
+  template<typename InstrHandlerCls, typename IntrinsicType>
+  void execute_native_floating_type_creation_instr_and_assert_result(
+    const corevm::runtime::instr& instr, IntrinsicType expected_result)
+  {
+    InstrHandlerCls instr_handler;
+
+    instr_handler.execute(instr, m_process);
+
+    corevm::runtime::frame& frame = m_process.top_frame();
+    ASSERT_EQ(m_expected_eval_stack_size, frame.eval_stack_size());
+
+    corevm::types::native_type_handle result_handle = frame.pop_eval_stack();
+
+    IntrinsicType actual_result = corevm::types::get_value_from_handle<IntrinsicType>(
+      result_handle
+    );
+
+    ASSERT_DOUBLE_EQ(expected_result, actual_result);
+  }
+
   uint32_t m_expected_eval_stack_size = 1;
   corevm::runtime::process m_process;
   corevm::runtime::frame* m_frame = new corevm::runtime::frame(m_ctx);
@@ -1537,14 +1557,28 @@ public:
 
 TEST_F(instrs_native_type_creation_instrs_test, TestInstrDEC1)
 {
-  execute_instr_and_assert_result<corevm::runtime::instr_handler_dec1, float>(0.0);
+  corevm::runtime::instr instr {
+    .code = corevm::runtime::instr_enum::DEC1,
+    .oprd1 = 12345,
+    .oprd2 = 98760
+  };
+
+  execute_native_floating_type_creation_instr_and_assert_result<
+    corevm::runtime::instr_handler_dec1, float>(instr, 12345.06789);
 }
 
 // -----------------------------------------------------------------------------
 
 TEST_F(instrs_native_type_creation_instrs_test, TestInstrDEC2)
 {
-  execute_instr_and_assert_result<corevm::runtime::instr_handler_dec2, double>(0.0);
+  corevm::runtime::instr instr {
+    .code = corevm::runtime::instr_enum::DEC2,
+    .oprd1 = 1234567890,
+    .oprd2 = 9876543210
+  };
+
+  execute_native_floating_type_creation_instr_and_assert_result<
+    corevm::runtime::instr_handler_dec2, double>(instr, 1234567890.0123456789);
 }
 
 // -----------------------------------------------------------------------------
