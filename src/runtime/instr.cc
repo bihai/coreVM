@@ -307,6 +307,20 @@ corevm::runtime::instr_handler::execute_binary_operator_instr(
 
 template<typename NativeType>
 void
+corevm::runtime::instr_handler::execute_native_integer_type_creation_instr(
+  const corevm::runtime::instr& instr, corevm::runtime::process& process)
+{
+  corevm::runtime::frame& frame = process.top_frame();
+
+  corevm::types::native_type_handle hndl = NativeType(instr.oprd1);
+
+  frame.push_eval_stack(hndl);
+}
+
+// -----------------------------------------------------------------------------
+
+template<typename NativeType>
+void
 corevm::runtime::instr_handler::execute_native_type_creation_instr(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
 {
@@ -1404,7 +1418,7 @@ void
 corevm::runtime::instr_handler_int8::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
 {
-  corevm::runtime::instr_handler::execute_native_type_creation_instr<corevm::types::int8>(
+  corevm::runtime::instr_handler::execute_native_integer_type_creation_instr<corevm::types::int8>(
     instr,
     process
   );
@@ -1416,7 +1430,7 @@ void
 corevm::runtime::instr_handler_uint8::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
 {
-  corevm::runtime::instr_handler::execute_native_type_creation_instr<corevm::types::uint8>(
+  corevm::runtime::instr_handler::execute_native_integer_type_creation_instr<corevm::types::uint8>(
     instr,
     process
   );
@@ -1428,7 +1442,7 @@ void
 corevm::runtime::instr_handler_int16::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
 {
-  corevm::runtime::instr_handler::execute_native_type_creation_instr<corevm::types::int16>(
+  corevm::runtime::instr_handler::execute_native_integer_type_creation_instr<corevm::types::int16>(
     instr,
     process
   );
@@ -1440,7 +1454,7 @@ void
 corevm::runtime::instr_handler_uint16::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
 {
-  corevm::runtime::instr_handler::execute_native_type_creation_instr<corevm::types::uint16>(
+  corevm::runtime::instr_handler::execute_native_integer_type_creation_instr<corevm::types::uint16>(
     instr,
     process
   );
@@ -1452,7 +1466,7 @@ void
 corevm::runtime::instr_handler_int32::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
 {
-  corevm::runtime::instr_handler::execute_native_type_creation_instr<corevm::types::int32>(
+  corevm::runtime::instr_handler::execute_native_integer_type_creation_instr<corevm::types::int32>(
     instr,
     process
   );
@@ -1464,7 +1478,7 @@ void
 corevm::runtime::instr_handler_uint32::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
 {
-  corevm::runtime::instr_handler::execute_native_type_creation_instr<corevm::types::uint32>(
+  corevm::runtime::instr_handler::execute_native_integer_type_creation_instr<corevm::types::uint32>(
     instr,
     process
   );
@@ -1476,7 +1490,7 @@ void
 corevm::runtime::instr_handler_int64::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
 {
-  corevm::runtime::instr_handler::execute_native_type_creation_instr<corevm::types::int64>(
+  corevm::runtime::instr_handler::execute_native_integer_type_creation_instr<corevm::types::int64>(
     instr,
     process
   );
@@ -1488,7 +1502,7 @@ void
 corevm::runtime::instr_handler_uint64::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
 {
-  corevm::runtime::instr_handler::execute_native_type_creation_instr<corevm::types::uint64>(
+  corevm::runtime::instr_handler::execute_native_integer_type_creation_instr<corevm::types::uint64>(
     instr,
     process
   );
@@ -1500,7 +1514,7 @@ void
 corevm::runtime::instr_handler_bool::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
 {
-  corevm::runtime::instr_handler::execute_native_type_creation_instr<corevm::types::boolean>(
+  corevm::runtime::instr_handler::execute_native_integer_type_creation_instr<corevm::types::boolean>(
     instr,
     process
   );

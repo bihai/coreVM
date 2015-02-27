@@ -893,6 +893,10 @@ protected:
     const corevm::runtime::instr&, corevm::runtime::process&, InterfaceFunc);
 
   template<typename NativeType>
+  void execute_native_integer_type_creation_instr(
+    const corevm::runtime::instr&, corevm::runtime::process&);
+
+  template<typename NativeType>
   void execute_native_type_creation_instr(
     const corevm::runtime::instr&, corevm::runtime::process&);
 

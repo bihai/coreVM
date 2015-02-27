@@ -43,7 +43,7 @@ typedef int32_t instr_addr;
 typedef uint16_t instr_code;
 
 
-typedef uint64_t instr_oprd;
+typedef int64_t instr_oprd;
 
 
 typedef int32_t variable_key;
