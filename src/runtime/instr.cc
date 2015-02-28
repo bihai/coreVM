@@ -51,9 +51,11 @@ namespace runtime {
 std::ostream& operator<<(
   std::ostream& ost, const corevm::runtime::instr& instr)
 {
+  ost << std::hex << std::showbase;
   ost << std::setiosflags(std::ios::left);
   ost << std::setw(6) << instr.code << " " << std::setw(6) << instr.oprd1 << " " << std::setw(6) << instr.oprd2;
   ost << std::resetiosflags(std::ios::adjustfield);
+  ost << std::noshowbase << std::dec;
   return ost;
 }
 
