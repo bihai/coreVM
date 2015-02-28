@@ -350,8 +350,13 @@ def main():
     with open(options.input_file, 'r') as fd:
         tree = ast.parse(fd.read())
 
+    generator = BytecodeGenerator(
+        options.output_file,
+        instr_str_to_code_map,
+        debug_mode=options.debug_mode
+    )
+
     try:
-        generator = BytecodeGenerator(options.output_file, instr_str_to_code_map, debug_mode=options.debug_mode)
         generator.visit(tree)
         generator.finalize()
     except Exception as ex:
