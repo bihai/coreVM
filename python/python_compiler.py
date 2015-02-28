@@ -21,6 +21,7 @@
 
 import ast
 import optparse
+import pprint
 import simplejson
 import sys
 
@@ -40,25 +41,26 @@ class Instr(object):
 
 class Closure(object):
 
-    closure_id = 0
+    __closure_id = 0
 
-    def __init__(self, name, parent_name):
+    def __init__(self, name, parent_name, parent_id):
         self.name = name
         self.parent_name = parent_name
         self.vector = []
-        self.closure_id = Closure.closure_id
-        Closure.closure_id += 1
+        self.closure_id = Closure.__closure_id
+        self.parent_id = parent_id
+        Closure.__closure_id += 1
 
     def to_json(self):
         json_dict = {
-            '__name__': self.name,
+            '__id__': self.closure_id,
             '__vector__': [
                 instr.to_json() for instr in self.vector
             ]
         }
 
-        if self.parent_name:
-            json_dict['__parent__'] = self.parent_name
+        if self.parent_id is not None:
+            json_dict['__parent__'] = self.parent_id
 
         return json_dict
 
@@ -82,9 +84,10 @@ class BytecodeGenerator(ast.NodeVisitor):
 
     default_closure_name = '__main__'
 
-    def __init__(self, output_file, instr_str_to_code_map):
+    def __init__(self, output_file, instr_str_to_code_map, debug_mode=False):
         self.output_file = output_file
         self.instr_str_to_code_map = instr_str_to_code_map
+        self.debug_mode = debug_mode
 
         # encoding map
         self.encoding_id = 0
@@ -93,7 +96,7 @@ class BytecodeGenerator(ast.NodeVisitor):
         # closure map
         self.current_closure_name = self.default_closure_name
         self.closure_map = {
-            self.current_closure_name: Closure(self.current_closure_name, '')
+            self.current_closure_name: Closure(self.current_closure_name, '', None)
         }
 
     def finalize(self):
@@ -116,6 +119,10 @@ class BytecodeGenerator(ast.NodeVisitor):
                 closure.to_json() for closure in self.closure_map.itervalues()
             ]
         }
+
+        if self.debug_mode:
+            print 'Writing the following to %s' % self.output_file
+            pprint.pprint(structured_bytecode)
 
         with open(self.output_file, 'w') as fd:
             fd.write(simplejson.dumps(structured_bytecode))
@@ -148,7 +155,12 @@ class BytecodeGenerator(ast.NodeVisitor):
         # step in
         name = self.__mingle_name(node.name)
 
-        self.closure_map[name] = Closure(name, self.current_closure_name)
+        self.closure_map[name] = Closure(
+            name,
+            self.current_closure_name,
+            self.closure_map[self.current_closure_name].closure_id
+        )
+
         self.current_closure_name = name
 
         for stmt in node.body:
@@ -174,11 +186,22 @@ class BytecodeGenerator(ast.NodeVisitor):
         self.visit(node.op)
 
     def visit_Call(self, node):
-        name = node.func.id
-        # TODO
+        # TODO: support arguments
+        self.visit(node.func)
+        self.__add_instr('pinvk', 0, 0)
+        self.__add_instr('invk', 0, 0)
 
     def visit_Num(self, node):
         self.__add_instr('uint32', node.n, 0)
+
+    def visit_Name(self, node):
+        name = node.id
+
+        if isinstance(node.ctx, ast.Load):
+            self.__add_instr('ldobj', self.__get_encoding_id(name), 0)
+        else:
+            # TODO
+            pass
 
     """ --------------------------- operator ------------------------------- """
 
@@ -295,6 +318,14 @@ def main():
         help='Output file'
     )
 
+    parser.add_option(
+        '-d',
+        '--debug',
+        action='store_true',
+        dest='debug_mode',
+        help='Debug mode'
+    )
+
     options, _ = parser.parse_args()
 
     if not options.input_file:
@@ -318,7 +349,7 @@ def main():
         tree = ast.parse(fd.read())
 
     try:
-        generator = BytecodeGenerator(options.output_file, instr_str_to_code_map)
+        generator = BytecodeGenerator(options.output_file, instr_str_to_code_map, debug_mode=options.debug_mode)
         generator.visit(tree)
         generator.finalize()
     except Exception as ex:
