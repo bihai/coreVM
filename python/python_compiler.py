@@ -172,6 +172,8 @@ class BytecodeGenerator(ast.NodeVisitor):
         self.current_closure_name = self.closure_map[self.current_closure_name].parent_name
 
         # In the outer closure, set the closure id on the object
+
+        # TODO: [COREVM-170] Add support for object creation flags in Python compiler
         self.__add_instr('new', 0, 0)
         self.__add_instr('setctx', self.closure_map[name].closure_id, 0)
         self.__add_instr('stobj', self.__get_encoding_id(node.name), 0)
