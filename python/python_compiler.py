@@ -140,6 +140,7 @@ class BytecodeGenerator(ast.NodeVisitor):
         )
 
     def __mingle_name(self, name):
+        # TDOO: Add support for actual name minglings.
         return name
 
     def __get_encoding_id(self, name):
@@ -186,7 +187,7 @@ class BytecodeGenerator(ast.NodeVisitor):
         self.visit(node.op)
 
     def visit_Call(self, node):
-        # TODO: support arguments
+        # TODO: [COREVM-169] Add support for functional call arguments in Python tests
         self.visit(node.func)
         self.__add_instr('pinvk', 0, 0)
         self.__add_instr('invk', 0, 0)
@@ -200,7 +201,7 @@ class BytecodeGenerator(ast.NodeVisitor):
         if isinstance(node.ctx, ast.Load):
             self.__add_instr('ldobj', self.__get_encoding_id(name), 0)
         else:
-            # TODO
+            # TODO: Add support for other types of ctx of `Name` node.
             pass
 
     """ --------------------------- operator ------------------------------- """
@@ -287,6 +288,7 @@ class BytecodeGenerator(ast.NodeVisitor):
     """ --------------------------- arguments ------------------------------ """
 
     def visit_arguments(self, node):
+        # TODO: [COREVM-169] Add support for functional call arguments in Python tests
         pass
 
 
