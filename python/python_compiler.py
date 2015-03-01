@@ -88,12 +88,12 @@ class BytecodeGenerator(ast.NodeVisitor):
 
     default_closure_name = '__main__'
 
-    def __init__(self, output_file, info_file, debug_mode=False):
-        self.output_file = output_file
-        self.debug_mode = debug_mode
+    def __init__(self, options):
+        self.output_file = options.output_file
+        self.debug_mode = options.debug_mode
 
         # Read info file
-        with open(info_file, 'r') as fd:
+        with open(options.info_file, 'r') as fd:
             info_json = simplejson.load(fd)
 
         self.instr_str_to_code_map = info_json[INSTR_STR_TO_CODE_MAP]
@@ -363,11 +363,7 @@ def main():
         return -1
 
     try:
-        generator = BytecodeGenerator(
-            options.output_file,
-            options.info_file,
-            debug_mode=options.debug_mode
-        )
+        generator = BytecodeGenerator(options)
 
         with open(options.input_file, 'r') as fd:
             tree = ast.parse(fd.read())
