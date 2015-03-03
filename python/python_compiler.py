@@ -221,8 +221,11 @@ class BytecodeGenerator(ast.NodeVisitor):
         if isinstance(node.ctx, ast.Load):
             self.__add_instr('ldobj', self.__get_encoding_id(name), 0)
         elif isinstance(node.ctx, ast.Param):
-            # for loading parameters
-            self.__add_instr('getarg', self.__get_encoding_id(node.id), 0)
+            # For loading parameters
+            # Note: here we only want to handle args. kwargs are handled
+            # differently in `visit_arguments`.
+            self.__add_instr('getarg', 0, 0)
+            self.__add_instr('stobj', self.__get_encoding_id(node.id), 0)
         else:
             # TODO: Add support for other types of ctx of `Name` node.
             pass
@@ -311,8 +314,19 @@ class BytecodeGenerator(ast.NodeVisitor):
     """ --------------------------- arguments ------------------------------ """
 
     def visit_arguments(self, node):
+        """Visit arguments for the function/lambda definition.
+
+        Python treats args and kwargs the same and put them all into the
+        `node.args` attribute, and since we are considering them differently
+        here, we need to be able to distinguish them.
+        """
+
+        # A mapping of the closest arguments to their default values by their
+        # column offset, for explicit kwargs.
         closest_args_to_defaults = {}
 
+        # Traverse through the default values, and find the closest arguments
+        # for each of them, and put them into the mapping above.
         for default in node.defaults:
             closest_arg = None
             for arg in node.args:
@@ -320,34 +334,47 @@ class BytecodeGenerator(ast.NodeVisitor):
                     closest_arg = arg
                 elif arg.col_offset < closest_arg.col_offset and arg.col_offset < default.col_offset:
                     closest_arg = arg
-            assert(closest_arg)
+
+            assert closest_arg
 
             closest_args_to_defaults[closest_arg.col_offset] = default
 
-        for arg in reversed(node.args):
+        # Iterate through the arguments.
+        for arg in node.args:
             default = closest_args_to_defaults.get(arg.col_offset)
             if default:
-                # kwarg
+                # This is a kwarg. It needs special handling here.
+                #
+                # TODO|HACK: This is a hack here to get around of the problem of
+                # evaluating a stmt if the kwarg cannot be found on the frame.
+                # The condition is that if it's not found, jump over two instrs
+                # to execute that stmt, otherwise, jump to skip over that block
+                # of code.
+                #
+                # The problem here is that we don't know the number of instrs to
+                # jump over before hand, so we will need to calculate the
+                # difference in the size of the vector, and reset the `jmp`
+                # instr afterward.
                 self.__add_instr('getkwarg', self.__get_encoding_id(arg.id), 2)
                 self.__add_instr('jmp', 0, 0) # offset addr to be set
                 vector_length1 = len(self.__current_vector())
                 self.visit(default)
                 vector_length2 = len(self.__current_vector())
                 length_diff = vector_length2 - vector_length1
-                self.__current_vector()[vector_length1 - 1] = Instr('jmp', length_diff, 0)
+                self.__current_vector()[vector_length1 - 1] = Instr('jmp', length_diff + 1, 0)
             else:
-                # arg
+                # This is an arg. It's handled in `visit_Name()`.
                 self.visit(arg)
 
-        # *args
+        # Pull out rest of the args (*args).
         if node.vararg:
             self.__add_instr('getargs', 0, 0)
-            self.__add_instr('stobj', self.__get_encoding_id(node.vararg), 0)
+            # TODO: Retrieve args stored as an array on top of eval stack.
 
-        # **kwarg
+        # Pull out rest of the kwargs (**kwarg).
         if node.kwarg:
             self.__add_instr('getkwargs', 0, 0)
-            # TODO: retrieve kwargs stored on top of eval stack
+            # TODO: retrieve kwargs stored as a map on top of eval stack.
 
 
 def main():
