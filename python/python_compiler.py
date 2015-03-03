@@ -220,6 +220,9 @@ class BytecodeGenerator(ast.NodeVisitor):
 
         if isinstance(node.ctx, ast.Load):
             self.__add_instr('ldobj', self.__get_encoding_id(name), 0)
+        elif isinstance(node.ctx, ast.Param):
+            # for loading parameters
+            self.__add_instr('getarg', self.__get_encoding_id(node.id), 0)
         else:
             # TODO: Add support for other types of ctx of `Name` node.
             pass
@@ -308,8 +311,43 @@ class BytecodeGenerator(ast.NodeVisitor):
     """ --------------------------- arguments ------------------------------ """
 
     def visit_arguments(self, node):
-        # TODO: [COREVM-169] Add support for functional call arguments in Python tests
-        pass
+        closest_args_to_defaults = {}
+
+        for default in node.defaults:
+            closest_arg = None
+            for arg in node.args:
+                if closest_arg is None:
+                    closest_arg = arg
+                elif arg.col_offset < closest_arg.col_offset and arg.col_offset < default.col_offset:
+                    closest_arg = arg
+            assert(closest_arg)
+
+            closest_args_to_defaults[closest_arg.col_offset] = default
+
+        for arg in reversed(node.args):
+            default = closest_args_to_defaults.get(arg.col_offset)
+            if default:
+                # kwarg
+                self.__add_instr('getkwarg', self.__get_encoding_id(arg.id), 2)
+                self.__add_instr('jmp', 0, 0) # offset addr to be set
+                vector_length1 = len(self.__current_vector())
+                self.visit(default)
+                vector_length2 = len(self.__current_vector())
+                length_diff = vector_length2 - vector_length1
+                self.__current_vector()[vector_length1 - 1] = Instr('jmp', length_diff, 0)
+            else:
+                # arg
+                self.visit(arg)
+
+        # *args
+        if node.vararg:
+            self.__add_instr('getargs', 0, 0)
+            self.__add_instr('stobj', self.__get_encoding_id(node.vararg), 0)
+
+        # **kwarg
+        if node.kwarg:
+            self.__add_instr('getkwargs', 0, 0)
+            # TODO: retrieve kwargs stored on top of eval stack
 
 
 def main():
