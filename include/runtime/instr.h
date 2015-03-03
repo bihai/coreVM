@@ -251,8 +251,8 @@ enum instr_enum : uint32_t
   /**
    * <getkwarg, key, addr>
    * If the top frame has the keyword-argument pair with the key specified
-   * as the first operand, pops off the pair and put it on top of the stack.
-   * Otherwise, advance the program counter by the value specified in the
+   * as the first operand, pops off the pair and put the value on top of the
+   * stack. Otherwise, advance the program counter by the value specified in the
    * second operand.
    */
   GETKWARG,
