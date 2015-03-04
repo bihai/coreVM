@@ -24,6 +24,7 @@ import optparse
 import pprint
 import simplejson
 import sys
+import traceback
 
 from datetime import datetime
 
@@ -191,7 +192,6 @@ class BytecodeGenerator(ast.NodeVisitor):
 
         # In the outer closure, set the closure id on the object
 
-        # TODO: [COREVM-170] Add support for object creation flags in Python compiler
         self.__add_instr('new', self.__get_dyobj_flag(['DYOBJ_IS_NOT_GARBAGE_COLLECTIBLE']), 0)
         self.__add_instr('setctx', self.closure_map[name].closure_id, 0)
         self.__add_instr('stobj', self.__get_encoding_id(node.name), 0)
@@ -207,9 +207,41 @@ class BytecodeGenerator(ast.NodeVisitor):
         self.visit(node.op)
 
     def visit_Call(self, node):
-        # TODO: [COREVM-169] Add support for functional call arguments in Python tests
+        # explicit args
+        for arg in node.args:
+            self.visit(arg)
+
+        # explicit kwargs
+        for keyword in node.keywords:
+            self.visit(keyword.value)
+
+        # implicit args
+        if node.starargs:
+            self.visit(node.starargs)
+
+        # implicit kwargs
+        if node.kwargs:
+            self.visit(node.kwargs)
+
         self.visit(node.func)
         self.__add_instr('pinvk', 0, 0)
+
+        # explicit args
+        for arg in node.args:
+            self.__add_instr('putarg', 0, 0)
+
+        # explicit kwargs
+        for keyword in node.keywords:
+            self.__add_instr('putkwarg', self.__get_encoding_id(keyword.arg), 0)
+
+        # implicit args
+        if node.starargs:
+            self.__add_instr('putargs', 0, 0)
+
+        # implicit kwargs
+        if node.kwargs:
+            self.__add_instr('putkwargs', 0, 0)
+
         self.__add_instr('invk', 0, 0)
 
     def visit_Num(self, node):
@@ -439,6 +471,8 @@ def main():
         sys.stderr.write('Failed to compile %s\n' % options.input_file)
         sys.stderr.write(str(ex))
         sys.stderr.write('\n')
+        if options.debug_mode:
+            print traceback.format_exc()
         sys.exit(-1)
 
 
