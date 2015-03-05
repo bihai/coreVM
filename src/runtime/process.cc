@@ -73,7 +73,7 @@ private:
 public:
   virtual void operator()(const dynamic_object_type& obj)
   {
-    this->m_list.push_back(obj.get_ntvhndl_key());
+    this->m_list.push_back(obj.ntvhndl_key());
   }
 
   const std::list<corevm::dyobj::ntvhndl_key>& list() const
