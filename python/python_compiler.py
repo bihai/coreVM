@@ -183,9 +183,12 @@ class BytecodeGenerator(ast.NodeVisitor):
 
         self.current_closure_name = name
 
+        # Off-load arguments.
+        self.visit(node.args)
+
+        # Statements.
         for stmt in node.body:
             self.visit(stmt)
-        self.visit(node.args)
 
         # step out
         self.current_closure_name = self.closure_map[self.current_closure_name].parent_name
@@ -380,7 +383,7 @@ class BytecodeGenerator(ast.NodeVisitor):
             for arg in node.args:
                 if closest_arg is None:
                     closest_arg = arg
-                elif arg.col_offset < closest_arg.col_offset and arg.col_offset < default.col_offset:
+                elif arg.col_offset > closest_arg.col_offset and arg.col_offset < default.col_offset:
                     closest_arg = arg
 
             assert closest_arg
