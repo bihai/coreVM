@@ -36,8 +36,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "../../include/runtime/sighandler_registrar.h"
 #include "../../include/runtime/vector.h"
 
-#include <sneaker/atomic/atomic_incrementor.h>
-
 #include <algorithm>
 #include <cassert>
 #include <cstdint>
