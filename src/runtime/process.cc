@@ -561,7 +561,7 @@ corevm::runtime::process::get_frame_by_closure_ctx(
 // -----------------------------------------------------------------------------
 
 bool
-corevm::runtime::process::should_gc()
+corevm::runtime::process::should_gc() const
 {
   size_t flag_size = sizeof(m_gc_flag) * sizeof(char);
 

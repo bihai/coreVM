@@ -117,7 +117,7 @@ corevm::runtime::instr_handler_meta::instr_info_map {
   /* ------------------------- Runtime instructions ------------------------- */
 
   { corevm::runtime::instr_enum::GC,        { .num_oprd=0, .str="gc",        .handler=std::make_shared<corevm::runtime::instr_handler_gc>()        } },
-  { corevm::runtime::instr_enum::DEBUG,     { .num_oprd=0, .str="debug",     .handler=std::make_shared<corevm::runtime::instr_handler_debug>()      } },
+  { corevm::runtime::instr_enum::DEBUG,     { .num_oprd=0, .str="debug",     .handler=std::make_shared<corevm::runtime::instr_handler_debug>()     } },
 
   /* ---------------- Arithmetic and logic instructions --------------------- */
 
