@@ -95,6 +95,8 @@ private:
 } /* end namespace corevm */
 
 
+// -----------------------------------------------------------------------------
+
 corevm::dyobj::dyobj_id
 corevm::runtime::process::adapter::help_create_dyobj()
 {
@@ -115,7 +117,7 @@ corevm::runtime::process::process()
   :
   m_pause_exec(false),
   m_gc_flag(0),
-  m_pc(0),
+  m_pc(NONESET_INSTR_ADDR),
   m_dynamic_object_heap(),
   m_dyobj_stack(),
   m_call_stack(),
@@ -148,14 +150,6 @@ corevm::runtime::process::process(uint64_t heap_alloc_size, uint64_t pool_alloc_
 corevm::runtime::process::~process()
 {
   // Do nothing here.
-}
-
-// -----------------------------------------------------------------------------
-
-const corevm::runtime::instr_addr
-corevm::runtime::process::current_addr() const
-{
-  return m_pc;
 }
 
 // -----------------------------------------------------------------------------
@@ -215,7 +209,13 @@ corevm::runtime::process::pop_frame() throw(corevm::runtime::frame_not_found_err
     }
   );
 
+  instr_addr return_addr = frame.return_addr();
+
   m_call_stack.pop_back();
+
+  set_pc(return_addr);
+
+  m_instrs.erase(m_instrs.begin() + pc(), m_instrs.end());
 }
 
 // -----------------------------------------------------------------------------
@@ -391,9 +391,17 @@ corevm::runtime::process::resume_exec()
 // -----------------------------------------------------------------------------
 
 bool
+corevm::runtime::process::is_valid_pc() const
+{
+  return m_pc != NONESET_INSTR_ADDR && (m_pc >= 0 && m_pc < m_instrs.size());
+}
+
+// -----------------------------------------------------------------------------
+
+bool
 corevm::runtime::process::can_execute()
 {
-  return m_pc < m_instrs.size();
+  return is_valid_pc();
 }
 
 // -----------------------------------------------------------------------------
@@ -422,6 +430,8 @@ corevm::runtime::process::pre_start()
     push_frame(frame);
 
     insert_vector(closure.vector);
+
+    m_pc = 0;
   }
 
   return res;
@@ -518,14 +528,13 @@ void
 corevm::runtime::process::set_pc(const corevm::runtime::instr_addr addr)
   throw(corevm::runtime::invalid_instr_addr_error)
 {
-  if (addr >= m_instrs.size())
+  if ( addr != corevm::runtime::NONESET_INSTR_ADDR &&
+      (addr < 0 || addr >= m_instrs.size()) )
   {
     throw corevm::runtime::invalid_instr_addr_error();
   }
 
   m_pc = addr;
-
-  m_instrs.erase(m_instrs.begin() + pc(), m_instrs.end());
 }
 
 // -----------------------------------------------------------------------------

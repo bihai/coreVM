@@ -103,8 +103,6 @@ public:
   process(const process&) = delete;
   process& operator=(const process&) = delete;
 
-  const corevm::runtime::instr_addr current_addr() const;
-
   uint64_t call_stack_size() const;
 
   bool has_frame() const;
@@ -182,6 +180,8 @@ public:
   friend std::ostream& operator<<(std::ostream&, const corevm::runtime::process&);
 
 private:
+  bool is_valid_pc() const;
+
   bool pre_start();
 
   bool should_gc() const;

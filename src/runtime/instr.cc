@@ -901,7 +901,7 @@ corevm::runtime::instr_handler_rtrn::execute(
 {
   corevm::runtime::frame& frame = process.top_frame();
 
-  corevm::runtime::instr_addr return_addr = frame.get_return_addr();
+  corevm::runtime::instr_addr return_addr = frame.return_addr();
 
   if (return_addr == corevm::runtime::NONESET_INSTR_ADDR)
   {
@@ -920,7 +920,7 @@ corevm::runtime::instr_handler_jmp::execute(
 {
   corevm::runtime::frame& frame = process.top_frame();
 
-  corevm::runtime::instr_addr starting_addr = frame.get_start_addr();
+  corevm::runtime::instr_addr starting_addr = frame.start_addr();
   corevm::runtime::instr_addr relative_addr = static_cast<corevm::runtime::instr_addr>(instr.oprd1);
 
   corevm::runtime::instr_addr addr = starting_addr + relative_addr;
@@ -945,7 +945,7 @@ corevm::runtime::instr_handler_jmpif::execute(
 {
   corevm::runtime::frame& frame = process.top_frame();
 
-  corevm::runtime::instr_addr starting_addr = frame.get_start_addr();
+  corevm::runtime::instr_addr starting_addr = frame.start_addr();
   corevm::runtime::instr_addr relative_addr = static_cast<corevm::runtime::instr_addr>(instr.oprd1);
 
   corevm::runtime::instr_addr addr = starting_addr + relative_addr;
