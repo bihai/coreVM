@@ -222,10 +222,10 @@ corevm::runtime::process::pop_frame() throw(corevm::runtime::frame_not_found_err
 
   if (is_valid_pc())
   {
-      auto begin_itr = m_instrs.begin() + pc();
-      auto end_itr = begin_itr + closure.vector.size();
+    auto begin_itr = m_instrs.begin() + pc();
+    auto end_itr = begin_itr + closure.vector.size();
 
-      m_instrs.erase(begin_itr, end_itr);
+    m_instrs.erase(begin_itr, end_itr);
   }
 
   m_call_stack.pop_back();
@@ -250,7 +250,8 @@ corevm::runtime::process::stack_size() const
 // -----------------------------------------------------------------------------
 
 const corevm::dyobj::dyobj_id&
-corevm::runtime::process::top_stack() throw(corevm::runtime::object_stack_empty_error)
+corevm::runtime::process::top_stack()
+  throw(corevm::runtime::object_stack_empty_error)
 {
   if (m_dyobj_stack.empty())
   {
@@ -271,7 +272,8 @@ corevm::runtime::process::push_stack(corevm::dyobj::dyobj_id& id)
 // -----------------------------------------------------------------------------
 
 const corevm::dyobj::dyobj_id
-corevm::runtime::process::pop_stack() throw(corevm::runtime::object_stack_empty_error)
+corevm::runtime::process::pop_stack()
+  throw(corevm::runtime::object_stack_empty_error)
 {
   if (m_dyobj_stack.empty())
   {
@@ -606,10 +608,14 @@ corevm::runtime::process::should_gc() const
       continue;
     }
 
-    corevm::runtime::gc_rule_meta::gc_bitfields bit = static_cast<corevm::runtime::gc_rule_meta::gc_bitfields>(i);
-    const corevm::runtime::gc_rule* gc_rule = corevm::runtime::gc_rule_meta::get_gc_rule(bit);
+    corevm::runtime::gc_rule_meta::gc_bitfields bit = \
+      static_cast<corevm::runtime::gc_rule_meta::gc_bitfields>(i);
 
-    if (gc_rule && gc_rule->should_gc(const_cast<const corevm::runtime::process&>(*this)))
+    const corevm::runtime::gc_rule* gc_rule = \
+      corevm::runtime::gc_rule_meta::get_gc_rule(bit);
+
+    if (gc_rule &&
+        gc_rule->should_gc(const_cast<const corevm::runtime::process&>(*this)))
     {
       return true;
     }
