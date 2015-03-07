@@ -24,6 +24,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "../../include/runtime/process.h"
 #include "../../include/types/interfaces.h"
+#include "../../include/types/types.h"
 
 #include <boost/format.hpp>
 
@@ -118,6 +119,7 @@ corevm::runtime::instr_handler_meta::instr_info_map {
 
   { corevm::runtime::instr_enum::GC,        { .num_oprd=0, .str="gc",        .handler=std::make_shared<corevm::runtime::instr_handler_gc>()        } },
   { corevm::runtime::instr_enum::DEBUG,     { .num_oprd=0, .str="debug",     .handler=std::make_shared<corevm::runtime::instr_handler_debug>()     } },
+  { corevm::runtime::instr_enum::PRINT,     { .num_oprd=0, .str="print",     .handler=std::make_shared<corevm::runtime::instr_handler_print>()     } },
 
   /* ---------------- Arithmetic and logic instructions --------------------- */
 
@@ -890,7 +892,7 @@ corevm::runtime::instr_handler_invk::execute(
 
   corevm::runtime::closure closure = compartment->get_closure_by_id(ctx.closure_id);
 
-  process.append_vector(closure.vector);
+  process.insert_vector(closure.vector);
 }
 
 // -----------------------------------------------------------------------------
@@ -908,7 +910,6 @@ corevm::runtime::instr_handler_rtrn::execute(
     throw corevm::runtime::invalid_instr_addr_error();
   }
 
-  process.set_pc(return_addr);
   process.pop_frame();
 }
 
@@ -1175,6 +1176,34 @@ corevm::runtime::instr_handler_debug::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
 {
   std::cout << process << std::endl;
+}
+
+// -----------------------------------------------------------------------------
+
+void
+corevm::runtime::instr_handler_print::execute(
+  const corevm::runtime::instr& instr, corevm::runtime::process& process)
+{
+  corevm::dyobj::dyobj_id id = process.top_stack();
+  auto &obj = corevm::runtime::process::adapter(process).help_get_dyobj(id);
+
+  corevm::dyobj::ntvhndl_key ntvhndl_key = obj.ntvhndl_key();
+
+  if (ntvhndl_key == corevm::dyobj::NONESET_NTVHNDL_KEY)
+  {
+    throw corevm::runtime::native_type_handle_not_found_error();
+  }
+
+  corevm::types::native_type_handle& hndl = process.get_ntvhndl(ntvhndl_key);
+  corevm::types::native_type_handle result;
+  corevm::types::interface_to_str(hndl, result);
+
+  corevm::types::native_string native_str = \
+    corevm::types::get_value_from_handle<corevm::types::native_string>(result);
+
+  const std::string& str = static_cast<std::string>(native_str);
+
+  std::cout << str << std::endl;
 }
 
 // -----------------------------------------------------------------------------
@@ -1640,10 +1669,31 @@ void
 corevm::runtime::instr_handler_str::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
 {
-  corevm::runtime::instr_handler::execute_native_complex_type_creation_instr<corevm::types::string>(
-    instr,
-    process
-  );
+  // String type is different than other complex types.
+  corevm::runtime::frame& frame = process.top_frame();
+
+  std::string str;
+
+  if (instr.oprd1 > 0)
+  {
+    uint64_t encoding_key = static_cast<uint64_t>(instr.oprd1);
+
+    corevm::runtime::compartment_id compartment_id = frame.closure_ctx().compartment_id;
+    corevm::runtime::compartment* compartment = nullptr;
+
+    process.get_compartment(compartment_id, &compartment);
+
+    if (!compartment)
+    {
+      throw corevm::runtime::compartment_not_found_error(compartment_id);
+    }
+
+    str = compartment->get_encoding_string(encoding_key);
+  }
+
+  corevm::types::native_type_handle hndl = corevm::types::string(str);
+
+  frame.push_eval_stack(hndl);
 }
 
 // -----------------------------------------------------------------------------

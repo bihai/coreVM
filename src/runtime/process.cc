@@ -209,13 +209,26 @@ corevm::runtime::process::pop_frame() throw(corevm::runtime::frame_not_found_err
     }
   );
 
-  instr_addr return_addr = frame.return_addr();
+  set_pc(frame.return_addr());
+
+  corevm::runtime::compartment_id compartment_id = frame.closure_ctx().compartment_id;
+  corevm::runtime::compartment* compartment = nullptr;
+  this->get_compartment(compartment_id, &compartment);
+
+  assert(compartment);
+
+  corevm::runtime::closure_id closure_id = frame.closure_ctx().closure_id;
+  corevm::runtime::closure closure = compartment->get_closure_by_id(closure_id);
+
+  if (is_valid_pc())
+  {
+      auto begin_itr = m_instrs.begin() + pc();
+      auto end_itr = begin_itr + closure.vector.size();
+
+      m_instrs.erase(begin_itr, end_itr);
+  }
 
   m_call_stack.pop_back();
-
-  set_pc(return_addr);
-
-  m_instrs.erase(m_instrs.begin() + pc(), m_instrs.end());
 }
 
 // -----------------------------------------------------------------------------
@@ -426,10 +439,11 @@ corevm::runtime::process::pre_start()
       .closure_id = closure.id
     };
 
-    corevm::runtime::frame frame(ctx);
-    push_frame(frame);
+    append_vector(closure.vector);
 
-    insert_vector(closure.vector);
+    corevm::runtime::frame frame(ctx);
+    frame.set_return_addr(m_pc);
+    push_frame(frame);
 
     m_pc = 0;
   }
@@ -542,7 +556,18 @@ corevm::runtime::process::set_pc(const corevm::runtime::instr_addr addr)
 void
 corevm::runtime::process::append_vector(const corevm::runtime::vector& vector)
 {
-  m_instrs.insert(m_instrs.end(), vector.begin(), vector.end());
+  // Inserts the vector at the very end of the instr array.
+  // (This is different than `process::insert_vector`.
+  std::copy(vector.begin(), vector.end(), std::back_inserter(m_instrs));
+}
+
+// -----------------------------------------------------------------------------
+
+void
+corevm::runtime::process::insert_vector(corevm::runtime::vector& vector)
+{
+  // We want to insert the vector right after the current pc().
+  m_instrs.insert(m_instrs.begin() + pc() + 1, vector.begin(), vector.end());
 }
 
 // -----------------------------------------------------------------------------
@@ -600,14 +625,6 @@ corevm::runtime::process::set_sig_vector(
   sig_atomic_t sig, corevm::runtime::vector& vector)
 {
   m_sig_instr_map.insert({sig, vector});
-}
-
-// -----------------------------------------------------------------------------
-
-void
-corevm::runtime::process::insert_vector(corevm::runtime::vector& vector)
-{
-  std::copy(vector.begin(), vector.end(), std::back_inserter(m_instrs));
 }
 
 // -----------------------------------------------------------------------------
@@ -682,6 +699,8 @@ std::ostream& operator<<(
     ost << compartment << std::endl;
   }
 
+  ost << "Total Instructions: " << process.m_instrs.size() << std::endl;
+  ost << "Program counter: " << process.pc() << std::endl;
   ost << "-- END --" << std::endl;
   ost << std::endl;
 

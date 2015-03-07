@@ -304,6 +304,13 @@ enum instr_enum : uint32_t
    */
   DEBUG,
 
+  /**
+   * <print, _, _>
+   * Converts the native type handle associated with the object on top of the
+   * stack into a native string, and prints it to std output.
+   */
+  PRINT,
+
   /* ------------------ Arithmetic and logic instructions ------------------- */
 
   /**
@@ -1267,6 +1274,14 @@ public:
 // -----------------------------------------------------------------------------
 
 class instr_handler_debug : public instr_handler
+{
+public:
+  virtual void execute(const corevm::runtime::instr&, corevm::runtime::process&);
+};
+
+// -----------------------------------------------------------------------------
+
+class instr_handler_print: public instr_handler
 {
 public:
   virtual void execute(const corevm::runtime::instr&, corevm::runtime::process&);

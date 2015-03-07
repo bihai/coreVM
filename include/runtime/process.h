@@ -142,6 +142,8 @@ public:
 
   void append_vector(const corevm::runtime::vector&);
 
+  void insert_vector(corevm::runtime::vector& vector);
+
   void get_frame_by_closure_ctx(
     corevm::runtime::closure_ctx&, corevm::runtime::frame**);
 
@@ -185,8 +187,6 @@ private:
   bool pre_start();
 
   bool should_gc() const;
-
-  void insert_vector(corevm::runtime::vector& vector);
 
   bool m_pause_exec;
   uint8_t m_gc_flag;

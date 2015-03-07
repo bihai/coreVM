@@ -165,18 +165,53 @@ TEST_F(process_unittest, TestPushAndPopFrames)
   ASSERT_EQ(false, process.has_frame());
   ASSERT_EQ(0, process.call_stack_size());
 
-  corevm::runtime::closure_ctx ctx {
-    .compartment_id = corevm::runtime::NONESET_COMPARTMENT_ID,
-    .closure_id = corevm::runtime::NONESET_CLOSURE_ID
+  corevm::runtime::compartment compartment("./example.core");
+
+  corevm::runtime::vector vector {
+    { .code=6, .oprd1=421, .oprd2=523 },
+    { .code=5, .oprd1=532, .oprd2=0   },
+    { .code=2, .oprd1=72,  .oprd2=0   },
   };
 
-  corevm::runtime::frame frame1(ctx);
+  corevm::runtime::closure closure1 {
+    .id=1,
+    .parent_id=0,
+    .vector=vector
+  };
+
+  corevm::runtime::closure closure2 {
+    .id=2,
+    .parent_id=1,
+    .vector=vector
+  };
+
+  corevm::runtime::closure_table closure_table {
+    closure1,
+    closure2,
+  };
+
+  compartment.set_closure_table(closure_table);
+
+  process.insert_compartment(compartment);
+
+  // TODO: fix hard coded compartment_id.
+  corevm::runtime::closure_ctx ctx1 {
+    .compartment_id = 0,
+    .closure_id = closure1.id,
+  };
+
+  corevm::runtime::closure_ctx ctx2 {
+    .compartment_id = 0,
+    .closure_id = closure2.id,
+  };
+
+  corevm::runtime::frame frame1(ctx1);
   process.push_frame(frame1);
 
   ASSERT_EQ(true, process.has_frame());
   ASSERT_EQ(1, process.call_stack_size());
 
-  corevm::runtime::frame frame2(ctx);
+  corevm::runtime::frame frame2(ctx2);
   process.push_frame(frame2);
 
   ASSERT_EQ(true, process.has_frame());
