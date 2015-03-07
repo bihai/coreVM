@@ -220,13 +220,10 @@ corevm::runtime::process::pop_frame() throw(corevm::runtime::frame_not_found_err
   corevm::runtime::closure_id closure_id = frame.closure_ctx().closure_id;
   corevm::runtime::closure closure = compartment->get_closure_by_id(closure_id);
 
-  if (is_valid_pc())
-  {
-    auto begin_itr = m_instrs.begin() + pc();
-    auto end_itr = begin_itr + closure.vector.size();
+  auto begin_itr = m_instrs.begin() + pc();
+  auto end_itr = begin_itr + closure.vector.size();
 
-    m_instrs.erase(begin_itr, end_itr);
-  }
+  m_instrs.erase(begin_itr, end_itr);
 
   m_call_stack.pop_back();
 }
