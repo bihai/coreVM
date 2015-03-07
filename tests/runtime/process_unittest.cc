@@ -105,13 +105,13 @@ TEST_F(process_unittest, TestAppendVector)
     { .code=2, .oprd1=72,  .oprd2=0  },
   };
 
-  corevm::runtime::vector dest {
+  corevm::runtime::vector src {
     { .code=36, .oprd1=41, .oprd2=81 },
     { .code=37, .oprd1=27, .oprd2=0  },
     { .code=83, .oprd1=93, .oprd2=0  },
   };
 
-  std::copy(dest.begin(), dest.end(), std::back_inserter(target));
+  std::copy(src.begin(), src.end(), std::back_inserter(target));
 
   corevm::runtime::vector expected {
     { .code=6, .oprd1=421, .oprd2=52 },
@@ -122,7 +122,55 @@ TEST_F(process_unittest, TestAppendVector)
     { .code=83, .oprd1=93, .oprd2=0  },
   };
 
-  ASSERT_EQ(true, expected == target);
+  ASSERT_EQ(expected, target);
+}
+
+// -----------------------------------------------------------------------------
+
+TEST_F(process_unittest, TestInsertVector)
+{
+  // The process's vector is inaccessible to the outside world, so we need to
+  // simulate its implementation here.
+  corevm::runtime::vector target {
+    { .code=6,  .oprd1=421, .oprd2=52 },
+    { .code=5,  .oprd1=532, .oprd2=0  },
+    { .code=2,  .oprd1=72,  .oprd2=0  },
+    { .code=71, .oprd1=25,  .oprd2=0  },
+    { .code=18, .oprd1=51,  .oprd2=43 },
+    { .code=17, .oprd1=11,  .oprd2=99 },
+    { .code=33, .oprd1=88,  .oprd2=55 },
+    { .code=88, .oprd1=11,  .oprd2=91 },
+    { .code=17, .oprd1=71,  .oprd2=23 },
+    { .code=91, .oprd1=64,  .oprd2=67 },
+  };
+
+  corevm::runtime::vector src {
+    { .code=36, .oprd1=41,  .oprd2=81 },
+    { .code=37, .oprd1=27,  .oprd2=0  },
+    { .code=83, .oprd1=93,  .oprd2=0  },
+  };
+
+  int64_t fake_pc = 5;
+
+  target.insert(target.begin() + fake_pc + 1, src.begin(), src.end());
+
+  corevm::runtime::vector expected {
+    { .code=6,  .oprd1=421, .oprd2=52 },
+    { .code=5,  .oprd1=532, .oprd2=0  },
+    { .code=2,  .oprd1=72,  .oprd2=0  },
+    { .code=71, .oprd1=25,  .oprd2=0  },
+    { .code=18, .oprd1=51,  .oprd2=43 },
+    { .code=17, .oprd1=11,  .oprd2=99 },
+    { .code=36, .oprd1=41,  .oprd2=81 },
+    { .code=37, .oprd1=27,  .oprd2=0  },
+    { .code=83, .oprd1=93,  .oprd2=0  },
+    { .code=33, .oprd1=88,  .oprd2=55 },
+    { .code=88, .oprd1=11,  .oprd2=91 },
+    { .code=17, .oprd1=71,  .oprd2=23 },
+    { .code=91, .oprd1=64,  .oprd2=67 },
+  };
+
+  ASSERT_EQ(expected, target);
 }
 
 // -----------------------------------------------------------------------------

@@ -572,6 +572,9 @@ void
 corevm::runtime::process::insert_vector(corevm::runtime::vector& vector)
 {
   // We want to insert the vector right after the current pc().
+  //
+  // NOTE: Please update `process_unittest::TestInsertVector` if the
+  // behavior here changes.
   m_instrs.insert(m_instrs.begin() + pc() + 1, vector.begin(), vector.end());
 }
 
