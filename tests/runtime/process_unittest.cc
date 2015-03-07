@@ -33,7 +33,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <sneaker/testing/_unittest.h>
 
+#include <algorithm>
 #include <cstdint>
+#include <iterator>
 #include <sstream>
 
 
@@ -89,6 +91,38 @@ TEST_F(process_unittest, TestInstantiateWithParameters)
 
   ASSERT_LT(0, process.max_heap_size());
   ASSERT_LT(0, process.max_ntvhndl_pool_size());
+}
+
+// -----------------------------------------------------------------------------
+
+TEST_F(process_unittest, TestAppendVector)
+{
+  // The process's vector is inaccessible to the outside world, so we need to
+  // simulate its implementation here.
+  corevm::runtime::vector target {
+    { .code=6, .oprd1=421, .oprd2=52 },
+    { .code=5, .oprd1=532, .oprd2=0  },
+    { .code=2, .oprd1=72,  .oprd2=0  },
+  };
+
+  corevm::runtime::vector dest {
+    { .code=36, .oprd1=41, .oprd2=81 },
+    { .code=37, .oprd1=27, .oprd2=0  },
+    { .code=83, .oprd1=93, .oprd2=0  },
+  };
+
+  std::copy(dest.begin(), dest.end(), std::back_inserter(target));
+
+  corevm::runtime::vector expected {
+    { .code=6, .oprd1=421, .oprd2=52 },
+    { .code=5, .oprd1=532, .oprd2=0  },
+    { .code=2, .oprd1=72,  .oprd2=0  },
+    { .code=36, .oprd1=41, .oprd2=81 },
+    { .code=37, .oprd1=27, .oprd2=0  },
+    { .code=83, .oprd1=93, .oprd2=0  },
+  };
+
+  ASSERT_EQ(true, expected == target);
 }
 
 // -----------------------------------------------------------------------------

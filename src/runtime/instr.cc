@@ -60,6 +60,15 @@ std::ostream& operator<<(
   return ost;
 }
 
+// -----------------------------------------------------------------------------
+
+bool operator==(const instr& lhs, const instr& rhs)
+{
+  return lhs.code == rhs.code &&
+    lhs.oprd1 == rhs.oprd1 &&
+    lhs.oprd2 == rhs.oprd2;
+}
+
 
 } /* end namespace runtime */
 

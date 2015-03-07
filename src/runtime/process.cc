@@ -560,6 +560,9 @@ corevm::runtime::process::append_vector(const corevm::runtime::vector& vector)
 {
   // Inserts the vector at the very end of the instr array.
   // (This is different than `process::insert_vector`.
+  //
+  // NOTE: Please update `process_unittest::TestAppendVector` if the
+  // behavior here changes.
   std::copy(vector.begin(), vector.end(), std::back_inserter(m_instrs));
 }
 

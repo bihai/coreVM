@@ -908,6 +908,10 @@ std::ostream& operator<<(std::ostream&, const corevm::runtime::instr&);
 
 // -----------------------------------------------------------------------------
 
+bool operator==(const instr&, const instr&);
+
+// -----------------------------------------------------------------------------
+
 // Forward declaration of `corevm::runtime::process`.
 class process;
 
