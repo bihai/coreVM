@@ -152,7 +152,7 @@ class BytecodeGenerator(ast.NodeVisitor):
         )
 
     def __mingle_name(self, name):
-        # TDOO: Add support for actual name minglings.
+        # TDOO: [COREVM-177] Add support for name mingling in Python compiler
         return name
 
     def __get_encoding_id(self, name):
@@ -204,11 +204,11 @@ class BytecodeGenerator(ast.NodeVisitor):
         self.__add_instr('stobj', self.__get_encoding_id(node.name), 0)
 
     def visit_Return(self, node):
-        # TODO: need to handle return value.
+        # TODO: [COREVM-176] Support return value in Python
         self.__add_instr('rtrn', 0, 0)
 
     def visit_Print(self, node):
-        # Currently only supports print one object.
+        # TODO: [COREVM-178] Support for printing multiple values in Python
         if node.values:
             self.visit(node.values[0])
 

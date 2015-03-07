@@ -194,7 +194,7 @@ TEST_F(process_unittest, TestPushAndPopFrames)
 
   process.insert_compartment(compartment);
 
-  // TODO: fix hard coded compartment_id.
+  // TODO: [COREVM-179] Make process::insert_compartment return the ID of the inserted compartment
   corevm::runtime::closure_ctx ctx1 {
     .compartment_id = 0,
     .closure_id = closure1.id,
