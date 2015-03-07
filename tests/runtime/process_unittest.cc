@@ -173,49 +173,38 @@ TEST_F(process_unittest, TestPushAndPopFrames)
     { .code=2, .oprd1=72,  .oprd2=0   },
   };
 
-  corevm::runtime::closure closure1 {
+  corevm::runtime::closure closure {
     .id=1,
     .parent_id=0,
     .vector=vector
   };
 
-  corevm::runtime::closure closure2 {
-    .id=2,
-    .parent_id=1,
-    .vector=vector
-  };
-
   corevm::runtime::closure_table closure_table {
-    closure1,
-    closure2,
+    closure
   };
 
   compartment.set_closure_table(closure_table);
 
+  // simulate `process::pre_start()`.
   process.insert_compartment(compartment);
+  process.append_vector(vector);
+  process.set_pc(0);
 
   // TODO: [COREVM-179] Make process::insert_compartment return the ID of the inserted compartment
-  corevm::runtime::closure_ctx ctx1 {
+  corevm::runtime::closure_ctx ctx {
     .compartment_id = 0,
-    .closure_id = closure1.id,
+    .closure_id = closure.id,
   };
 
-  corevm::runtime::closure_ctx ctx2 {
-    .compartment_id = 0,
-    .closure_id = closure2.id,
-  };
-
-  corevm::runtime::frame frame1(ctx1);
-  process.push_frame(frame1);
+  corevm::runtime::frame frame(ctx);
+  frame.set_return_addr(process.pc());
+  process.push_frame(frame);
+  process.insert_vector(closure.vector);
 
   ASSERT_EQ(true, process.has_frame());
   ASSERT_EQ(1, process.call_stack_size());
 
-  corevm::runtime::frame frame2(ctx2);
-  process.push_frame(frame2);
-
-  ASSERT_EQ(true, process.has_frame());
-  ASSERT_EQ(2, process.call_stack_size());
+  auto original_pc = process.pc();
 
   ASSERT_NO_THROW(
     {
@@ -223,14 +212,7 @@ TEST_F(process_unittest, TestPushAndPopFrames)
     }
   );
 
-  ASSERT_EQ(true, process.has_frame());
-  ASSERT_EQ(1, process.call_stack_size());
-
-  ASSERT_NO_THROW(
-    {
-      process.pop_frame();
-    }
-  );
+  ASSERT_EQ(original_pc, process.pc());
 
   ASSERT_EQ(false, process.has_frame());
   ASSERT_EQ(0, process.call_stack_size());
