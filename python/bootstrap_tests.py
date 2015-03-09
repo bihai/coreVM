@@ -35,7 +35,7 @@ import subprocess
 
 
 PYTHON = 'python'
-PYTHON_SOURCE_DIR = './python/src/'
+PYTHON_TESTS_DIR = './python/tests/'
 PYTHON_COMPILER = './python/python_compiler.py'
 INFO_FILE = './info.json'
 COREVM = './coreVM'
@@ -75,7 +75,7 @@ def corevm_cmdl_args(path):
 
 
 def main():
-    inputs = glob.glob(PYTHON_SOURCE_DIR + '*.py')
+    inputs = glob.glob(PYTHON_TESTS_DIR + '*.py')
 
     print 'Bootstrapping Python tests...'
     print 'Testing using the following %d input file(s):' % len(inputs)
