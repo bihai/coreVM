@@ -22,6 +22,7 @@
 import ast
 import optparse
 import pprint
+import re
 import simplejson
 import sys
 import traceback
@@ -31,6 +32,30 @@ from datetime import datetime
 
 INSTR_STR_TO_CODE_MAP = 'INSTR_STR_TO_CODE_MAP'
 DYOBJ_FLAG_STR_TO_VALUE_MAP = 'DYOBJ_FLAG_STR_TO_VALUE_MAP'
+
+
+class VectorString(object):
+
+    pattern = r'^(?:\n### BEGIN VECTOR ###\n)(\[\d,\d,\d\]\n)*(?:### END VECTOR ###)$'
+    regex = re.compile(pattern)
+
+    def __init__(self, s):
+        self.s = s
+
+    @classmethod
+    def is_vector_string(cls, s):
+        return cls.regex.match(s)
+
+    def vector(self):
+        vector = []
+
+        it = re.finditer(self.regex, self.s)
+        for match in it:
+            if not match.contains('VECTOR'):
+                match = match.strip('[]\n')
+                vector.append(match.split(','))
+
+        return vector
 
 
 class Instr(object):
@@ -203,6 +228,17 @@ class BytecodeGenerator(ast.NodeVisitor):
         self.__add_instr('setctx', self.closure_map[name].closure_id, 0)
         self.__add_instr('stobj', self.__get_encoding_id(node.name), 0)
 
+    def visit_ClassDef(self, node):
+        self.__add_instr('new', self.__get_dyobj_flag(['DYOBJ_IS_NOT_GARBAGE_COLLECTIBLE']), 0)
+
+        for stmt in node.body:
+            # TODO|NOTE: currently only supports functions.
+            if isinstance(stmt, ast.FunctionDef):
+                self.visit(stmt)
+                self.__add_instr('setattr', self.__get_encoding_id(stmt.name), 0)
+
+        self.__add_instr('stobj', self.__get_encoding_id(node.name), 0)
+
     def visit_Return(self, node):
         # TODO: [COREVM-176] Support return value in Python
         self.__add_instr('rtrn', 0, 0)
@@ -287,9 +323,17 @@ class BytecodeGenerator(ast.NodeVisitor):
             pass
 
     def visit_Str(self, node):
-        self.__add_instr('new', 0, 0)
-        self.__add_instr('str', self.__get_encoding_id(node.s), 0)
-        self.__add_instr('sethndl', 0, 0)
+        if not VectorString.is_vector_string(node.s):
+            self.__add_instr('new', 0, 0)
+            self.__add_instr('str', self.__get_encoding_id(node.s), 0)
+            self.__add_instr('sethndl', 0, 0)
+        else:
+            vector = VectorString(node.s).vector()
+
+            for instr in vector:
+                self.__current_vector().append(
+                    Instr(instr[0], instr[1], instr[2])
+                )
 
     """ --------------------------- operator ------------------------------- """
 
