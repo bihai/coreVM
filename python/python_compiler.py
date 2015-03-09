@@ -22,7 +22,6 @@
 import ast
 import optparse
 import pprint
-import re
 import simplejson
 import sys
 import traceback
@@ -36,24 +35,23 @@ DYOBJ_FLAG_STR_TO_VALUE_MAP = 'DYOBJ_FLAG_STR_TO_VALUE_MAP'
 
 class VectorString(object):
 
-    pattern = r'^(?:\n### BEGIN VECTOR ###\n)(\[\d,\d,\d\]\n)*(?:### END VECTOR ###)$'
-    regex = re.compile(pattern)
-
     def __init__(self, s):
         self.s = s
 
     @classmethod
     def is_vector_string(cls, s):
-        return cls.regex.match(s)
+        s = s.strip()
+        return s.startswith('### BEGIN VECTOR ###') and s.endswith('### END VECTOR ###')
 
-    def vector(self):
+    def to_raw_vector(self):
         vector = []
 
-        it = re.finditer(self.regex, self.s)
-        for match in it:
-            if not match.contains('VECTOR'):
-                match = match.strip('[]\n')
-                vector.append(match.split(','))
+        lines = self.s.split('\n')
+
+        for line in lines:
+            if not 'VECTOR' in line and len(line) > 5:
+                line = line.strip('[ ]\n')
+                vector.append(line.split(','))
 
         return vector
 
@@ -115,6 +113,8 @@ class BytecodeGenerator(ast.NodeVisitor):
 
     default_closure_name = '__main__'
 
+    in_class_def = False
+
     def __init__(self, options):
         self.output_file = options.output_file
         self.debug_mode = options.debug_mode
@@ -135,6 +135,9 @@ class BytecodeGenerator(ast.NodeVisitor):
         self.closure_map = {
             self.current_closure_name: Closure(self.current_closure_name, '', None)
         }
+
+        # states
+        self.under_class_def = False
 
     def finalize(self):
         structured_bytecode = {
@@ -226,18 +229,36 @@ class BytecodeGenerator(ast.NodeVisitor):
 
         self.__add_instr('new', self.__get_dyobj_flag(['DYOBJ_IS_NOT_GARBAGE_COLLECTIBLE']), 0)
         self.__add_instr('setctx', self.closure_map[name].closure_id, 0)
-        self.__add_instr('stobj', self.__get_encoding_id(node.name), 0)
+
+        # Hack
+        if not self.in_class_def:
+            self.__add_instr('stobj', self.__get_encoding_id(node.name), 0)
 
     def visit_ClassDef(self, node):
+        # Step in.
+        self.in_class_def = True
         self.__add_instr('new', self.__get_dyobj_flag(['DYOBJ_IS_NOT_GARBAGE_COLLECTIBLE']), 0)
+
+        init_closure_id = None
 
         for stmt in node.body:
             # TODO|NOTE: currently only supports functions.
             if isinstance(stmt, ast.FunctionDef):
                 self.visit(stmt)
                 self.__add_instr('setattr', self.__get_encoding_id(stmt.name), 0)
+                if stmt.name == '__init__':
+                    init_closure_id = self.closure_map[stmt.name].closure_id
+
+        assert init_closure_id
+
+        # HACK
+        if node.name == 'int':
+            self.__add_instr('setctx', init_closure_id, 0)
 
         self.__add_instr('stobj', self.__get_encoding_id(node.name), 0)
+
+        # Step out.
+        self.in_class_def = False
 
     def visit_Return(self, node):
         # TODO: [COREVM-176] Support return value in Python
@@ -261,6 +282,8 @@ class BytecodeGenerator(ast.NodeVisitor):
         self.visit(node.op)
 
     def visit_Call(self, node):
+        self.visit(node.func)
+
         # explicit args
         for arg in node.args:
             self.visit(arg)
@@ -279,6 +302,7 @@ class BytecodeGenerator(ast.NodeVisitor):
 
         self.visit(node.func)
         self.__add_instr('pinvk', 0, 0)
+        self.__add_instr('pop', 0, 0)
 
         # The order of loading arguments onto the next frame has to be opposite
         # than the way they are being evaluated, since they are placed on the
@@ -296,10 +320,16 @@ class BytecodeGenerator(ast.NodeVisitor):
         for keyword in node.keywords:
             self.__add_instr('putkwarg', self.__get_encoding_id(keyword.arg), 0)
 
+        # Hack
+        if node.func.id == 'int':
+            self.__add_instr('new', 0, 0)
+            self.__add_instr('putarg', 0, 0)
+
         # explicit args
         for arg in node.args:
             self.__add_instr('putarg', 0, 0)
 
+        self.visit(node.func)
         self.__add_instr('invk', 0, 0)
 
     def visit_Num(self, node):
@@ -317,7 +347,7 @@ class BytecodeGenerator(ast.NodeVisitor):
             # Note: here we only want to handle args. kwargs are handled
             # differently in `visit_arguments`.
             self.__add_instr('getarg', 0, 0)
-            self.__add_instr('stobj', self.__get_encoding_id(node.id), 0)
+            self.__add_instr('stobj', self.__get_encoding_id(name), 0)
         else:
             # TODO: Add support for other types of ctx of `Name` node.
             pass
@@ -328,12 +358,23 @@ class BytecodeGenerator(ast.NodeVisitor):
             self.__add_instr('str', self.__get_encoding_id(node.s), 0)
             self.__add_instr('sethndl', 0, 0)
         else:
-            vector = VectorString(node.s).vector()
+            raw_vector = VectorString(node.s).to_raw_vector()
 
-            for instr in vector:
-                self.__current_vector().append(
-                    Instr(instr[0], instr[1], instr[2])
-                )
+            for raw_piece in raw_vector:
+                if len(raw_piece) < 3:
+                    continue
+                raw_code, raw_oprd1, raw_oprd2 = raw_piece
+                code = raw_code.strip()
+                raw_oprd1 = raw_oprd1.strip()
+                raw_oprd2 = raw_oprd2.strip()
+
+                if raw_code in ('ldobj', 'stobj', 'setattr', 'getattr', 'putkwarg', 'str'):
+                    oprd1 = self.__get_encoding_id(raw_oprd1)
+                else:
+                    oprd1 = int(raw_oprd1)
+                oprd2 = int(raw_oprd2)
+
+                self.__add_instr(code, oprd1, oprd2)
 
     """ --------------------------- operator ------------------------------- """
 
@@ -545,6 +586,11 @@ def main():
 
     try:
         generator = BytecodeGenerator(options)
+
+        with open('python/src/int.py', 'r') as fd:
+            int_tree = ast.parse(fd.read())
+
+        generator.visit(int_tree)
 
         with open(options.input_file, 'r') as fd:
             tree = ast.parse(fd.read())
