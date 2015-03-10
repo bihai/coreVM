@@ -237,19 +237,28 @@ class BytecodeGenerator(ast.NodeVisitor):
     def visit_ClassDef(self, node):
         # Step in.
         self.in_class_def = True
+
         self.__add_instr('new', self.__get_dyobj_flag(['DYOBJ_IS_NOT_GARBAGE_COLLECTIBLE']), 0)
 
+        # Setup class stuff...
+        if node.name != 'type':
+            self.__add_instr('ldobj', self.__get_encoding_id('type'), 0)
+            self.__add_instr('setattr', self.__get_encoding_id('__class__'), 0)
+
         init_closure_id = None
+        has_method = False
 
         for stmt in node.body:
             # TODO|NOTE: currently only supports functions.
             if isinstance(stmt, ast.FunctionDef):
+                has_method = True
                 self.visit(stmt)
                 self.__add_instr('setattr', self.__get_encoding_id(stmt.name), 0)
                 if stmt.name == '__init__':
                     init_closure_id = self.closure_map[stmt.name].closure_id
 
-        assert init_closure_id
+        if has_method:
+            assert init_closure_id
 
         # HACK
         if node.name == 'int':
@@ -456,10 +465,10 @@ class BytecodeGenerator(ast.NodeVisitor):
         self.__add_instr('gte', 0, 0)
 
     def visit_Is(self, node):
-        pass
+        self.__add_instr('objeq', 0, 0)
 
     def visit_IsNot(self, node):
-        pass
+        self.__add_instr('objneq', 0, 0)
 
     def visit_In(self, node):
         pass
@@ -586,6 +595,11 @@ def main():
 
     try:
         generator = BytecodeGenerator(options)
+
+        with open('python/src/__builtin__.py', 'r') as fd:
+            builtin_tree = ast.parse(fd.read())
+
+        generator.visit(builtin_tree)
 
         with open('python/src/int.py', 'r') as fd:
             int_tree = ast.parse(fd.read())
