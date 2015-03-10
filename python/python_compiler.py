@@ -257,8 +257,8 @@ class BytecodeGenerator(ast.NodeVisitor):
                 if stmt.name == '__init__':
                     init_closure_id = self.closure_map[stmt.name].closure_id
 
-        if has_method:
-            assert init_closure_id
+        #if has_method:
+        #    assert init_closure_id
 
         # HACK
         if node.name == 'int':
