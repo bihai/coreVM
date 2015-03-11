@@ -40,6 +40,7 @@ class VectorString(object):
 
     @classmethod
     def is_vector_string(cls, s):
+        # TODO: Need more robust checking.
         s = s.strip()
         return s.startswith('### BEGIN VECTOR ###') and s.endswith('### END VECTOR ###')
 
@@ -230,7 +231,6 @@ class BytecodeGenerator(ast.NodeVisitor):
         self.__add_instr('new', self.__get_dyobj_flag(['DYOBJ_IS_NOT_GARBAGE_COLLECTIBLE']), 0)
         self.__add_instr('setctx', self.closure_map[name].closure_id, 0)
 
-        # Hack
         if not self.in_class_def:
             self.__add_instr('stobj', self.__get_encoding_id(node.name), 0)
 
@@ -240,29 +240,17 @@ class BytecodeGenerator(ast.NodeVisitor):
 
         self.__add_instr('new', self.__get_dyobj_flag(['DYOBJ_IS_NOT_GARBAGE_COLLECTIBLE']), 0)
 
-        # Setup class stuff...
+        # Setup class object attributes.
+        # TODO: Can this logic be moved to __builtin__.py ?
         if node.name != 'type':
             self.__add_instr('ldobj', self.__get_encoding_id('type'), 0)
             self.__add_instr('setattr', self.__get_encoding_id('__class__'), 0)
 
-        init_closure_id = None
-        has_method = False
-
         for stmt in node.body:
             # TODO|NOTE: currently only supports functions.
             if isinstance(stmt, ast.FunctionDef):
-                has_method = True
                 self.visit(stmt)
                 self.__add_instr('setattr', self.__get_encoding_id(stmt.name), 0)
-                if stmt.name == '__init__':
-                    init_closure_id = self.closure_map[stmt.name].closure_id
-
-        #if has_method:
-        #    assert init_closure_id
-
-        # HACK
-        if node.name == 'int':
-            self.__add_instr('setctx', init_closure_id, 0)
 
         self.__add_instr('stobj', self.__get_encoding_id(node.name), 0)
 
@@ -271,7 +259,8 @@ class BytecodeGenerator(ast.NodeVisitor):
 
     def visit_Return(self, node):
         # TODO: [COREVM-176] Support return value in Python
-        self.__add_instr('rtrn', 0, 0)
+        if node.value:
+            self.visit(node.value)
 
     def visit_Print(self, node):
         # TODO: [COREVM-178] Support for printing multiple values in Python
@@ -329,16 +318,10 @@ class BytecodeGenerator(ast.NodeVisitor):
         for keyword in node.keywords:
             self.__add_instr('putkwarg', self.__get_encoding_id(keyword.arg), 0)
 
-        # Hack
-        if node.func.id == 'int':
-            self.__add_instr('new', 0, 0)
-            self.__add_instr('putarg', 0, 0)
-
         # explicit args
         for arg in node.args:
             self.__add_instr('putarg', 0, 0)
 
-        self.visit(node.func)
         self.__add_instr('invk', 0, 0)
 
     def visit_Num(self, node):

@@ -27,8 +27,6 @@ import traceback
 
 class CodeTransformer(ast.NodeVisitor):
 
-    TAB = '\t'
-
     def __init__(self, options):
         self.options = options
         self.indent_level = 0
@@ -37,7 +35,11 @@ class CodeTransformer(ast.NodeVisitor):
         self.indent_level += 1
 
     def __dedent(self):
-        self.dedent_level -= 1
+        self.indent_level -= 1
+
+    def __indentation(self):
+        INDENT = '  '
+        return ''.join([INDENT for _ in xrange(self.indent_level)])
 
     def transform(self):
         with open(self.options.input_file, 'r') as fd:
@@ -53,13 +55,23 @@ class CodeTransformer(ast.NodeVisitor):
             fd.write(transformed_str)
 
     def visit_FunctionDef(self, node):
-        base_str = 'def {func_name}({arguments}):\n{body}'
+        base_str = '{indentation}def {func_name}({arguments}):\n'
 
-        return base_str.format(
+        base_str = base_str.format(
+            indentation=self.__indentation(),
             func_name=node.name,
             arguments=self.visit(node.args),
-            body=''.join([self.visit(stmt) for stmt in node.body])
         )
+
+        self.__indent()
+
+        base_str += ''.join([self.visit(stmt) for stmt in node.body])
+        base_str = base_str.replace(', )', ')')
+        base_str += '\n'
+
+        self.__dedent()
+
+        return base_str
 
     """ ------------------------------ mod --------------------------------- """
 
@@ -69,27 +81,40 @@ class CodeTransformer(ast.NodeVisitor):
     """ ----------------------------- stmt --------------------------------- """
 
     def visit_ClassDef(self, node):
-        base_str = 'class {class_name}:\n{body}'
+        base_str = '{indentation}class {class_name}:\n'
 
-        return base_str.format(
+        base_str = base_str.format(
+            indentation=self.__indentation(),
             class_name=node.name,
             body=''.join([self.visit(stmt) for stmt in node.body])
         )
 
+        self.__indent()
+
+        base_str += ''.join([self.visit(stmt) for stmt in node.body])
+
+        self.__dedent()
+
+        return base_str
+
     def visit_Return(self, node):
-        base_str = 'return'
+        base_str = '{indentation}return'.format(indentation=self.__indentation())
 
         if node.value:
             base_str += (' ' + self.visit(node.value))
 
+        base_str += '\n'
+
         return base_str
 
     def visit_Print(self, node):
-        base_str = 'print'
+        base_str = '{indentation}print'.format(indentation=self.__indentation())
 
         if node.values:
             values_str = '.'.join([self.visit(value) for value in node.values])
             base_str += (' ' + values_str)
+
+        base_str += '\n'
 
         return base_str
 
@@ -108,9 +133,10 @@ class CodeTransformer(ast.NodeVisitor):
         )
 
     def visit_Call(self, node):
-        base_str = '__call({caller}'
+        base_str = '{indentation}__call({caller}'
 
         base_str = base_str.format(
+            indentation=self.__indentation(),
             caller=self.visit(node.func)
         )
 
@@ -136,6 +162,9 @@ class CodeTransformer(ast.NodeVisitor):
             base_str += (', ' + '**' + self.visit(node.kwargs))
 
         base_str += ')'
+
+        base_str = base_str.replace(', )', ')')
+        base_str += '\n'
 
         return base_str
 
@@ -205,9 +234,7 @@ class CodeTransformer(ast.NodeVisitor):
             base_str += ('*' + node.vararg + ', ')
 
         if node.kwarg:
-            base_str += ('*' + node.kwarg + ', ')
-
-        base_str.replace(', )', ')')
+            base_str += ('**' + node.kwarg + ', ')
 
         return base_str
 

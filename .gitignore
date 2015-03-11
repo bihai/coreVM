@@ -17,7 +17,7 @@
 
 # Outputs
 info.json
-*tmp.py
+*.tmp.py
 
 # Binaries
 coreVM
