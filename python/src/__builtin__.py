@@ -4,7 +4,7 @@ class type:
 
 class object:
 
-    def __new__(cls, arg, *args, **kwargs):
+    def __new__(cls):
         """
         ### BEGIN VECTOR ###
         [new, 0, 0]
@@ -13,10 +13,9 @@ class object:
         ### END VECTOR ###
         """
 
-
-def __call(caller, *args, **kwargs):
-    # TODO: to be completed.
-    # Note: here we can check on the type of the caller and act
-    # accordingly. However, this is blocked until we support boolean
-    # conditioning in Python.
-    caller()
+def __call(caller):
+    # Need to support *args and **kwargs.
+    if caller.__class__ is type:
+        return caller.__init__(object.__new__(caller))
+    else:
+        return caller()

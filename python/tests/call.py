@@ -1,4 +1,4 @@
-def hello_world_again(*args):
+def hello_world_again():
     print 'Hello world again!'
 
 def introduction():
@@ -6,11 +6,11 @@ def introduction():
     # test explicit return should work.
     return
 
-def hello_world(*args):
+def hello_world():
     print 'Hello world!'
     introduction()
 
-def main(*args, **kwargs):
+def main():
     print 'Hi'
     hello_world()
     hello_world_again()

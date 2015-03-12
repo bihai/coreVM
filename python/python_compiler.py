@@ -230,6 +230,8 @@ class BytecodeGenerator(ast.NodeVisitor):
 
         self.__add_instr('new', self.__get_dyobj_flag(['DYOBJ_IS_NOT_GARBAGE_COLLECTIBLE']), 0)
         self.__add_instr('setctx', self.closure_map[name].closure_id, 0)
+        self.__add_instr('ldobj', self.__get_encoding_id('object'), 0)
+        self.__add_instr('setattr', self.__get_encoding_id('__class__'), 0)
 
         if not self.in_class_def:
             self.__add_instr('stobj', self.__get_encoding_id(node.name), 0)
@@ -239,20 +241,16 @@ class BytecodeGenerator(ast.NodeVisitor):
         self.in_class_def = True
 
         self.__add_instr('new', self.__get_dyobj_flag(['DYOBJ_IS_NOT_GARBAGE_COLLECTIBLE']), 0)
-
-        # Setup class object attributes.
-        # TODO: Can this logic be moved to __builtin__.py ?
-        if node.name != 'type':
-            self.__add_instr('ldobj', self.__get_encoding_id('type'), 0)
-            self.__add_instr('setattr', self.__get_encoding_id('__class__'), 0)
+        self.__add_instr('stobj', self.__get_encoding_id(node.name), 0)
+        self.__add_instr('ldobj', self.__get_encoding_id(node.name), 0)
+        self.__add_instr('ldobj', self.__get_encoding_id('type'), 0)
+        self.__add_instr('setattr', self.__get_encoding_id('__class__'), 0)
 
         for stmt in node.body:
             # TODO|NOTE: currently only supports functions.
             if isinstance(stmt, ast.FunctionDef):
                 self.visit(stmt)
                 self.__add_instr('setattr', self.__get_encoding_id(stmt.name), 0)
-
-        self.__add_instr('stobj', self.__get_encoding_id(node.name), 0)
 
         # Step out.
         self.in_class_def = False
@@ -261,6 +259,7 @@ class BytecodeGenerator(ast.NodeVisitor):
         # TODO: [COREVM-176] Support return value in Python
         if node.value:
             self.visit(node.value)
+        self.__add_instr('rtrn', 0, 0)
 
     def visit_Print(self, node):
         # TODO: [COREVM-178] Support for printing multiple values in Python
@@ -268,6 +267,27 @@ class BytecodeGenerator(ast.NodeVisitor):
             self.visit(node.values[0])
 
         self.__add_instr('print', 0, 0)
+
+    def visit_If(self, node):
+        self.visit(node.test)
+        self.__add_instr('gethndl', 0, 0)
+        self.__add_instr('truthy', 0, 0)
+
+        # Add `jmpif` here.
+        self.__add_instr('jmpif', 0, 0)
+        vector_length1 = len(self.__current_vector())
+
+        for stmt in node.orelse:
+            self.visit(stmt)
+
+        # Add `jmpif` here.
+        vector_length2 = len(self.__current_vector())
+        length_diff = vector_length2 - vector_length1
+        self.__current_vector()[vector_length1 - 1] = Instr(
+            self.instr_str_to_code_map['jmpif'], length_diff, 0)
+
+        for stmt in node.body:
+            self.visit(stmt)
 
     def visit_Expr(self, node):
         self.visit(node.value)
@@ -278,6 +298,12 @@ class BytecodeGenerator(ast.NodeVisitor):
         self.visit(node.right)
         self.visit(node.left)
         self.visit(node.op)
+
+    def visit_Compare(self, node):
+        # Note: Only supports one comparison now.
+        self.visit(node.comparators[0])
+        self.visit(node.left)
+        self.visit(node.ops[0])
 
     def visit_Call(self, node):
         self.visit(node.func)
@@ -334,6 +360,8 @@ class BytecodeGenerator(ast.NodeVisitor):
 
         if isinstance(node.ctx, ast.Load):
             self.__add_instr('ldobj', self.__get_encoding_id(name), 0)
+        elif isinstance(node.ctx, ast.Name):
+            self.__add_instr('ldobj', self.__get_encoding_id(name), 0)
         elif isinstance(node.ctx, ast.Param):
             # For loading parameters
             # Note: here we only want to handle args. kwargs are handled
@@ -367,6 +395,11 @@ class BytecodeGenerator(ast.NodeVisitor):
                 oprd2 = int(raw_oprd2)
 
                 self.__add_instr(code, oprd1, oprd2)
+
+    def visit_Attribute(self, node):
+        # Note: ignoring ctx here
+        self.visit(node.value)
+        self.__add_instr('getattr', self.__get_encoding_id(node.attr), 0)
 
     """ --------------------------- operator ------------------------------- """
 
@@ -449,6 +482,8 @@ class BytecodeGenerator(ast.NodeVisitor):
 
     def visit_Is(self, node):
         self.__add_instr('objeq', 0, 0)
+        self.__add_instr('new', 0, 0)
+        self.__add_instr('sethndl', 0, 0)
 
     def visit_IsNot(self, node):
         self.__add_instr('objneq', 0, 0)

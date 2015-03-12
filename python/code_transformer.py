@@ -54,6 +54,13 @@ class CodeTransformer(ast.NodeVisitor):
         with open(self.options.output_file, 'w') as fd:
             fd.write(transformed_str)
 
+    """ ------------------------------ mod --------------------------------- """
+
+    def visit_Module(self, node):
+        return ''.join([self.visit(stmt) for stmt in node.body])
+
+    """ ----------------------------- stmt --------------------------------- """
+
     def visit_FunctionDef(self, node):
         base_str = '{indentation}def {func_name}({arguments}):\n'
 
@@ -72,13 +79,6 @@ class CodeTransformer(ast.NodeVisitor):
         self.__dedent()
 
         return base_str
-
-    """ ------------------------------ mod --------------------------------- """
-
-    def visit_Module(self, node):
-        return ''.join([self.visit(stmt) for stmt in node.body])
-
-    """ ----------------------------- stmt --------------------------------- """
 
     def visit_ClassDef(self, node):
         base_str = '{indentation}class {class_name}:\n'
@@ -115,6 +115,28 @@ class CodeTransformer(ast.NodeVisitor):
             base_str += (' ' + values_str)
 
         base_str += '\n'
+
+        return base_str
+
+    def visit_If(self, node):
+        base_str = '{indentation}if {expr}:\n'.format(
+            indentation=self.__indentation(),
+            expr=node.test
+        )
+
+        self.__indent()
+
+        for stmt in node.body:
+            base_str += (self.visit(stmt) + '\n')
+
+        self.__dedent()
+
+        if node.orelse:
+            base_str += 'else:\n'
+            self.__indent()
+            for stmt in node.orelse:
+                base_str += (self.visit(stmt) + '\n')
+            self.__dedent()
 
         return base_str
 
@@ -169,7 +191,7 @@ class CodeTransformer(ast.NodeVisitor):
         return base_str
 
     def visit_Num(self, node):
-        return str(node.n)
+        return '__call(int)' #% str(node.n)
 
     def visit_Name(self, node):
         return node.id
@@ -198,6 +220,11 @@ class CodeTransformer(ast.NodeVisitor):
 
     def visit_Not(self, node):
         return 'not'
+
+    """ ---------------------------- unaryop ------------------------------- """
+
+    def visit_Is(self, node):
+        return 'is'
 
     """ --------------------------- arguments ------------------------------ """
 

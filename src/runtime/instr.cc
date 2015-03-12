@@ -959,7 +959,7 @@ corevm::runtime::instr_handler_jmpif::execute(
 {
   corevm::runtime::frame& frame = process.top_frame();
 
-  corevm::runtime::instr_addr starting_addr = frame.start_addr();
+  corevm::runtime::instr_addr starting_addr = process.pc(); //frame.start_addr();
   corevm::runtime::instr_addr relative_addr = static_cast<corevm::runtime::instr_addr>(instr.oprd1);
 
   corevm::runtime::instr_addr addr = starting_addr + relative_addr;
