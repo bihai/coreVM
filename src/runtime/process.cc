@@ -282,6 +282,15 @@ corevm::runtime::process::push_invocation_ctx(const invocation_ctx& invk_ctx)
 // -----------------------------------------------------------------------------
 
 void
+corevm::runtime::process::emplace_invocation_ctx(
+  const corevm::runtime::closure_ctx& ctx)
+{
+  m_invocation_ctx_stack.emplace_back(ctx);
+}
+
+// -----------------------------------------------------------------------------
+
+void
 corevm::runtime::process::pop_invocation_ctx()
   throw (corevm::runtime::invocation_ctx_not_found_error)
 {
@@ -493,8 +502,7 @@ corevm::runtime::process::pre_start()
     frame.set_return_addr(m_pc);
     push_frame(frame);
 
-    corevm::runtime::invocation_ctx invk_ctx(ctx);
-    push_invocation_ctx(invk_ctx);
+    emplace_invocation_ctx(ctx);
 
     m_pc = 0;
   }

@@ -1094,7 +1094,7 @@ corevm::runtime::instr_handler_putkwargs::execute(
     corevm::runtime::variable_key key = static_cast<corevm::runtime::variable_key>(itr->first);
     corevm::dyobj::dyobj_id id = static_cast<corevm::dyobj::dyobj_id>(itr->second);
 
-    invk_ctx.put_param(id);
+    invk_ctx.put_param_value_pair(key, id);
   }
 }
 

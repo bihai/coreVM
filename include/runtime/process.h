@@ -125,6 +125,8 @@ public:
 
   void push_invocation_ctx(const invocation_ctx&);
 
+  void emplace_invocation_ctx(const corevm::runtime::closure_ctx&);
+
   void pop_invocation_ctx()
     throw (corevm::runtime::invocation_ctx_not_found_error);
 
