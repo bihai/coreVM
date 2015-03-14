@@ -30,6 +30,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "errors.h"
 #include "frame.h"
 #include "instr.h"
+#include "invocation_ctx.h"
 #include "native_types_pool.h"
 #include "sighandler.h"
 #include "vector.h"
@@ -54,27 +55,6 @@ namespace corevm {
 namespace runtime {
 
 
-typedef std::list<corevm::dyobj::dyobj_id> param_list_type;
-typedef std::unordered_map<corevm::runtime::variable_key, corevm::dyobj::dyobj_id> param_value_map_type;
-
-
-struct invocation_ctx
-{
-public:
-  invocation_ctx()
-    :
-    ctx(),
-    params_list(),
-    param_value_map()
-  {
-  }
-
-  corevm::runtime::closure_ctx ctx;
-  param_list_type params_list;
-  param_value_map_type param_value_map;
-};
-
-
 /**
  * A process is a unit for executing a sequence of instructions.
  * It's supposed to have the following:
@@ -86,6 +66,7 @@ public:
  * - A program counter.
  * - A heap for holding dynamic objects.
  * - A call stack for executing blocks of instructions.
+ * - A stack of invocation contexts.
  * - A pool of native type handles.
  * - A set of compartments.
  */
@@ -138,6 +119,14 @@ public:
   void pop_frame() throw(corevm::runtime::frame_not_found_error);
 
   uint64_t stack_size() const;
+
+  corevm::runtime::invocation_ctx& top_invocation_ctx()
+    throw(corevm::runtime::invocation_ctx_not_found_error);
+
+  void push_invocation_ctx(const invocation_ctx&);
+
+  void pop_invocation_ctx()
+    throw (corevm::runtime::invocation_ctx_not_found_error);
 
   const corevm::dyobj::dyobj_id& top_stack()
     throw(corevm::runtime::object_stack_empty_error);
@@ -204,8 +193,6 @@ public:
 
   friend std::ostream& operator<<(std::ostream&, const corevm::runtime::process&);
 
-  std::list<invocation_ctx> invocation_ctx_stack;
-
 private:
   bool is_valid_pc() const;
 
@@ -220,6 +207,7 @@ private:
   corevm::dyobj::dynamic_object_heap<garbage_collection_scheme::dynamic_object_manager> m_dynamic_object_heap;
   std::stack<corevm::dyobj::dyobj_id> m_dyobj_stack;
   std::list<corevm::runtime::frame> m_call_stack;
+  std::list<invocation_ctx> m_invocation_ctx_stack;
   native_types_pool_type m_ntvhndl_pool;
   std::unordered_map<sig_atomic_t, corevm::runtime::vector> m_sig_instr_map;
   std::vector<corevm::runtime::compartment> m_compartments;

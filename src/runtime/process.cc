@@ -121,17 +121,18 @@ corevm::runtime::process::process()
   m_dynamic_object_heap(),
   m_dyobj_stack(),
   m_call_stack(),
+  m_invocation_ctx_stack(),
   m_ntvhndl_pool(),
   m_sig_instr_map(),
-  m_compartments(),
-  invocation_ctx_stack()
+  m_compartments()
 {
   // Do nothing here.
 }
 
 // -----------------------------------------------------------------------------
 
-corevm::runtime::process::process(uint64_t heap_alloc_size, uint64_t pool_alloc_size)
+corevm::runtime::process::process(
+  uint64_t heap_alloc_size, uint64_t pool_alloc_size)
   :
   m_pause_exec(false),
   m_gc_flag(0),
@@ -139,10 +140,10 @@ corevm::runtime::process::process(uint64_t heap_alloc_size, uint64_t pool_alloc_
   m_dynamic_object_heap(heap_alloc_size),
   m_dyobj_stack(),
   m_call_stack(),
+  m_invocation_ctx_stack(),
   m_ntvhndl_pool(pool_alloc_size),
   m_sig_instr_map(),
-  m_compartments(),
-  invocation_ctx_stack()
+  m_compartments()
 {
   // Do nothing here.
 }
@@ -229,7 +230,7 @@ corevm::runtime::process::pop_frame() throw(corevm::runtime::frame_not_found_err
 
   m_call_stack.pop_back();
 
-  this->invocation_ctx_stack.pop_back();
+  this->pop_invocation_ctx();
 }
 
 // -----------------------------------------------------------------------------
@@ -254,6 +255,42 @@ uint64_t
 corevm::runtime::process::stack_size() const
 {
   return m_dyobj_stack.size();
+}
+
+// -----------------------------------------------------------------------------
+
+corevm::runtime::invocation_ctx&
+corevm::runtime::process::top_invocation_ctx()
+  throw(corevm::runtime::invocation_ctx_not_found_error)
+{
+  if (m_invocation_ctx_stack.empty())
+  {
+    throw invocation_ctx_not_found_error();
+  }
+
+  return m_invocation_ctx_stack.back();
+}
+
+// -----------------------------------------------------------------------------
+
+void
+corevm::runtime::process::push_invocation_ctx(const invocation_ctx& invk_ctx)
+{
+  m_invocation_ctx_stack.push_back(invk_ctx);
+}
+
+// -----------------------------------------------------------------------------
+
+void
+corevm::runtime::process::pop_invocation_ctx()
+  throw (corevm::runtime::invocation_ctx_not_found_error)
+{
+  if (m_invocation_ctx_stack.empty())
+  {
+    throw invocation_ctx_not_found_error();
+  }
+
+  m_invocation_ctx_stack.pop_back();
 }
 
 // -----------------------------------------------------------------------------
@@ -456,9 +493,8 @@ corevm::runtime::process::pre_start()
     frame.set_return_addr(m_pc);
     push_frame(frame);
 
-    invocation_ctx invk_ctx;
-    invk_ctx.ctx = ctx;
-    this->invocation_ctx_stack.push_back(invk_ctx);
+    corevm::runtime::invocation_ctx invk_ctx(ctx);
+    push_invocation_ctx(invk_ctx);
 
     m_pc = 0;
   }
@@ -481,8 +517,6 @@ corevm::runtime::process::start()
     while (m_pause_exec) {}
 
     corevm::runtime::instr instr = static_cast<corevm::runtime::instr>(m_instrs[m_pc]);
-
-    //std::cout << instr_handler_meta::instr_to_string(instr) << std::endl;
 
     corevm::runtime::instr_handler* handler =
       const_cast<corevm::runtime::instr_handler*>(this->get_instr_handler(instr.code));
