@@ -54,6 +54,27 @@ namespace corevm {
 namespace runtime {
 
 
+typedef std::list<corevm::dyobj::dyobj_id> param_list_type;
+typedef std::unordered_map<corevm::runtime::variable_key, corevm::dyobj::dyobj_id> param_value_map_type;
+
+
+struct invocation_ctx
+{
+public:
+  invocation_ctx()
+    :
+    ctx(),
+    params_list(),
+    param_value_map()
+  {
+  }
+
+  corevm::runtime::closure_ctx ctx;
+  param_list_type params_list;
+  param_value_map_type param_value_map;
+};
+
+
 /**
  * A process is a unit for executing a sequence of instructions.
  * It's supposed to have the following:
@@ -182,6 +203,8 @@ public:
   void get_compartment(corevm::runtime::compartment_id, corevm::runtime::compartment**);
 
   friend std::ostream& operator<<(std::ostream&, const corevm::runtime::process&);
+
+  std::list<invocation_ctx> invocation_ctx_stack;
 
 private:
   bool is_valid_pc() const;

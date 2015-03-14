@@ -123,7 +123,8 @@ corevm::runtime::process::process()
   m_call_stack(),
   m_ntvhndl_pool(),
   m_sig_instr_map(),
-  m_compartments()
+  m_compartments(),
+  invocation_ctx_stack()
 {
   // Do nothing here.
 }
@@ -140,7 +141,8 @@ corevm::runtime::process::process(uint64_t heap_alloc_size, uint64_t pool_alloc_
   m_call_stack(),
   m_ntvhndl_pool(pool_alloc_size),
   m_sig_instr_map(),
-  m_compartments()
+  m_compartments(),
+  invocation_ctx_stack()
 {
   // Do nothing here.
 }
@@ -226,6 +228,8 @@ corevm::runtime::process::pop_frame() throw(corevm::runtime::frame_not_found_err
   m_instrs.erase(begin_itr, end_itr);
 
   m_call_stack.pop_back();
+
+  this->invocation_ctx_stack.pop_back();
 }
 
 // -----------------------------------------------------------------------------
@@ -452,6 +456,10 @@ corevm::runtime::process::pre_start()
     frame.set_return_addr(m_pc);
     push_frame(frame);
 
+    invocation_ctx invk_ctx;
+    invk_ctx.ctx = ctx;
+    this->invocation_ctx_stack.push_back(invk_ctx);
+
     m_pc = 0;
   }
 
@@ -473,6 +481,8 @@ corevm::runtime::process::start()
     while (m_pause_exec) {}
 
     corevm::runtime::instr instr = static_cast<corevm::runtime::instr>(m_instrs[m_pc]);
+
+    //std::cout << instr_handler_meta::instr_to_string(instr) << std::endl;
 
     corevm::runtime::instr_handler* handler =
       const_cast<corevm::runtime::instr_handler*>(this->get_instr_handler(instr.code));

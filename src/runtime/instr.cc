@@ -884,7 +884,12 @@ corevm::runtime::instr_handler_pinvk::execute(
     throw corevm::runtime::closure_not_found_error(ctx.closure_id);
   }
 
-  process.emplace_frame(ctx);
+  //process.emplace_frame(ctx);
+
+  corevm::runtime::invocation_ctx invk_ctx;
+  invk_ctx.ctx = ctx;
+
+  process.invocation_ctx_stack.push_back(invk_ctx);
 }
 
 // -----------------------------------------------------------------------------
@@ -893,11 +898,14 @@ void
 corevm::runtime::instr_handler_invk::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
 {
+  corevm::runtime::closure_ctx ctx = process.invocation_ctx_stack.back().ctx;
+
+  process.emplace_frame(ctx);
+
   corevm::runtime::frame& frame = process.top_frame();
 
   frame.set_return_addr(process.pc());
 
-  corevm::runtime::closure_ctx ctx = frame.closure_ctx();
 
   corevm::runtime::compartment* compartment = nullptr;
   process.get_compartment(ctx.compartment_id, &compartment);
@@ -1027,7 +1035,8 @@ corevm::runtime::instr_handler_putarg::execute(
   corevm::runtime::frame& frame = process.top_frame();
   corevm::dyobj::dyobj_id id = process.pop_stack();
 
-  frame.put_param(id);
+  assert(!process.invocation_ctx_stack.empty());
+  process.invocation_ctx_stack.back().params_list.push_back(id);
 }
 
 // -----------------------------------------------------------------------------
@@ -1104,7 +1113,13 @@ corevm::runtime::instr_handler_getarg::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
 {
   corevm::runtime::frame& frame = process.top_frame();
-  corevm::dyobj::dyobj_id id = frame.pop_param();
+
+  assert(!process.invocation_ctx_stack.empty());
+  assert(!process.invocation_ctx_stack.back().params_list.empty());
+
+  corevm::dyobj::dyobj_id id = process.invocation_ctx_stack.back().params_list.front();
+
+  process.invocation_ctx_stack.back().params_list.pop_front();
 
   process.push_stack(id);
 }
