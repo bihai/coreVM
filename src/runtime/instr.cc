@@ -1038,11 +1038,10 @@ void
 corevm::runtime::instr_handler_putkwarg::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
 {
-  corevm::runtime::frame& frame = process.top_frame();
   corevm::runtime::variable_key key = static_cast<corevm::runtime::variable_key>(instr.oprd1);
   corevm::dyobj::dyobj_id id = process.pop_stack();
 
-  frame.put_param_value_pair(key, id);
+  process.top_invocation_ctx().put_param_value_pair(key, id);
 }
 
 // -----------------------------------------------------------------------------
@@ -1051,7 +1050,7 @@ void
 corevm::runtime::instr_handler_putargs::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
 {
-  corevm::runtime::frame& frame = process.top_frame();
+  corevm::runtime::invocation_ctx& invk_ctx = process.top_invocation_ctx();
   corevm::dyobj::dyobj_id id = process.pop_stack();
   auto &obj = corevm::runtime::process::adapter(process).help_get_dyobj(id);
 
@@ -1067,7 +1066,7 @@ corevm::runtime::instr_handler_putargs::execute(
   for (auto itr = array.begin(); itr != array.end(); ++itr)
   {
     corevm::dyobj::dyobj_id id = static_cast<corevm::dyobj::dyobj_id>(*itr);
-    frame.put_param(id);
+    invk_ctx.put_param(id);
   }
 }
 
@@ -1077,7 +1076,7 @@ void
 corevm::runtime::instr_handler_putkwargs::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
 {
-  corevm::runtime::frame& frame = process.top_frame();
+  corevm::runtime::invocation_ctx& invk_ctx = process.top_invocation_ctx();
   corevm::dyobj::dyobj_id id = process.pop_stack();
   auto &obj = corevm::runtime::process::adapter(process).help_get_dyobj(id);
 
@@ -1095,7 +1094,7 @@ corevm::runtime::instr_handler_putkwargs::execute(
     corevm::runtime::variable_key key = static_cast<corevm::runtime::variable_key>(itr->first);
     corevm::dyobj::dyobj_id id = static_cast<corevm::dyobj::dyobj_id>(itr->second);
 
-    frame.put_param_value_pair(key, id);
+    invk_ctx.put_param(id);
   }
 }
 
@@ -1115,12 +1114,12 @@ void
 corevm::runtime::instr_handler_getkwarg::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
 {
-  corevm::runtime::frame& frame = process.top_frame();
+  corevm::runtime::invocation_ctx& invk_ctx = process.top_invocation_ctx();
   corevm::runtime::variable_key key = static_cast<corevm::runtime::variable_key>(instr.oprd1);
 
-  if (frame.has_param_value_pair_with_key(key))
+  if (invk_ctx.has_param_value_pair_with_key(key))
   {
-    corevm::dyobj::dyobj_id id = frame.pop_param_value_pair(key);
+    corevm::dyobj::dyobj_id id = invk_ctx.pop_param_value_pair(key);
     process.push_stack(id);
   }
   else
@@ -1137,11 +1136,12 @@ corevm::runtime::instr_handler_getargs::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
 {
   corevm::runtime::frame& frame = process.top_frame();
+  corevm::runtime::invocation_ctx& invk_ctx = process.top_invocation_ctx();
   corevm::types::native_array array;
 
-  while (frame.has_params())
+  while (invk_ctx.has_params())
   {
-    corevm::dyobj::dyobj_id id = frame.pop_param();
+    corevm::dyobj::dyobj_id id = invk_ctx.pop_param();
     array.push_back(id);
   }
 
@@ -1156,14 +1156,15 @@ corevm::runtime::instr_handler_getkwargs::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
 {
   corevm::runtime::frame& frame = process.top_frame();
+  corevm::runtime::invocation_ctx& invk_ctx = process.top_invocation_ctx();
   corevm::types::native_map map;
 
-  std::list<corevm::runtime::variable_key> params = frame.param_value_pair_keys();
+  std::list<corevm::runtime::variable_key> params = invk_ctx.param_value_pair_keys();
 
   for (auto itr = params.begin(); itr != params.end(); ++itr)
   {
     corevm::runtime::variable_key key = static_cast<corevm::runtime::variable_key>(*itr);
-    corevm::dyobj::dyobj_id id = frame.pop_param_value_pair(key);
+    corevm::dyobj::dyobj_id id = invk_ctx.pop_param_value_pair(key);
 
     map[key] = id;
   }
