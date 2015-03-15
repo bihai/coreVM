@@ -1,3 +1,7 @@
+def do_math(arg):
+    print 'Time to have fun!'
+    return int(5)
+
 def hello_world_again(arg):
     print 'Hello world again!'
 
@@ -13,7 +17,7 @@ def hello_world(arg):
 def main(arg):
     print 'Hi'
     hello_world(arg)
-    hello_world_again(arg)
+    hello_world_again(do_math(arg))
     hello_world(arg)
     print 'Bye'
 
