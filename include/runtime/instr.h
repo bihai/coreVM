@@ -174,9 +174,9 @@ enum instr_enum : uint32_t
   /**
    * <cldobj, oprd1, oprd2>
    * Conditionally loads an object associated with the variable key value
-   * represented by either oprd1 or oprd2, by evaluating the boolean equivalent
-   * of the object on top of the evaluation stack. Loads `oprd1` if the value
-   * evaluates to true, `oprd2` otherwise.
+   * represented by either `oprd1` or `oprd2`, by evaluating the boolean
+   * equivalent of the object on top of the evaluation stack. Loads `oprd1`
+   * if the value evaluates to true, `oprd2` otherwise.
    */
   CLDOBJ,
 
