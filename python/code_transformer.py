@@ -163,6 +163,17 @@ class CodeTransformer(ast.NodeVisitor):
             rhs=self.visit(node.right)
         )
 
+    def visit_Compare(self, node):
+        # Note: Only supports one comparison now.
+        base_str = '{indentation}{left} {op} {comparator}'.format(
+          indentation=self.__indentation(),
+          left=self.visit(node.left),
+          op=self.visit(node.ops[0]),
+          comparator=self.visit(node.comparators[0])
+        )
+
+        return base_str
+
     def visit_Call(self, node):
         base_str = '{indentation}__call({caller}'
 
@@ -230,7 +241,7 @@ class CodeTransformer(ast.NodeVisitor):
     def visit_Not(self, node):
         return 'not'
 
-    """ ---------------------------- unaryop ------------------------------- """
+    """ ----------------------------- cmpop -------------------------------- """
 
     def visit_Is(self, node):
         return 'is'
