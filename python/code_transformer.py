@@ -57,7 +57,7 @@ class CodeTransformer(ast.NodeVisitor):
     """ ------------------------------ mod --------------------------------- """
 
     def visit_Module(self, node):
-        return ''.join([self.visit(stmt) for stmt in node.body])
+        return '\n'.join([self.visit(stmt) for stmt in node.body])
 
     """ ----------------------------- stmt --------------------------------- """
 
@@ -104,6 +104,15 @@ class CodeTransformer(ast.NodeVisitor):
             base_str += (' ' + self.visit(node.value))
 
         base_str += '\n'
+
+        return base_str
+
+    def visit_Assign(self, node):
+        base_str = '{indentation}{exprs} = {value}\n'.format(
+          indentation=self.__indentation(),
+          exprs=', '.join([self.visit(expr) for expr in node.exprs]),
+          value=self.visit(node.value)
+        )
 
         return base_str
 
