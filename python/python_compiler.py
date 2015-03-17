@@ -138,6 +138,12 @@ class BytecodeGenerator(ast.NodeVisitor):
         # states
         self.current_class_name = ''
 
+    def read_from_source(self, path):
+        with open(path, 'r') as fd:
+            tree = ast.parse(fd.read())
+
+        self.visit(tree)
+
     def finalize(self):
         structured_bytecode = {
             'format': self.format,
@@ -590,29 +596,13 @@ def main():
     try:
         generator = BytecodeGenerator(options)
 
-        with open('python/src/__builtin__.py', 'r') as fd:
-            builtin_tree = ast.parse(fd.read())
+        generator.read_from_source('python/src/__builtin__.py')
+        generator.read_from_source('python/src/bool.py')
+        generator.read_from_source('python/src/int.py')
+        generator.read_from_source('python/src/str.py')
 
-        generator.visit(builtin_tree)
+        generator.read_from_source(options.input_file)
 
-        with open('python/src/bool.py', 'r') as fd:
-            bool_tree = ast.parse(fd.read())
-
-        generator.visit(bool_tree)
-
-        with open('python/src/int.py', 'r') as fd:
-            int_tree = ast.parse(fd.read())
-
-        generator.visit(int_tree)
-
-        with open('python/src/str.py', 'r') as fd:
-            str_tree = ast.parse(fd.read())
-
-        generator.visit(str_tree)
-        with open(options.input_file, 'r') as fd:
-            tree = ast.parse(fd.read())
-
-        generator.visit(tree)
         generator.finalize()
     except Exception as ex:
         sys.stderr.write('Failed to compile %s\n' % options.input_file)
