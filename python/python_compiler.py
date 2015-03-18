@@ -257,9 +257,11 @@ class BytecodeGenerator(ast.NodeVisitor):
             if isinstance(stmt, ast.FunctionDef):
                 self.__add_instr('gethndl', 0, 0)
                 self.visit(stmt)
+                self.__add_instr('ldobj', self.__get_encoding_id('MethodType'), 0)
+                self.__add_instr('setattr', self.__get_encoding_id('__class__'), 0)
                 self.__add_instr('mapset', self.__get_encoding_id(stmt.name), 0)
-                self.__add_instr('sethndl', 0, 0)
                 self.__add_instr('setattr', self.__get_encoding_id(stmt.name), 0)
+                self.__add_instr('sethndl', 0, 0)
 
         # Step out.
         self.current_class_name = '::'.join(self.current_class_name.split('::')[:-1])
