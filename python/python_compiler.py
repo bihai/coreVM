@@ -245,6 +245,8 @@ class BytecodeGenerator(ast.NodeVisitor):
         self.current_class_name = self.current_class_name + '::' + node.name
 
         self.__add_instr('new', self.__get_dyobj_flag(['DYOBJ_IS_NOT_GARBAGE_COLLECTIBLE']), 0)
+        self.__add_instr('map', 0, 0)
+        self.__add_instr('sethndl', 0, 0)
         self.__add_instr('stobj', self.__get_encoding_id(node.name), 0)
         self.__add_instr('ldobj', self.__get_encoding_id(node.name), 0)
         self.__add_instr('ldobj', self.__get_encoding_id('type'), 0)
@@ -253,7 +255,10 @@ class BytecodeGenerator(ast.NodeVisitor):
         for stmt in node.body:
             # TODO|NOTE: currently only supports functions.
             if isinstance(stmt, ast.FunctionDef):
+                self.__add_instr('gethndl', 0, 0)
                 self.visit(stmt)
+                self.__add_instr('mapset', self.__get_encoding_id(stmt.name), 0)
+                self.__add_instr('sethndl', 0, 0)
                 self.__add_instr('setattr', self.__get_encoding_id(stmt.name), 0)
 
         # Step out.
@@ -364,7 +369,7 @@ class BytecodeGenerator(ast.NodeVisitor):
                 raw_oprd1 = raw_oprd1.strip()
                 raw_oprd2 = raw_oprd2.strip()
 
-                if raw_code in ('ldobj', 'stobj', 'setattr', 'getattr', 'putkwarg', 'str'):
+                if raw_code in ('ldobj', 'stobj', 'setattr', 'getattr', 'putkwarg', 'rsetattrs', 'str'):
                     oprd1 = self.__get_encoding_id(raw_oprd1)
                 else:
                     oprd1 = int(raw_oprd1)
