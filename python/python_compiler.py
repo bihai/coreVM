@@ -57,6 +57,7 @@ class VectorString(object):
         return vector
 
 
+
 class Instr(object):
 
     def __init__(self, code, oprd1, oprd2):
@@ -202,6 +203,32 @@ class BytecodeGenerator(ast.NodeVisitor):
             value |= (1 << self.dyobj_flag_str_to_value_map[flag])
 
         return value
+
+    def __process_raw_instr(self, raw_instr):
+        INSTRS_NEED_ENCODING_ID = (
+            'ldobj',
+            'stobj',
+            'setattr',
+            'getattr',
+            'putkwarg',
+            'rsetattrs',
+            'str'
+        )
+        raw_code, raw_oprd1, raw_oprd2 = raw_instr
+
+        raw_code = raw_code.strip()
+        raw_oprd1 = raw_oprd1.strip()
+        raw_oprd2 = raw_oprd2.strip()
+
+        code = raw_code.strip()
+
+        if raw_code in INSTRS_NEED_ENCODING_ID:
+            oprd1 = self.__get_encoding_id(raw_oprd1)
+        else:
+            oprd1 = int(raw_oprd1)
+        oprd2 = int(raw_oprd2)
+
+        return code, oprd1, oprd2
 
     """ ----------------------------- stmt --------------------------------- """
 
@@ -363,19 +390,11 @@ class BytecodeGenerator(ast.NodeVisitor):
         else:
             raw_vector = VectorString(node.s).to_raw_vector()
 
-            for raw_piece in raw_vector:
-                if len(raw_piece) < 3:
+            for raw_instr in raw_vector:
+                if len(raw_instr) < 3:
                     continue
-                raw_code, raw_oprd1, raw_oprd2 = raw_piece
-                code = raw_code.strip()
-                raw_oprd1 = raw_oprd1.strip()
-                raw_oprd2 = raw_oprd2.strip()
 
-                if raw_code in ('ldobj', 'stobj', 'setattr', 'getattr', 'putkwarg', 'rsetattrs', 'str'):
-                    oprd1 = self.__get_encoding_id(raw_oprd1)
-                else:
-                    oprd1 = int(raw_oprd1)
-                oprd2 = int(raw_oprd2)
+                code, oprd1, oprd2 = self.__process_raw_instr(raw_instr)
 
                 self.__add_instr(code, oprd1, oprd2)
 
