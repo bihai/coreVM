@@ -57,7 +57,6 @@ class VectorString(object):
         return vector
 
 
-
 class Instr(object):
 
     def __init__(self, code, oprd1, oprd2):
