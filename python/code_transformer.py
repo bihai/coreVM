@@ -209,7 +209,6 @@ class CodeTransformer(ast.NodeVisitor):
         base_str += ')'
 
         base_str = base_str.replace(', )', ')')
-        #base_str += '\n'
 
         return base_str
 
