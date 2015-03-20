@@ -697,7 +697,8 @@ enum instr_enum : uint32_t
 
   /**
    * <repr, _, _>
-   * Converts the element on top of the eval stack to its string representation.
+   * Computes the string equivalent representation of the element on top of the
+   * eval stack, and push it on top of the stack.
    */
   REPR,
 
