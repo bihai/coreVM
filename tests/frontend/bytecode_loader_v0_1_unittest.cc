@@ -131,7 +131,7 @@ protected:
 
 TEST_F(bytecode_loader_v0_1_invalid_instr_unittest, TestLoadFails)
 {
-  // TODO: 
+  // TODO: [SNEAKER-87] JSON schema validation with enum not working well for JSON integer
   /*
   corevm::runtime::process process;
 

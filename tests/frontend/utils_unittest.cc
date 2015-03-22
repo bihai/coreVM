@@ -73,7 +73,7 @@ TEST_F(utils_unittest, TestGetVectorFromJson)
 
 TEST_F(utils_unittest, TestValidateInvalidVectorFails)
 {
-  // TODO:
+  // TODO: [SNEAKER-87] JSON schema validation with enum not working well for JSON integer
   /*
   const std::string vector_str = "["
     "[700, 0, 0]"

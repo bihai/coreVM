@@ -105,16 +105,6 @@ corevm::frontend::get_v0_1_instr_code_schema_definition()
   }
   ss << "]";
 
-  /*
-  const std::string def(
-    str(
-      boost::format(unformatted_def)
-        % std::numeric_limits<corevm::runtime::instr_code>::min()
-        % std::numeric_limits<corevm::runtime::instr_code>::max()
-    )
-  );
-  */
-
   const std::string def(
     str(boost::format(unformatted_def) % ss.str().c_str()));
 
