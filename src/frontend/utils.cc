@@ -30,6 +30,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <cassert>
 #include <limits>
+#include <sstream>
 #include <string>
 #include <utility>
 
@@ -80,11 +81,31 @@ corevm::frontend::get_v0_1_instr_code_schema_definition()
   static const std::string unformatted_def(
     "{"
       "\"type\": \"integer\","
-      "\"minimum\": %lu,"
-      "\"maximum\": %lu"
+      "\"enum\": %s"
     "}"
   );
 
+  std::stringstream ss;
+  ss << "[";
+
+  for (auto itr = runtime::instr_handler_meta::instr_info_map.begin();
+       itr != runtime::instr_handler_meta::instr_info_map.end();
+       ++itr)
+  {
+    const runtime::instr_code& code = itr->first;
+    ss << code;
+
+    auto itr_ = itr;
+    ++itr_;
+
+    if (itr_ != runtime::instr_handler_meta::instr_info_map.end())
+    {
+      ss << ",";
+    }
+  }
+  ss << "]";
+
+  /*
   const std::string def(
     str(
       boost::format(unformatted_def)
@@ -92,6 +113,10 @@ corevm::frontend::get_v0_1_instr_code_schema_definition()
         % std::numeric_limits<corevm::runtime::instr_code>::max()
     )
   );
+  */
+
+  const std::string def(
+    str(boost::format(unformatted_def) % ss.str().c_str()));
 
   return def;
 }
@@ -125,27 +150,29 @@ corevm::frontend::get_v0_1_instr_oprd_schema_definition()
 const std::string
 corevm::frontend::get_v0_1_vector_schema_definition()
 {
-  static const std::string def(
+  static const std::string unformatted_def(
     "{"
       "\"type:\": \"array\","
       "\"items\": {"
         "\"type:\": \"array\","
         "\"items\": ["
-          "{"
-            "\"$ref\": \"#/definitions/instr/code\""
-          "},"
-          "{"
-            "\"$ref\": \"#/definitions/instr/oprd\""
-          "},"
-          "{"
-            "\"$ref\": \"#/definitions/instr/oprd\""
-          "}"
+          "%1%,"
+          "%2%,"
+          "%2%"
         "],"
         "\"minItems\": 3,"
         "\"maxItems\": 3,"
         "\"additionalItems\": false"
       "}"
     "}"
+  );
+
+  const std::string def(
+    str(
+      boost::format(unformatted_def)
+        % get_v0_1_instr_code_schema_definition()
+        % get_v0_1_instr_oprd_schema_definition()
+    )
   );
 
   return def;
