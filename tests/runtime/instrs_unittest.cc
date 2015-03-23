@@ -1101,7 +1101,10 @@ TEST_F(instrs_runtime_instrs_test, TestInstrDEBUG)
 {
   corevm::runtime::instr instr { .code=0, .oprd1=0, .oprd2=0 };
   corevm::runtime::instr_handler_debug handler;
+
   handler.execute(instr, m_process);
+
+  std::cout << "(output above expected)" << std::endl;
 }
 
 // -----------------------------------------------------------------------------
