@@ -73,6 +73,7 @@ TEST_F(utils_unittest, TestGetVectorFromJson)
 
 TEST_F(utils_unittest, TestValidateInvalidVectorFails)
 {
+  // Invalid instruction code.
   const std::string vector_str = "["
     "[700, 0, 0]"
   "]";
