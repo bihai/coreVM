@@ -19,12 +19,10 @@
 *.pyc
 
 # Outputs
+coreVM
 info.json
 *.tmp.py
-
-# Binaries
-coreVM
-tools/bin/*
+*.out
 
 # coreVM bytecode
 *.core

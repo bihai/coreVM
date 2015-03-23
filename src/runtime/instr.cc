@@ -20,11 +20,11 @@ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 *******************************************************************************/
-#include "../../include/runtime/instr.h"
+#include "instr.h"
 
-#include "../../include/runtime/process.h"
-#include "../../include/types/interfaces.h"
-#include "../../include/types/types.h"
+#include "process.h"
+#include "types/interfaces.h"
+#include "types/types.h"
 
 #include <boost/format.hpp>
 

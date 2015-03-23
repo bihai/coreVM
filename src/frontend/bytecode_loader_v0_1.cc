@@ -20,15 +20,15 @@ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 *******************************************************************************/
-#include "../../include/frontend/bytecode_loader_v0_1.h"
+#include "bytecode_loader_v0_1.h"
 
-#include "../../include/frontend/errors.h"
-#include "../../include/frontend/utils.h"
-#include "../../include/runtime/closure.h"
-#include "../../include/runtime/common.h"
-#include "../../include/runtime/compartment.h"
-#include "../../include/runtime/process.h"
-#include "../../include/runtime/vector.h"
+#include "errors.h"
+#include "utils.h"
+#include "runtime/closure.h"
+#include "runtime/common.h"
+#include "runtime/compartment.h"
+#include "runtime/process.h"
+#include "runtime/vector.h"
 
 #include <boost/format.hpp>
 #include <sneaker/json/json.h>
