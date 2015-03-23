@@ -1233,7 +1233,7 @@ TEST_F(instrs_control_instrs_test, TestInstrJMP)
   corevm::runtime::instr_handler_jmp handler;
   handler.execute(instr, m_process);
 
-  ASSERT_EQ(8, m_process.pc());
+  ASSERT_EQ(7, m_process.pc());
 }
 
 // -----------------------------------------------------------------------------
