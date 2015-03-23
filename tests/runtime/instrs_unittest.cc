@@ -1160,7 +1160,7 @@ TEST_F(instrs_control_instrs_test, TestInstrPINVK)
 
   corevm::runtime::invocation_ctx& invk_ctx = m_process.top_invocation_ctx();
 
-  corevm::runtime::closure_ctx ctx = invk_ctx.ctx();
+  corevm::runtime::closure_ctx ctx = invk_ctx.closure_ctx();
 
   ASSERT_TRUE(m_ctx == ctx);
 }
