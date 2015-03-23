@@ -124,11 +124,12 @@ corevm::frontend::get_v0_1_instr_oprd_schema_definition()
     "}"
   );
 
+  // TODO: [COREVM-198] Bytecode schema does not handle 64-bit integers
   const std::string def(
     str(
       boost::format(unformatted_def)
-        % std::numeric_limits<corevm::runtime::instr_oprd>::min()
-        % std::numeric_limits<corevm::runtime::instr_oprd>::max()
+        % std::numeric_limits<int>::min()
+        % std::numeric_limits<int>::max()
     )
   );
 
@@ -142,9 +143,9 @@ corevm::frontend::get_v0_1_vector_schema_definition()
 {
   static const std::string unformatted_def(
     "{"
-      "\"type:\": \"array\","
+      "\"type\": \"array\","
       "\"items\": {"
-        "\"type:\": \"array\","
+        "\"type\": \"array\","
         "\"items\": ["
           "%1%,"
           "%2%,"

@@ -73,8 +73,6 @@ TEST_F(utils_unittest, TestGetVectorFromJson)
 
 TEST_F(utils_unittest, TestValidateInvalidVectorFails)
 {
-  // TODO: [SNEAKER-87] JSON schema validation with enum not working well for JSON integer
-  /*
   const std::string vector_str = "["
     "[700, 0, 0]"
   "]";
@@ -88,9 +86,8 @@ TEST_F(utils_unittest, TestValidateInvalidVectorFails)
     {
       sneaker::json::json_schema::validate(vector_json, schema_json);
     },
-    sneaker::json:json_validation_error
+    sneaker::json::json_validation_error
   );
-  */
 }
 
 // -----------------------------------------------------------------------------
