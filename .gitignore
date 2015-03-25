@@ -12,15 +12,14 @@
 *.la
 *.a
 
-# Tests
-*.test
-
 # Python
 *.pyc
 
 # Outputs
+build/
 coreVM
 info.json
+run_tests
 *.tmp.py
 *.out
 
