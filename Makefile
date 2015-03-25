@@ -61,7 +61,6 @@ export GTEST_COLOR=true
 
 
 include src/include.mk
-include tools/include.mk
 include tests/include.mk
 
 
