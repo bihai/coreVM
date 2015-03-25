@@ -17,9 +17,9 @@
 
 # Outputs
 build/
+bin/
 coreVM
 info.json
-run_tests
 *.tmp.py
 *.out
 
