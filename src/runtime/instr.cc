@@ -1069,8 +1069,6 @@ void
 corevm::runtime::instr_handler_jmp::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
 {
-  corevm::runtime::frame& frame = process.top_frame();
-
   corevm::runtime::instr_addr starting_addr = process.pc();
   corevm::runtime::instr_addr relative_addr = static_cast<corevm::runtime::instr_addr>(instr.oprd1);
 

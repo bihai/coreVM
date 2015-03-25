@@ -179,8 +179,8 @@ public:
     vertices_map_type& vertices_map,
     neighbor_set_type& non_garbage_collectible_neighbors)
     :
-    m_vertices_map(vertices_map),
-    m_non_garbage_collectible_neighbors(non_garbage_collectible_neighbors)
+    m_non_garbage_collectible_neighbors(non_garbage_collectible_neighbors),
+    m_vertices_map(vertices_map)
   {
   }
 

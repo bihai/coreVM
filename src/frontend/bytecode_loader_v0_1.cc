@@ -172,8 +172,6 @@ corevm::frontend::bytecode_loader_v0_1::load(
 
   const JSON::object& json_object = content_json.object_items();
 
-  const JSON::string& encoding = json_object.at("encoding").string_value();
-
   // Load encoding map.
   corevm::runtime::encoding_map encoding_map;
   const JSON::array& encoding_map_json = json_object.at("encoding_map").array_items();

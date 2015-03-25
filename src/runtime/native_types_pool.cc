@@ -99,6 +99,7 @@ corevm::runtime::native_types_pool::at(const corevm::dyobj::ntvhndl_key& key)
 
 corevm::dyobj::ntvhndl_key
 corevm::runtime::native_types_pool::create()
+  throw(corevm::runtime::native_type_handle_insertion_error)
 {
   auto ptr = m_container.create();
 
