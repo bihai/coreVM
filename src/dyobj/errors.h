@@ -69,7 +69,7 @@ public:
 
   explicit object_not_found_error(corevm::dyobj::dyobj_id id):
     corevm::dyobj::runtime_error(
-      str(boost::format("Object %s not found") % corevm::dyobj::id_to_string(id))
+      str(boost::format("Object %#x not found") % id)
     ),
     id(id)
   {
@@ -97,8 +97,8 @@ public:
     corevm::dyobj::attr_key attr_key, corevm::dyobj::dyobj_id id
   ):
     corevm::dyobj::runtime_error(
-      str(boost::format("Attribute %u in object %s not found") % \
-        attr_key % corevm::dyobj::id_to_string(id))
+      str(boost::format(
+        "Attribute %#x in object %#x not found") % attr_key % id)
     ),
     attr_key(attr_key),
     id(id)
@@ -129,8 +129,8 @@ public:
   ):
     corevm::dyobj::runtime_error(
       str(
-        boost::format("Attribute %u cannot be deleted from object %s") % \
-          attr_key % corevm::dyobj::id_to_string(id)
+        boost::format(
+          "Attribute %#x cannot be deleted from object %#x") % attr_key % id
       )
     ),
     attr_key(attr_key),
