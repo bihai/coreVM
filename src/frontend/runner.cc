@@ -25,6 +25,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "errors.h"
 #include "bytecode_loader.h"
 #include "configuration.h"
+#include "corevm/macros.h"
 #include "dyobj/common.h"
 #include "dyobj/errors.h"
 #include "runtime/common.h"
@@ -110,7 +111,11 @@ corevm::frontend::runner::run() const noexcept
     if (!res)
     {
       std::cerr << "Run failed: " << strerror(errno) << std::endl;
+
+#if __DEBUG__
       print_stack_trace();
+#endif
+
       return -1;
     }
   }
@@ -135,7 +140,10 @@ corevm::frontend::runner::run() const noexcept
   {
     std::cerr << "Runtime error: " << ex.what() << std::endl;
     std::cerr << "Abort" << std::endl;
+
+#if __DEBUG__
     print_stack_trace();
+#endif
 
     return -1;
   }
@@ -143,7 +151,10 @@ corevm::frontend::runner::run() const noexcept
   {
     std::cerr << "Error: " << ex.what() << std::endl;
     std::cerr << "Abort" << std::endl;
+
+#if __DEBUG__
     print_stack_trace();
+#endif
 
     return -1;
   }
@@ -151,7 +162,10 @@ corevm::frontend::runner::run() const noexcept
   {
     std::cerr << "Unknown error" << std::endl;
     std::cerr << "Abort" << std::endl;
+
+#if __DEBUG__
     print_stack_trace();
+#endif
 
     return -1;
   }
