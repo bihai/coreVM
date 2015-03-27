@@ -23,7 +23,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef COREVM_MEMORY_ALLOCATOR_H_
 #define COREVM_MEMORY_ALLOCATOR_H_
 
-#include <cassert>
+#include "corevm/macros.h"
+
 #include <cstddef>
 #include <cstdlib>
 #include <cstdint>
@@ -142,7 +143,10 @@ corevm::memory::allocator<allocation_scheme>::allocate(size_t size) noexcept
     uint8_t* base = static_cast<uint8_t*>(m_heap);
     ptr = base + static_cast<uint32_t>(offset);
     m_allocated_size += static_cast<uint64_t>(size);
-    assert(m_allocated_size <= m_total_size);
+
+#if __DEBUG__
+    ASSERT(m_allocated_size <= m_total_size);
+#endif
   }
 
   return ptr;
@@ -171,7 +175,11 @@ corevm::memory::allocator<allocation_scheme>::deallocate(void* ptr) noexcept
   {
     memset(ptr, 0, static_cast<uint32_t>(size));
     m_allocated_size -= static_cast<uint64_t>(size);
-    assert(m_allocated_size <= m_total_size);
+
+#if __DEBUG__
+    ASSERT(m_allocated_size <= m_total_size);
+#endif
+
     res = 1;
   }
 

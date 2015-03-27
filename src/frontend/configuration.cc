@@ -23,12 +23,12 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "configuration.h"
 
 #include "errors.h"
+#include "corevm/macros.h"
 
 #include <boost/format.hpp>
 #include <sneaker/json/json.h>
 #include <sneaker/json/json_schema.h>
 
-#include <cassert>
 #include <fstream>
 #include <ios>
 #include <sstream>
@@ -190,7 +190,9 @@ void
 corevm::frontend::configuration::set_values(
   corevm::frontend::configuration& configuration, const JSON& config_json)
 {
-  assert(config_json.is_object());
+#if __DEBUG__
+  ASSERT(config_json.is_object());
+#endif
 
   JSON::object config_obj = config_json.object_items();
 

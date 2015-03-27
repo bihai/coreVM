@@ -23,12 +23,25 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef COREVM_MACROS_H_
 #define COREVM_MACROS_H_
 
+#include <cstdlib>
+#include <iostream>
+
 
 // Debug mode is off by default.
 // Use compiler option to turn on debug mode.
 #ifndef __DEBUG__
   #define __DEBUG__ 0
 #endif
+
+
+#define ASSERT(expr)                                    \
+  if (! (expr) )                                        \
+  {                                                     \
+    std::cerr << "Assertion failed: " << #expr <<       \
+      " (" << __FILE__ << ")" << " [" << __FUNCTION__   \
+      << " line " << __LINE__ << "]" << std::endl;      \
+    abort();                                            \
+  }
 
 
 #endif /* COREVM_MACROS_H_ */

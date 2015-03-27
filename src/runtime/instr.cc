@@ -23,11 +23,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "instr.h"
 
 #include "process.h"
+#include "corevm/macros.h"
 #include "types/interfaces.h"
 #include "types/types.h"
 
 #include <algorithm>
-#include <cassert>
 #include <csignal>
 #include <cstdlib>
 #include <iomanip>
@@ -497,7 +497,9 @@ corevm::runtime::instr_handler_ldobj::execute(
 
     // Theoretically, the pointer that points to the frame that's
     // associated with the parent closure should exist.
-    assert(frame_ptr);
+#if __DEBUG__
+    ASSERT(frame_ptr);
+#endif
   }
 
   auto id = frame_ptr->get_visible_var(key);
@@ -662,7 +664,9 @@ corevm::runtime::instr_handler_ldobj2::execute(
 
     // Theoretically, the pointer that points to the frame that's
     // associated with the parent closure should exist.
-    assert(frame_ptr);
+#if __DEBUG__
+    ASSERT(frame_ptr);
+#endif
   }
 
   auto id = frame_ptr->get_invisible_var(key);
@@ -888,7 +892,9 @@ corevm::runtime::instr_handler_cldobj::execute(
 
     // Theoretically, the pointer that points to the frame that's
     // associated with the parent closure should exist.
-    assert(frame_ptr);
+#if __DEBUG__
+    ASSERT(frame_ptr);
+#endif
   }
 
   auto id = frame_ptr->get_visible_var(key);

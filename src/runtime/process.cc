@@ -31,13 +31,13 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "native_types_pool.h"
 #include "sighandler_registrar.h"
 #include "vector.h"
+#include "corevm/macros.h"
 #include "dyobj/common.h"
 #include "dyobj/dynamic_object_heap.h"
 #include "gc/garbage_collector.h"
 #include "gc/garbage_collection_scheme.h"
 
 #include <algorithm>
-#include <cassert>
 #include <cstdint>
 #include <iterator>
 #include <list>
@@ -218,7 +218,9 @@ corevm::runtime::process::pop_frame() throw(corevm::runtime::frame_not_found_err
   corevm::runtime::compartment* compartment = nullptr;
   this->get_compartment(compartment_id, &compartment);
 
-  assert(compartment);
+#if __DEBUG__
+  ASSERT(compartment);
+#endif
 
   corevm::runtime::closure_id closure_id = frame.closure_ctx().closure_id;
   corevm::runtime::closure closure = compartment->get_closure_by_id(closure_id);
