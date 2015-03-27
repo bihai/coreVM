@@ -127,13 +127,13 @@ corevm::frontend::runner::run() const noexcept
 
     if (!attr_name.empty())
     {
-      throw corevm::dyobj::object_attribute_not_found_error(
+      THROW(corevm::dyobj::object_attribute_not_found_error(
         str(
           boost::format(
             "Attribute %s not found in object %#x"
           ) % attr_name.c_str() % ex.id
         )
-      );
+      ));
     }
   }
   catch (const corevm::runtime_error& ex)

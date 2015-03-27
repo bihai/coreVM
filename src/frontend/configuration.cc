@@ -132,13 +132,13 @@ corevm::frontend::configuration::load_config(const std::string& path)
   }
   catch (const std::ios_base::failure& ex)
   {
-    throw corevm::frontend::configuration_loading_error(
+    THROW(corevm::frontend::configuration_loading_error(
       str(
         boost::format(
           "Error loading configuration file %s: %s"
         ) % path % ex.what()
       )
-    );
+    ));
   }
 
   std::string content = buffer.str();
@@ -151,13 +151,13 @@ corevm::frontend::configuration::load_config(const std::string& path)
   }
   catch (const sneaker::json::invalid_json_error& ex)
   {
-    throw corevm::frontend::configuration_loading_error(
+    THROW(corevm::frontend::configuration_loading_error(
       str(
         boost::format(
           "Error parsing configuration file %s: %s"
         ) % path % ex.what()
       )
-    );
+    ));
   }
 
   JSON schema_json = sneaker::json::parse(configuration::schema);
@@ -168,13 +168,13 @@ corevm::frontend::configuration::load_config(const std::string& path)
   }
   catch (const sneaker::json::json_validation_error& ex)
   {
-    throw corevm::frontend::configuration_loading_error(
+    THROW(corevm::frontend::configuration_loading_error(
       str(
         boost::format(
           "Invalid configuration file %s: %s"
         ) % path % ex.what()
       )
-    );
+    ));
   }
 
   corevm::frontend::configuration configuration;

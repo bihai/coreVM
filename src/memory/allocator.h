@@ -82,7 +82,7 @@ corevm::memory::allocator<allocation_scheme>::allocator(uint64_t total_size):
 
   if (!mem)
   {
-    throw std::bad_alloc();
+    THROW(std::bad_alloc());
   }
 
   m_heap = mem;

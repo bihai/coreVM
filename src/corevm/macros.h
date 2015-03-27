@@ -34,14 +34,32 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endif
 
 
+// Special exception throw mode. Off by default.
+// To be turned on by compiler option when needed.
+#ifndef __THROW__
+  #define __THROW__ 0
+#endif
+
+
 #define ASSERT(expr)                                    \
   if (! (expr) )                                        \
   {                                                     \
     std::cerr << "Assertion failed: " << #expr <<       \
       " (" << __FILE__ << ")" << " [" << __FUNCTION__   \
-      << " line " << __LINE__ << "]" << std::endl;      \
+      << "() line " << __LINE__ << "]" << std::endl;    \
     abort();                                            \
   }
+
+
+#if __DEBUG__ && __THROW__
+  #define THROW(expr)                                   \
+    std::cerr << #expr << " (" << __FILE__ << ")" <<    \
+      "[" << __FUNCTION__ << "() line " << __LINE__ <<  \
+      "]" << std::endl;                                 \
+    throw (expr)
+#else
+  #define THROW(expr) throw (expr)
+#endif
 
 
 #endif /* COREVM_MACROS_H_ */
