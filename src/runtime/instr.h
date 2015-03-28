@@ -199,6 +199,13 @@ enum instr_enum : uint32_t
    */
   RSETATTRS,
 
+  /*
+   * <putobj>
+   * Pops the object on top of the stack, and pushes its value onto the top
+   * of the current evaluation stack.
+   */
+  PUTOBJ,
+
   /* ------------------------ Control instructions -------------------------- */
 
   /**
@@ -1192,6 +1199,14 @@ public:
 // -----------------------------------------------------------------------------
 
 class instr_handler_rsetattrs : public instr_handler
+{
+public:
+  virtual void execute(const corevm::runtime::instr&, corevm::runtime::process&);
+};
+
+// -----------------------------------------------------------------------------
+
+class instr_handler_putobj : public instr_handler
 {
 public:
   virtual void execute(const corevm::runtime::instr&, corevm::runtime::process&);

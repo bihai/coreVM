@@ -12,5 +12,5 @@ class str(object):
         ### END VECTOR ###
         """
 
-    def __str__(self, arg_):
+    def __str__(self):
         return self

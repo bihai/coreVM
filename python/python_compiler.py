@@ -392,6 +392,11 @@ class BytecodeGenerator(ast.NodeVisitor):
             self.visit(arg)
             self.__add_instr('putarg', 0, 0)
 
+        # implicit args
+        if node.starargs:
+            self.visit(node.starargs)
+            self.__add_instr('putargs', 0, 0)
+
         self.__add_instr('invk', 0, 0)
 
     def visit_Num(self, node):
@@ -607,8 +612,10 @@ class BytecodeGenerator(ast.NodeVisitor):
 
         # Pull out rest of the args (*args).
         if node.vararg:
-            self.__add_instr('getargs', 0, 0, loc=Loc.from_node(node))
-            # TODO: Retrieve args stored as an array on top of eval stack.
+            self.__add_instr('getargs', 0, 0)
+            self.__add_instr('new', 0, 0)
+            self.__add_instr('sethndl', 0, 0)
+            self.__add_instr('stobj', self.__get_encoding_id(node.vararg), 0)
 
         # Pull out rest of the kwargs (**kwarg).
         if node.kwarg:

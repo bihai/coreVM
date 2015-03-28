@@ -102,6 +102,7 @@ corevm::runtime::instr_handler_meta::instr_info_map {
   { corevm::runtime::instr_enum::CLDOBJ,    { .num_oprd=2, .str="cldobj",    .handler=std::make_shared<corevm::runtime::instr_handler_cldobj>()    } },
   { corevm::runtime::instr_enum::SETATTRS,  { .num_oprd=2, .str="setattrs",  .handler=std::make_shared<corevm::runtime::instr_handler_setattrs>()  } },
   { corevm::runtime::instr_enum::RSETATTRS, { .num_oprd=1, .str="rsetattrs", .handler=std::make_shared<corevm::runtime::instr_handler_rsetattrs>() } },
+  { corevm::runtime::instr_enum::PUTOBJ,    { .num_oprd=0, .str="putobj",    .handler=std::make_shared<corevm::runtime::instr_handler_putobj>()    } },
 
   /* -------------------------- Control instructions ------------------------ */
 
@@ -989,6 +990,20 @@ corevm::runtime::instr_handler_rsetattrs::execute(
   res = map;
 
   frame.push_eval_stack(res);
+}
+
+// -----------------------------------------------------------------------------
+
+void
+corevm::runtime::instr_handler_putobj::execute(
+  const corevm::runtime::instr& instr, corevm::runtime::process& process)
+{
+  corevm::dyobj::dyobj_id id = process.top_stack();
+  corevm::runtime::frame& frame = process.top_frame();
+
+  corevm::types::native_type_handle hndl = corevm::types::uint64(id);
+
+  frame.push_eval_stack(hndl);
 }
 
 // -----------------------------------------------------------------------------
