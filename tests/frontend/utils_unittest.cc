@@ -99,7 +99,7 @@ TEST_F(utils_unittest, TestValidateLocs)
     "{"
       "\"index\": 0,"
       "\"loc\": {"
-        "\"lieno\": 200,"
+        "\"lineno\": 200,"
         "\"col_offset\": 10"
       "}"
     "}"
