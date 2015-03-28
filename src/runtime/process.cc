@@ -808,6 +808,8 @@ corevm::runtime::process::unwind_stack(
       ss << " (" << "line " << loc.lineno << " col " << loc.col_offset << ')';
     }
 
+    ss << " in " << closure->name;
+
     ss << std::endl;
 
     process.pop_frame();

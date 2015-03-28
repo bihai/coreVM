@@ -38,6 +38,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <utility>
 
 
+// -----------------------------------------------------------------------------
+
 const std::string BYTECODE_LOADER_V0_1_FORMAT = "application/json";
 
 // -----------------------------------------------------------------------------
@@ -134,6 +136,9 @@ corevm::frontend::bytecode_loader_v0_1::schema() const
         "\"closure\": {"
           "\"type\": \"object\","
           "\"properties\": {"
+            "\"name\": {"
+              "\"type\": \"string\""
+            "},"
             "\"__id__\": {"
               "\"type\": \"integer\""
             "},"
@@ -148,6 +153,7 @@ corevm::frontend::bytecode_loader_v0_1::schema() const
             "}"
           "},"
           "\"required\": ["
+            "\"name\","
             "\"__id__\","
             "\"__vector__\""
           "]"
@@ -211,6 +217,9 @@ corevm::frontend::bytecode_loader_v0_1::load(
     const JSON& closure_raw = static_cast<JSON>(*itr);
     const JSON::object& closure = closure_raw.object_items();
 
+    const JSON::string name_ = closure.at("name").string_value();
+    std::string name = static_cast<std::string>(name_);
+
     // ID
     const int __id__ = closure.at("__id__").int_value();
     corevm::runtime::closure_id id = __id__;
@@ -257,6 +266,7 @@ corevm::frontend::bytecode_loader_v0_1::load(
 
     closure_table.push_back(
       corevm::runtime::closure {
+        .name = name,
         .id = id,
         .parent_id = parent_id,
         .vector = vector,

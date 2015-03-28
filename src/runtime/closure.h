@@ -29,6 +29,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <limits>
 #include <ostream>
+#include <string>
 #include <type_traits>
 #include <vector>
 
@@ -43,6 +44,7 @@ namespace runtime {
 
 typedef struct closure
 {
+  std::string name;
   corevm::runtime::closure_id id;
   corevm::runtime::closure_id parent_id;
   corevm::runtime::vector vector;

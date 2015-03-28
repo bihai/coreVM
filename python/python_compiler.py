@@ -84,7 +84,8 @@ class Closure(object):
     # Has to be a non-zero value.
     __closure_id = 1
 
-    def __init__(self, name, parent_name, parent_id):
+    def __init__(self, original_name, name, parent_name, parent_id):
+        self.original_name = original_name
         self.name = name
         self.parent_name = parent_name
         self.vector = []
@@ -98,6 +99,7 @@ class Closure(object):
 
     def to_json(self):
         json_dict = {
+            'name': self.original_name,
             '__id__': self.closure_id,
             '__vector__': [
                 instr.to_json() for instr in self.vector
@@ -159,7 +161,8 @@ class BytecodeGenerator(ast.NodeVisitor):
         # closure map
         self.current_closure_name = self.default_closure_name
         self.closure_map = {
-            self.current_closure_name: Closure(self.current_closure_name, '', None)
+            self.current_closure_name: Closure(
+                self.current_closure_name, self.current_closure_name, '', None)
         }
 
         # states
@@ -269,6 +272,7 @@ class BytecodeGenerator(ast.NodeVisitor):
         name = self.__mingle_name(node.name)
 
         self.closure_map[name] = Closure(
+            node.name,
             name,
             self.current_closure_name,
             self.closure_map[self.current_closure_name].closure_id
