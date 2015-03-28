@@ -53,14 +53,19 @@ public:
 
   size_t closure_count() const;
 
-  const corevm::runtime::closure get_closure_by_id(
-    corevm::runtime::closure_id) const throw(corevm::runtime::closure_not_found_error);
+  const corevm::runtime::closure
+    get_closure_by_id(corevm::runtime::closure_id) const
+    throw(corevm::runtime::closure_not_found_error);
+
+  void get_closure_by_id(
+    corevm::runtime::closure_id, corevm::runtime::closure** closure);
 
   void set_closure_table(const corevm::runtime::closure_table&);
 
   bool get_starting_closure(corevm::runtime::closure*);
 
-  friend std::ostream& operator<<(std::ostream&, const corevm::runtime::compartment&);
+  friend std::ostream& operator<<(
+    std::ostream&, const corevm::runtime::compartment&);
 
 private:
   const std::string m_path;
