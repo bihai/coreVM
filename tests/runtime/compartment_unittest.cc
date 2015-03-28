@@ -38,11 +38,13 @@ TEST_F(compartment_unittest, TestGetClosureByID)
   corevm::runtime::compartment compartment("./example.core");
 
   corevm::runtime::vector vector;
+  corevm::runtime::loc_table locs;
 
   corevm::runtime::closure closure {
     .id=2,
     .parent_id=1,
-    .vector=vector
+    .vector=vector,
+    .locs = locs
   };
 
   corevm::runtime::closure_table closure_table {
@@ -75,11 +77,13 @@ TEST_F(compartment_unittest, TestGetClosureByID2)
   corevm::runtime::compartment compartment("./example.core");
 
   corevm::runtime::vector vector;
+  corevm::runtime::loc_table locs;
 
   corevm::runtime::closure closure {
     .id=2,
     .parent_id=1,
-    .vector=vector
+    .vector=vector,
+    .locs = locs
   };
 
   corevm::runtime::closure_table closure_table {

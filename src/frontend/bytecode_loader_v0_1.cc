@@ -130,6 +130,7 @@ corevm::frontend::bytecode_loader_v0_1::schema() const
           "}"
         "},"
         "\"vector\": %1%,"
+        "\"locs\": %2%,"
         "\"closure\": {"
           "\"type\": \"object\","
           "\"properties\": {"
@@ -141,6 +142,9 @@ corevm::frontend::bytecode_loader_v0_1::schema() const
             "},"
             "\"__parent__\": {"
               "\"type\": \"integer\""
+            "},"
+            "\"locs\": {"
+              "\"$ref\": \"#/definitions/locs\""
             "}"
           "},"
           "\"required\": ["
@@ -156,6 +160,7 @@ corevm::frontend::bytecode_loader_v0_1::schema() const
     str(
       boost::format(unformatted_def)
         % get_v0_1_vector_schema_definition()
+        % get_v0_1_locs_schema_definition()
     )
   );
 
@@ -223,11 +228,39 @@ corevm::frontend::bytecode_loader_v0_1::load(
     corevm::runtime::vector vector = \
       corevm::frontend::get_vector_from_json(__vector__);
 
+    corevm::runtime::loc_table locs_table;
+
+    // Locs
+    if (closure.find("locs") != closure.end())
+    {
+      const JSON::array items = closure.at("locs").array_items();
+
+      for (auto locs_itr = items.begin(); locs_itr != items.end(); ++locs_itr)
+      {
+        const JSON::object item = static_cast<JSON>(*locs_itr).object_items();
+
+        const int32_t index = item.at("index").int_value();
+
+        const JSON::object loc_item = item.at("loc").object_items();
+
+        const int32_t lineno = loc_item.at("lineno").int_value();
+        const int32_t col_offset = loc_item.at("col_offset").int_value();
+
+        corevm::runtime::loc_info loc {
+          .lineno = lineno,
+          .col_offset = col_offset
+        };
+
+        locs_table[index] = loc;
+      }
+    }
+
     closure_table.push_back(
       corevm::runtime::closure {
         .id = id,
         .parent_id = parent_id,
-        .vector = vector
+        .vector = vector,
+        .locs = locs_table
       }
     );
 

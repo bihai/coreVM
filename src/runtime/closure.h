@@ -24,6 +24,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define COREVM_CLOSURE_H_
 
 #include "common.h"
+#include "loc.h"
 #include "vector.h"
 
 #include <limits>
@@ -38,11 +39,14 @@ namespace corevm {
 namespace runtime {
 
 
+// -----------------------------------------------------------------------------
+
 typedef struct closure
 {
   corevm::runtime::closure_id id;
   corevm::runtime::closure_id parent_id;
   corevm::runtime::vector vector;
+  corevm::runtime::loc_table locs;
 } closure;
 
 // -----------------------------------------------------------------------------

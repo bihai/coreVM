@@ -20,50 +20,37 @@ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 *******************************************************************************/
-#ifndef COREVM_FRONTEND_UTILS_H_
-#define COREVM_FRONTEND_UTILS_H_
+#ifndef COREVM_LOC_INFO_H_
+#define COREVM_LOC_INFO_H_
 
-#include "runtime/vector.h"
-
-#include <string>
-
-#include <sneaker/json/json.h>
+#include <unordered_map>
 
 
 namespace corevm {
 
 
-namespace frontend {
+namespace runtime {
 
-
-using sneaker::json::JSON;
 
 // -----------------------------------------------------------------------------
 
-corevm::runtime::vector get_vector_from_json(const JSON&);
+struct loc_info
+{
+  int32_t lineno;
+  int32_t col_offset;
+};
 
 // -----------------------------------------------------------------------------
 
-const std::string get_v0_1_instr_code_schema_definition();
+typedef std::unordered_map<int32_t, loc_info> loc_table;
 
 // -----------------------------------------------------------------------------
 
-const std::string get_v0_1_instr_oprd_schema_definition();
 
-// -----------------------------------------------------------------------------
-
-const std::string get_v0_1_vector_schema_definition();
-
-// -----------------------------------------------------------------------------
-
-const std::string get_v0_1_locs_schema_definition();
-
-// -----------------------------------------------------------------------------
-
-}; /* end namespace frontend */
+} /* end namespace runtime */
 
 
-}; /* end namespace corevm */
+} /* end namespace corevm */
 
 
-#endif /* COREVM_FRONTEND_UTILS_H_ */
+#endif /* COREVM_LOC_INFO_H_ */

@@ -788,11 +788,27 @@ corevm::runtime::process::unwind_stack(
     ASSERT(compartment);
 #endif
 
-    ss << '\t' << "File " << compartment->path() << std::endl;
+    ss << "    " << "File " << '\"' << compartment->path() << '\"';
 
-    // TODO: get exact location of invocations.
-    // corevm::runtime::closure* closure = nullptr;
-    // compartment->get_closure_by_id(ctx.closure_id, &closure);
+    corevm::runtime::closure* closure = nullptr;
+    compartment->get_closure_by_id(ctx.closure_id, &closure);
+
+#if __DEBUG__
+    ASSERT(closure);
+#endif
+
+    corevm::runtime::loc_table& locs = closure->locs;
+
+    int32_t index = process.pc() - frame.return_addr();
+
+    if (locs.find(index) != locs.end())
+    {
+      const corevm::runtime::loc_info& loc = locs.at(index);
+
+      ss << " (" << "line " << loc.lineno << " col " << loc.col_offset << ')';
+    }
+
+    ss << std::endl;
 
     process.pop_frame();
 
@@ -806,7 +822,7 @@ corevm::runtime::process::unwind_stack(
 
   process.reset();
 
-  std::cout << ss.str() << std::endl;
+  std::cerr << std::endl << ss.str() << std::endl;
 }
 
 // -----------------------------------------------------------------------------
