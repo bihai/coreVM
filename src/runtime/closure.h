@@ -24,7 +24,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define COREVM_CLOSURE_H_
 
 #include "common.h"
-#include "loc.h"
+#include "loc_info.h"
 #include "vector.h"
 
 #include <limits>

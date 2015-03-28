@@ -110,7 +110,7 @@ TEST_F(utils_unittest, TestValidateLocs)
     corevm::frontend::get_v0_1_locs_schema_definition()
   );
 
-  //sneaker::json::json_schema::validate(locs_json, schema_json);
+  sneaker::json::json_schema::validate(locs_json, schema_json);
 }
 
 // -----------------------------------------------------------------------------

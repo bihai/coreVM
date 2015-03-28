@@ -41,6 +41,7 @@ TEST_F(compartment_unittest, TestGetClosureByID)
   corevm::runtime::loc_table locs;
 
   corevm::runtime::closure closure {
+    .name = "__main__",
     .id=2,
     .parent_id=1,
     .vector=vector,
@@ -80,6 +81,7 @@ TEST_F(compartment_unittest, TestGetClosureByID2)
   corevm::runtime::loc_table locs;
 
   corevm::runtime::closure closure {
+    .name = "__main__",
     .id=2,
     .parent_id=1,
     .vector=vector,
@@ -120,6 +122,7 @@ TEST_F(compartment_unittest, TestOutputStream)
   };
 
   corevm::runtime::closure closure {
+    .name = "__main__",
     .id=2,
     .parent_id=1,
     .vector=vector
