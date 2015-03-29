@@ -22,7 +22,9 @@
 import ast
 import optparse
 import pprint
+import random
 import simplejson
+import string
 import sys
 import traceback
 
@@ -399,6 +401,27 @@ class BytecodeGenerator(ast.NodeVisitor):
 
         self.__add_instr('invk', 0, 0)
 
+    def visit_List(self, node):
+        random_name = ''.join(random.choice(string.ascii_letters) for _ in xrange(5))
+
+        self.__add_instr('new', 0, 0)
+        self.__add_instr('ary', 0, 0)
+        self.__add_instr('sethndl', 0, 0)
+        self.__add_instr('stobj', self.__get_encoding_id(random_name), 0)
+
+        for item in node.elts:
+            self.visit(item)
+            self.__add_instr('stobj', self.__get_encoding_id('tmp'), 0)
+            self.__add_instr('ldobj', self.__get_encoding_id(random_name), 0)
+            self.__add_instr('gethndl', 0, 0)
+            self.__add_instr('ldobj', self.__get_encoding_id('tmp'), 0)
+            self.__add_instr('putobj', 0, 0)
+            self.__add_instr('aryapnd', 0, 0)
+            self.__add_instr('sethndl', 0, 0)
+            self.__add_instr('stobj', self.__get_encoding_id(random_name), 0)
+
+        self.__add_instr('ldobj', self.__get_encoding_id(random_name), 0)
+
     def visit_Num(self, node):
         num_type = 'dec2' if isinstance(node.n, float) else 'int64'
 
@@ -681,6 +704,7 @@ def main():
         generator.read_from_source('python/src/int.py')
         generator.read_from_source('python/src/float.py')
         generator.read_from_source('python/src/str.py')
+        generator.read_from_source('python/src/list.py')
 
         generator.read_from_source(options.input_file)
 

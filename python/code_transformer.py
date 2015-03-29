@@ -168,6 +168,10 @@ class CodeTransformer(ast.NodeVisitor):
             rhs=self.visit(node.right)
         )
 
+    def visit_ListComp(self, node):
+        print 'jajajaja'
+        print node.__dict__
+
     def visit_Compare(self, node):
         # Note: Only supports one comparison now.
         base_str = '{indentation}{left} {op} {comparator}'.format(
@@ -225,6 +229,9 @@ class CodeTransformer(ast.NodeVisitor):
             attr=str(node.attr)
         )
 
+    def visit_List(self, node):
+        return '__call(list, [' + ', '.join([self.visit(expr) for expr in node.elts]) + '])'
+
     def visit_Name(self, node):
         return node.id
 
@@ -257,6 +264,11 @@ class CodeTransformer(ast.NodeVisitor):
 
     def visit_Is(self, node):
         return 'is'
+
+    """ ------------------------- comprehension ---------------------------- """
+
+    def visit_comprehension(self, node):
+        raise NotImplementedError
 
     """ --------------------------- arguments ------------------------------ """
 
