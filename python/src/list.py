@@ -27,3 +27,12 @@ class list(object):
 
     def pop(self, arg):
         pass
+
+    def __str__(self):
+        res = __call(str, '')
+        __call(res.__add__, __call(str, '['))
+        for item in self:
+            __call(res.__add__, __call(item.__str__)) # res += str(item)
+            __call(res.__add__, __call(str, ', '))
+        __call(res.__add__, __call(str, ']'))
+        return res

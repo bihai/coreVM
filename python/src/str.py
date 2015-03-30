@@ -14,3 +14,17 @@ class str(object):
 
     def __str__(self):
         return self
+
+    def __add__(self, other):
+        """
+        ### BEGIN VECTOR ###
+        [ldobj, self, 0]
+        [gethndl, 0, 0]
+        [ldobj, other, 0]
+        [gethndl, 0, 0]
+        [strapd, 0, 0]
+        [pop, 0, 0]
+        [sethndl, 0, 0]
+        [rtrn, 0, 0]
+        ### END VECTOR ###
+        """

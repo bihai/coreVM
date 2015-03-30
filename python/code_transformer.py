@@ -119,6 +119,16 @@ class CodeTransformer(ast.NodeVisitor):
 
         return base_str
 
+    def visit_AugAssign(self, node):
+        base_str = '{indentation}{target} = __call({target}.{func}, {value})\n'.format(
+            indentation=self.__indentation(),
+            target=self.visit(node.target),
+            func=self.visit(node.op),
+            value=self.visit(node.value)
+        )
+
+        return base_str
+
     def visit_Print(self, node):
         base_str = '{indentation}print'.format(indentation=self.__indentation())
 
@@ -126,6 +136,22 @@ class CodeTransformer(ast.NodeVisitor):
             base_str += (' ' + '__call(' + self.visit(node.values[0]) + '.__str__' + ')')
 
         base_str += '\n'
+
+        return base_str
+
+    def visit_For(self, node):
+        base_str = '{indentation}for {target} in {iter}:\n'.format(
+            indentation=self.__indentation(),
+            target=self.visit(node.target),
+            iter=self.visit(node.iter)
+        )
+
+        self.__indent()
+
+        for stmt in node.body:
+            base_str += (self.visit(stmt) + '\n')
+
+        self.__dedent()
 
         return base_str
 
@@ -169,7 +195,7 @@ class CodeTransformer(ast.NodeVisitor):
         )
 
     def visit_ListComp(self, node):
-        raise NotImplementedError
+        pass
 
     def visit_Compare(self, node):
         # Note: Only supports one comparison now.
