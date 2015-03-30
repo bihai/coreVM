@@ -802,7 +802,8 @@ TEST_F(instrs_obj_unittest, TestInstrPUTOBJ)
 
   corevm::types::native_type_handle& hndl = frame.top_eval_stack();
 
-  corevm::dyobj::dyobj_id actual_id = corevm::types::get_value_from_handle<corevm::dyobj::dyobj_id>(hndl);
+  corevm::dyobj::dyobj_id actual_id = \
+    corevm::types::get_value_from_handle<corevm::dyobj::dyobj_id>(hndl);
 
   ASSERT_EQ(id, actual_id);
 }

@@ -169,8 +169,7 @@ class CodeTransformer(ast.NodeVisitor):
         )
 
     def visit_ListComp(self, node):
-        print 'jajajaja'
-        print node.__dict__
+        raise NotImplementedError
 
     def visit_Compare(self, node):
         # Note: Only supports one comparison now.
