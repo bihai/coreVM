@@ -535,7 +535,7 @@ corevm::runtime::process::start()
   {
     while (m_pause_exec) {}
 
-    corevm::runtime::instr instr = static_cast<corevm::runtime::instr>(m_instrs[m_pc]);
+    const corevm::runtime::instr& instr = m_instrs[m_pc];
 
     corevm::runtime::instr_handler* handler =
       const_cast<corevm::runtime::instr_handler*>(this->get_instr_handler(instr.code));
