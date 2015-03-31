@@ -25,9 +25,6 @@ class list(object):
         ### END VECTOR ###
         """
 
-    def pop(self, arg):
-        pass
-
     def __str__(self):
         res = __call(str, '')
         __call(res.__add__, __call(str, '['))
