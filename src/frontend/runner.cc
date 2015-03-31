@@ -145,13 +145,6 @@ corevm::frontend::runner::run() const noexcept
 
 #if __DEBUG__
     print_stack_trace();
-
-    auto itr = corevm::runtime::instr_handler_meta::instr_info_map.find(
-      process.current_instr());
-
-    corevm::runtime::instr_info info = itr->second;
-
-    std::cout << std::endl << "Last instruction: " << info.str << std::endl;
 #endif
 
     corevm::runtime::process::unwind_stack(process);

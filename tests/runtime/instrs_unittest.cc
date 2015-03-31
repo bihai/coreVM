@@ -824,7 +824,7 @@ TEST_F(instrs_obj_unittest, TestInstrGETOBJ)
 
   corevm::types::native_type_handle hndl = corevm::types::uint64(10);
 
-  frames.push_eval_stack(hndl);
+  frame.push_eval_stack(hndl);
 
   m_process.push_frame(frame);
 
@@ -1354,6 +1354,27 @@ TEST_F(instrs_control_instrs_test, TestInstrJMPIF_OnFalseCondition)
   handler.execute(instr, m_process);
 
   ASSERT_EQ(corevm::runtime::NONESET_INSTR_ADDR, m_process.pc());
+}
+
+// -----------------------------------------------------------------------------
+
+TEST_F(instrs_control_instrs_test, TestInstrJMPR)
+{
+  corevm::runtime::frame frame(m_ctx);
+  m_process.push_frame(frame);
+
+  ASSERT_EQ(corevm::runtime::NONESET_INSTR_ADDR, m_process.pc());
+
+  corevm::runtime::instr instr {
+    .code=0,
+    .oprd1=static_cast<corevm::runtime::instr_oprd>(5),
+    .oprd2=0
+  };
+
+  corevm::runtime::instr_handler_jmp handler;
+  handler.execute(instr, m_process);
+
+  ASSERT_EQ(4, m_process.pc());
 }
 
 // -----------------------------------------------------------------------------

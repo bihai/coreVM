@@ -608,14 +608,6 @@ corevm::runtime::process::pc() const
 
 // -----------------------------------------------------------------------------
 
-const corevm::runtime::instr_code
-corevm::runtime::process::current_instr() const
-{
-  return m_instrs[pc()].code;
-}
-
-// -----------------------------------------------------------------------------
-
 void
 corevm::runtime::process::set_pc(const corevm::runtime::instr_addr addr)
   throw(corevm::runtime::invalid_instr_addr_error)

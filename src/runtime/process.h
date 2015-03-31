@@ -153,8 +153,6 @@ public:
 
   const corevm::runtime::instr_addr pc() const;
 
-  const corevm::runtime::instr_code current_instr() const;
-
   void set_pc(const corevm::runtime::instr_addr)
     throw(corevm::runtime::invalid_instr_addr_error);
 
