@@ -810,6 +810,39 @@ TEST_F(instrs_obj_unittest, TestInstrPUTOBJ)
 
 // -----------------------------------------------------------------------------
 
+TEST_F(instrs_obj_unittest, TestInstrGETOBJ)
+{
+  corevm::runtime::compartment_id compartment_id = 0;
+  corevm::runtime::closure_id closure_id = 10;
+
+  corevm::runtime::closure_ctx ctx {
+    .compartment_id = compartment_id,
+    .closure_id = closure_id
+  };
+
+  corevm::runtime::frame frame(ctx);
+
+  corevm::types::native_type_handle hndl = corevm::types::uint64(10);
+
+  frames.push_eval_stack(hndl);
+
+  m_process.push_frame(frame);
+
+  corevm::runtime::instr instr {
+    .code = 0,
+    .oprd1 = 0,
+    .oprd2 = 0
+  };
+
+  execute_instr<corevm::runtime::instr_handler_getobj>(instr, 1);
+
+  corevm::dyobj::dyobj_id id = m_process.top_stack();
+
+  ASSERT_EQ(10, id);
+}
+
+// -----------------------------------------------------------------------------
+
 class instrs_functions_instrs_test : public instrs_unittest {
 protected:
   corevm::runtime::process m_process;
