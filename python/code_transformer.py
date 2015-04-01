@@ -198,6 +198,12 @@ class CodeTransformer(ast.NodeVisitor):
     def visit_Pass(self, node):
         return '{indentation}pass'.format(indentation=self.__indentation())
 
+    def visit_Break(self, node):
+        return '{indentation}break'.format(indentation=self.__indentation())
+
+    def visit_Continue(self, node):
+        return '{indentation}continue'.format(indentation=self.__indentation())
+
     """ ----------------------------- expr --------------------------------- """
 
     def visit_BinOp(self, node):

@@ -420,9 +420,17 @@ class BytecodeGenerator(ast.NodeVisitor):
 
         vector_length2 = len(self.__current_vector())
 
+        break_line_length = 0
+
         # Execute body instruction.
         for stmt in node.body:
-           self.visit(stmt)
+            if isinstance(stmt, ast.Break):
+                self.__add_instr('jmp', 0, 0)
+                break_line_length = len(self.__current_vector())
+            elif isinstance(stmt, ast.Continue):
+                self.__add_instr('jmpr', vector_length1 - 1, 0)
+            else:
+                self.visit(stmt)
 
         # Jump back to beginning.
         self.__add_instr('jmpr', vector_length1 - 1, 0)
@@ -432,6 +440,11 @@ class BytecodeGenerator(ast.NodeVisitor):
         length_diff = vector_length3 - vector_length2
         self.__current_vector()[vector_length2 - 1] = Instr(
             self.instr_str_to_code_map['jmpif'], length_diff, 0)
+
+        if break_line_length:
+            break_length_diff = vector_length3 - break_line_length
+            self.__current_vector()[break_line_length - 1] = Instr(
+                self.instr_str_to_code_map['jmp'], break_length_diff, 0)
 
     def visit_If(self, node):
         self.visit(node.test)
@@ -456,6 +469,9 @@ class BytecodeGenerator(ast.NodeVisitor):
 
     def visit_Expr(self, node):
         self.visit(node.value)
+
+    def visit_Pass(self, node):
+        pass
 
     """ ----------------------------- expr --------------------------------- """
 
