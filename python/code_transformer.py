@@ -155,6 +155,21 @@ class CodeTransformer(ast.NodeVisitor):
 
         return base_str
 
+    def visit_While(self, node):
+        base_str = '{indentation}while {test}:\n'.format(
+            indentation=self.__indentation(),
+            test=self.visit(node.test)
+        )
+
+        self.__indent()
+
+        for stmt in node.body:
+            base_str += (self.visit(stmt) + '\n')
+
+        self.__dedent()
+
+        return base_str
+
     def visit_If(self, node):
         base_str = '{indentation}if {expr}:\n'.format(
             indentation=self.__indentation(),

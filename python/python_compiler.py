@@ -407,6 +407,32 @@ class BytecodeGenerator(ast.NodeVisitor):
         self.__current_vector()[vector_length2 - 1] = Instr(
             self.instr_str_to_code_map['jmpif'], length_diff, 0)
 
+    def visit_While(self, node):
+        vector_length1 = len(self.__current_vector())
+
+        # Test expr.
+        self.visit(node.test)
+
+        self.__add_instr('gethndl', 0, 0)
+        self.__add_instr('truthy', 0, 0)
+        self.__add_instr('lnot', 0, 0)
+        self.__add_instr('jmpif', 0, 0)
+
+        vector_length2 = len(self.__current_vector())
+
+        # Execute body instruction.
+        for stmt in node.body:
+           self.visit(stmt)
+
+        # Jump back to beginning.
+        self.__add_instr('jmpr', vector_length1 - 1, 0)
+
+        vector_length3 = len(self.__current_vector())
+
+        length_diff = vector_length3 - vector_length2
+        self.__current_vector()[vector_length2 - 1] = Instr(
+            self.instr_str_to_code_map['jmpif'], length_diff, 0)
+
     def visit_If(self, node):
         self.visit(node.test)
         self.__add_instr('gethndl', 0, 0, loc=Loc.from_node(node))
