@@ -389,9 +389,19 @@ class BytecodeGenerator(ast.NodeVisitor):
         self.__add_instr('getobj', 0, 0)
         self.__add_instr('stobj', self.__get_encoding_id(node.target.id), 0)
 
+        break_line_length = 0
+
         # Execute body instruction.
         for stmt in node.body:
-           self.visit(stmt)
+            if isinstance(stmt, ast.Break):
+                self.__add_instr('jmp', 0, 0)
+                break_line_length = len(self.__current_vector())
+            elif isinstance(stmt, ast.Continue):
+                # Do not run the rest of the statements,
+                # just run increment index and loop back below.
+                break
+            else:
+                self.visit(stmt)
 
         # Increment index.
         self.__add_instr('ldobj2', self.__get_encoding_id(index_name), 0)
@@ -406,6 +416,11 @@ class BytecodeGenerator(ast.NodeVisitor):
         length_diff = vector_length3 - vector_length2
         self.__current_vector()[vector_length2 - 1] = Instr(
             self.instr_str_to_code_map['jmpif'], length_diff, 0)
+
+        if break_line_length:
+            break_length_diff = vector_length3 - break_line_length
+            self.__current_vector()[break_line_length - 1] = Instr(
+                self.instr_str_to_code_map['jmp'], break_length_diff, 0)
 
     def visit_While(self, node):
         vector_length1 = len(self.__current_vector())
