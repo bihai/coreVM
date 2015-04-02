@@ -667,20 +667,16 @@ class BytecodeGenerator(ast.NodeVisitor):
         self.__add_instr('cldobj', self.__get_encoding_id('True'), self.__get_encoding_id('False'))
 
     def visit_Lt(self, node):
-        self.__add_instr('lt', 0, 0)
-        self.__add_instr('cldobj', self.__get_encoding_id('True'), self.__get_encoding_id('False'))
+        pass
 
     def visit_LtE(self, node):
-        self.__add_instr('lte', 0, 0)
-        self.__add_instr('cldobj', self.__get_encoding_id('True'), self.__get_encoding_id('False'))
+        pass
 
     def visit_Gt(self, node):
-        self.__add_instr('gt', 0, 0)
-        self.__add_instr('cldobj', self.__get_encoding_id('True'), self.__get_encoding_id('False'))
+        pass
 
     def visit_GtE(self, node):
-        self.__add_instr('gte', 0, 0)
-        self.__add_instr('cldobj', self.__get_encoding_id('True'), self.__get_encoding_id('False'))
+        pass
 
     def visit_Is(self, node):
         self.__add_instr('objeq', 0, 0)
