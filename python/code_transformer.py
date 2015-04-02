@@ -222,8 +222,6 @@ class CodeTransformer(ast.NodeVisitor):
         # Note: Only supports one comparison now.
         op = node.ops[0]
 
-        # TODO: special support for `is` and `is not` can be removed once
-        # dynamic dispatching is supported.
         if any(
             (
                 isinstance(op, ast.Eq),
@@ -241,6 +239,8 @@ class CodeTransformer(ast.NodeVisitor):
                 right=self.visit(node.comparators[0])
             )
         else:
+            # TODO: special support for `is` and `is not` can be removed once
+            # dynamic dispatching is supported.
             base_str = '{indentation}{left} {op} {comparator}'.format(
               indentation=self.__indentation(),
               left=self.visit(node.left),
