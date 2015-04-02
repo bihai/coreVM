@@ -355,6 +355,7 @@ class BytecodeGenerator(ast.NodeVisitor):
         self.__add_instr('print', 0, 0, loc=Loc.from_node(node))
 
     def visit_For(self, node):
+        # TODO: Handle `orelse` here.
         index_name = self.__get_random_name()
         iter_name = self.__get_random_name()
 
@@ -423,6 +424,7 @@ class BytecodeGenerator(ast.NodeVisitor):
                 self.instr_str_to_code_map['jmp'], break_length_diff, 0)
 
     def visit_While(self, node):
+        # TODO: Handle `orelse` here.
         vector_length1 = len(self.__current_vector())
 
         # Test expr.
