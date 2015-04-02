@@ -111,6 +111,40 @@ class float(object):
         """
         return __call(float, res_)
 
+    def __eq__(self, other):
+        """
+        ### BEGIN VECTOR ###
+        [ldobj, other, 0]
+        [gethndl, 0, 0]
+        [pop, 0, 0]
+        [ldobj, self, 0]
+        [gethndl, 0, 0]
+        [pop, 0, 0]
+        [eq, 0, 0]
+        [new, 0, 0]
+        [sethndl, 0, 0]
+        [stobj, res_, 0]
+        ### END VECTOR ###
+        """
+        return __call(bool, res_)
+
+    def __neq__(self, other):
+        """
+        ### BEGIN VECTOR ###
+        [ldobj, other, 0]
+        [gethndl, 0, 0]
+        [pop, 0, 0]
+        [ldobj, self, 0]
+        [gethndl, 0, 0]
+        [pop, 0, 0]
+        [neq, 0, 0]
+        [new, 0, 0]
+        [sethndl, 0, 0]
+        [stobj, res_, 0]
+        ### END VECTOR ###
+        """
+        return __call(bool, res_)
+
     def __lt__(self, other):
         """
         ### BEGIN VECTOR ###

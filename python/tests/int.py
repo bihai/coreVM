@@ -6,6 +6,13 @@ print 567 * 654
 print 101 / 11
 print 110 % 33
 
+
+if 1 == 1:
+    print 'You cannot argue with that'
+
+if 1 != 2:
+    print 'Affirmative'
+
 if 1 < 2:
     print '1 < 2 is correct'
 

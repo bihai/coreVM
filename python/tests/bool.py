@@ -14,6 +14,12 @@ True is False
 # print False / True
 # print False % True
 
+if True == bool(1):
+    print 'Integrity of truth is rock solid'
+
+if False != True:
+    print 'Opposite polarity do not match'
+
 if False < True:
     print 'The truth always triumphs'
 

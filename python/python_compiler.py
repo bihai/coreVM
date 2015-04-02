@@ -659,12 +659,10 @@ class BytecodeGenerator(ast.NodeVisitor):
     """ ----------------------------- cmpop -------------------------------- """
 
     def visit_Eq(self, node):
-        self.__add_instr('eq', 0, 0, loc=Loc.from_node(node))
-        self.__add_instr('cldobj', self.__get_encoding_id('True'), self.__get_encoding_id('False'))
+        pass
 
     def visit_NotEq(self, node):
-        self.__add_instr('neq', 0, 0)
-        self.__add_instr('cldobj', self.__get_encoding_id('True'), self.__get_encoding_id('False'))
+        pass
 
     def visit_Lt(self, node):
         pass

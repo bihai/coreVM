@@ -224,6 +224,8 @@ class CodeTransformer(ast.NodeVisitor):
 
         if any(
             (
+                isinstance(op, ast.Eq),
+                isinstance(op, ast.NotEq),
                 isinstance(op, ast.Lt),
                 isinstance(op, ast.LtE),
                 isinstance(op, ast.Gt),
@@ -327,6 +329,12 @@ class CodeTransformer(ast.NodeVisitor):
 
     def visit_Is(self, node):
         return 'is'
+
+    def visit_Eq(self, node):
+        return '__eq__'
+
+    def visit_NotEq(self, node):
+        return '__neq__'
 
     def visit_Lt(self, node):
         return '__lt__'
