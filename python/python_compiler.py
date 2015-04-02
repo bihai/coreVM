@@ -677,10 +677,14 @@ class BytecodeGenerator(ast.NodeVisitor):
         pass
 
     def visit_Is(self, node):
+        # TODO: logic can be placed under `object.__eq__` once
+        # dynamic dispatching is supported.
         self.__add_instr('objeq', 0, 0)
         self.__add_instr('cldobj', self.__get_encoding_id('True'), self.__get_encoding_id('False'))
 
     def visit_IsNot(self, node):
+        # TODO: logic can be placed under `object.__eq__` once
+        # dynamic dispatching is supported.
         self.__add_instr('objneq', 0, 0)
         self.__add_instr('cldobj', self.__get_encoding_id('True'), self.__get_encoding_id('False'))
 

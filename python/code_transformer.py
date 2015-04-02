@@ -222,6 +222,8 @@ class CodeTransformer(ast.NodeVisitor):
         # Note: Only supports one comparison now.
         op = node.ops[0]
 
+        # TODO: special support for `is` and `is not` can be removed once
+        # dynamic dispatching is supported.
         if any(
             (
                 isinstance(op, ast.Eq),
@@ -328,7 +330,14 @@ class CodeTransformer(ast.NodeVisitor):
     """ ----------------------------- cmpop -------------------------------- """
 
     def visit_Is(self, node):
+        # TODO: special support for `is` and `is not` can be removed once
+        # dynamic dispatching is supported.
         return 'is'
+
+    def visit_IsNot(self, node):
+        # TODO: special support for `is` and `is not` can be removed once
+        # dynamic dispatching is supported.
+        print 'is not'
 
     def visit_Eq(self, node):
         return '__eq__'
