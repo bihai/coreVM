@@ -103,6 +103,8 @@ class bool(object):
         """
         return __call(bool, res_)
 
+    # TODO: Equality methods can be placed under `object` once
+    # dynamic dispatching is supported.
     def __eq__(self, other):
         """
         ### BEGIN VECTOR ###
