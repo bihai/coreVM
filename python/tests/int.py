@@ -24,3 +24,18 @@ if 100 / 10 <= 100 / 9:
 
 if 123 * 321 >= 321 * 123:
     print 'Multiplication is commutative'
+
+if 1 or 0:
+    print '1 or 0 == True'
+
+if 0 or 0:
+    print 'This cannot be said'
+
+if 1 and 0:
+    print 'This is a secret'
+
+if 0 and 0:
+    print 'This cannot be said too'
+
+if 1 and 2 and 3 or 4:
+    print 'Hello'
