@@ -535,7 +535,8 @@ class BytecodeGenerator(ast.NodeVisitor):
                 jmp_lengths.append(len(self.__current_vector()))
 
             current_length = len(self.__current_vector())
-            self.__add_instr('cldobj', self.__get_encoding_id('True'), self.__get_encoding_id('False'))
+            self.__add_instr('cldobj',
+                self.__get_encoding_id('True'), self.__get_encoding_id('False'))
 
             for jmp_length in jmp_lengths:
                 length_diff = current_length - jmp_length
@@ -566,7 +567,8 @@ class BytecodeGenerator(ast.NodeVisitor):
 
             self.__add_instr('ldobj2', right_name_id, 0)
             self.__add_instr('gethndl', 0, 0)
-            self.__add_instr('cldobj', self.__get_encoding_id('True'), self.__get_encoding_id('False'))
+            self.__add_instr('cldobj',
+                self.__get_encoding_id('True'), self.__get_encoding_id('False'))
 
     def visit_BinOp(self, node):
         self.visit(node.right)
@@ -764,13 +766,15 @@ class BytecodeGenerator(ast.NodeVisitor):
         # TODO: logic can be placed under `object.__eq__` once
         # dynamic dispatching is supported.
         self.__add_instr('objeq', 0, 0)
-        self.__add_instr('cldobj', self.__get_encoding_id('True'), self.__get_encoding_id('False'))
+        self.__add_instr('cldobj',
+            self.__get_encoding_id('True'), self.__get_encoding_id('False'))
 
     def visit_IsNot(self, node):
         # TODO: logic can be placed under `object.__eq__` once
         # dynamic dispatching is supported.
         self.__add_instr('objneq', 0, 0)
-        self.__add_instr('cldobj', self.__get_encoding_id('True'), self.__get_encoding_id('False'))
+        self.__add_instr('cldobj',
+            self.__get_encoding_id('True'), self.__get_encoding_id('False'))
 
     def visit_In(self, node):
         pass
