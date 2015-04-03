@@ -506,8 +506,6 @@ class BytecodeGenerator(ast.NodeVisitor):
 
         assert isinstance(node.op, ast.And) or isinstance(node.op, ast.Or)
 
-        op_instr = 'land' if isinstance(node.op, ast.And) else 'lor'
-
         if isinstance(node.op, ast.Or):
             jmp_lengths = []
 
