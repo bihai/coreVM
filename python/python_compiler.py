@@ -508,41 +508,67 @@ class BytecodeGenerator(ast.NodeVisitor):
 
         op_instr = 'land' if isinstance(node.op, ast.And) else 'lor'
 
-        jmp_lengths = []
+        if isinstance(node.op, ast.Or):
+            jmp_lengths = []
 
-        self.visit(node.values[0])
-        self.__add_instr('stobj2', left_name_id, 0)
+            self.visit(node.values[0])
+            self.__add_instr('stobj2', left_name_id, 0)
 
-        self.visit(node.values[1])
-        self.__add_instr('stobj2', right_name_id, 0)
+            self.visit(node.values[1])
+            self.__add_instr('stobj2', right_name_id, 0)
 
-        self.__add_instr('ldobj2', left_name_id, 0)
-        self.__add_instr('gethndl', 0, 0)
-        self.__add_instr('ldobj2', right_name_id, 0)
-        self.__add_instr('gethndl', 0, 0)
-        self.__add_instr(op_instr, 0, 0)
-        self.__add_instr('jmpif', 0, 0)
-
-        jmp_lengths.append(len(self.__current_vector()))
-
-        for i in xrange(2, len(node.values)):
-            self.visit(node.values[i])
-
+            self.__add_instr('ldobj2', left_name_id, 0)
             self.__add_instr('gethndl', 0, 0)
-            self.__add_instr('bool', 0, 0)
-            self.__add_instr(op_instr, 0, 0)
+            self.__add_instr('ldobj2', right_name_id, 0)
+            self.__add_instr('gethndl', 0, 0)
+            self.__add_instr('lor', 0, 0)
             self.__add_instr('jmpif', 0, 0)
 
             jmp_lengths.append(len(self.__current_vector()))
 
-        self.__add_instr('cldobj', self.__get_encoding_id('True'), self.__get_encoding_id('False'))
-        current_length = len(self.__current_vector())
+            for i in xrange(2, len(node.values)):
+                self.visit(node.values[i])
 
-        for jmp_length in jmp_lengths:
-            length_diff = current_length - jmp_length
+                self.__add_instr('gethndl', 0, 0)
+                self.__add_instr('bool', 0, 0)
+                self.__add_instr('lor', 0, 0)
+                self.__add_instr('jmpif', 0, 0)
 
-            self.__current_vector()[jmp_length - 1] = Instr(
-                self.instr_str_to_code_map['jmpif'], length_diff, 0)
+                jmp_lengths.append(len(self.__current_vector()))
+
+            current_length = len(self.__current_vector())
+            self.__add_instr('cldobj', self.__get_encoding_id('True'), self.__get_encoding_id('False'))
+
+            for jmp_length in jmp_lengths:
+                length_diff = current_length - jmp_length
+
+                self.__current_vector()[jmp_length - 1] = Instr(
+                    self.instr_str_to_code_map['jmpif'], length_diff, 0)
+        elif isinstance(node.op, ast.And):
+            self.visit(node.values[0])
+            self.__add_instr('stobj2', left_name_id, 0)
+
+            self.visit(node.values[1])
+            self.__add_instr('stobj2', right_name_id, 0)
+
+            self.__add_instr('ldobj2', left_name_id, 0)
+            self.__add_instr('gethndl', 0, 0)
+            self.__add_instr('ldobj2', right_name_id, 0)
+            self.__add_instr('gethndl', 0, 0)
+            self.__add_instr('land', 0, 0)
+            self.__add_instr('sethndl', 0, 0) # store in right
+
+            for i in xrange(2, len(node.values)):
+                self.visit(node.values[i])
+                self.__add_instr('gethndl', 0, 0)
+                self.__add_instr('ldobj2', right_name_id, 0)
+                self.__add_instr('gethndl', 0, 0)
+                self.__add_instr('land', 0, 0)
+                self.__add_instr('sethndl', 0, 0) # store in right
+
+            self.__add_instr('ldobj2', right_name_id, 0)
+            self.__add_instr('gethndl', 0, 0)
+            self.__add_instr('cldobj', self.__get_encoding_id('True'), self.__get_encoding_id('False'))
 
     def visit_BinOp(self, node):
         self.visit(node.right)
