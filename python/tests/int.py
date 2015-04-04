@@ -44,7 +44,7 @@ v %= 5
 print v
 
 w = 23
-w *= 3
+w **= 3
 print w
 
 x = 5000
