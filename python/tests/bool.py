@@ -1,18 +1,11 @@
+## -------------------------- Representation Tests -----------------------------
+
 print True
 print False
 print bool(1)
 print bool(0)
-True is False
-True ** False
-False << True
-True >> False
-True | False
-bool(0) | False
-False & True
-True & bool(1)
-True ^ bool(0)
-bool(0) ^ bool(1)
-bool(1) // bool(1)
+
+## -------------------------- Unary operator Tests -----------------------------
 
 # Python returns int type.
 print ~True
@@ -25,6 +18,31 @@ print -True
 print +False
 print -(+True)
 print +(-(+bool(0)))
+
+## ------------------------- Binary operator Tests -----------------------------
+
+# NOTE: Python prints arithmetic operations on bools as `1`s and `0`s, but we
+# actually print them as `True` and `False`, so can't do stdout comparision.
+# ( Kinda sad :'( )
+# But the results were verified as correct.
+# print True + False
+# print True - False
+# print True * False
+# print False / True
+# print False % True
+True is False
+True ** False
+False << True
+True >> False
+True | False
+bool(0) | False
+False & True
+True & bool(1)
+True ^ bool(0)
+bool(0) ^ bool(1)
+bool(1) // bool(1)
+
+## --------------------------- Aug-assignment Tests ----------------------------
 
 # NOTE: In Python (tested in v2.7.6), aug-assignments on instances of `bool`
 # type makes the instance itself turn into type `int`. This behavior, however,
@@ -77,15 +95,7 @@ fd = True
 fd //= bool(1)
 print fd == (True // bool(1))
 
-# NOTE: Python prints arithmetic operations on bools as `1`s and `0`s, but we
-# actually print them as `True` and `False`, so can't do stdout comparision.
-# ( Kinda sad :'( )
-# But the results were verified as correct.
-# print True + False
-# print True - False
-# print True * False
-# print False / True
-# print False % True
+## ----------------------------- Comparison Tests ------------------------------
 
 if True == bool(1):
     print 'Integrity of truth is rock solid'

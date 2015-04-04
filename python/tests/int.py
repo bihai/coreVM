@@ -1,5 +1,20 @@
+## -------------------------- Representation Tests -----------------------------
+
 print 1234567890
 print int(987654321)
+
+## -------------------------- Unary operator Tests -----------------------------
+
+print not 1
+print not 0
+
+print -1
+print +0
+print -(+123)
+print +(-(+321))
+
+## ------------------------- Binary operator Tests -----------------------------
+
 print 1 + 2
 print 987654321 - 123456789
 print 567 * 654
@@ -15,13 +30,7 @@ print 5 // 2
 print ~1
 print ~0
 
-print not 1
-print not 0
-
-print -1
-print +0
-print -(+123)
-print +(-(+321))
+## --------------------------- Aug-assignment Tests ----------------------------
 
 i = 1
 i += 3
@@ -70,6 +79,8 @@ print zelda
 fd = 368
 fd //= 5
 print fd
+
+## ----------------------------- Comparison Tests ------------------------------
 
 if 1 == 1:
     print 'You cannot argue with that'
