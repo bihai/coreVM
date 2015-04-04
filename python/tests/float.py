@@ -15,6 +15,34 @@ print -(9.999999)
 print +10.123456
 print +(-(-(123.725197)))
 
+i = 1.34
+i += 3.585739
+print i
+
+j = 111.555555
+j -= 110.444444
+print j
+
+k = 123.554
+k *= 321.649
+print k
+
+u = 777.777777
+u /= 7
+print u
+
+v = 639.0
+v %= 5.0
+print v == float(639.0 % 5.0)
+
+w = 23.444
+w **= 3.59
+print w
+
+fd = 368.5
+fd //= 5.0
+print fd == int(368 // 5.0)
+
 # TODO: [COREVM-196] Modulus operator for float type inaccurate
 #print 100.000001 % 33.000000
 
