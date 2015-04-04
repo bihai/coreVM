@@ -4,6 +4,7 @@ print 1.329431 + 5.953167
 print 99.838301 - 99.000123
 print 123.456 * 987.654
 print 999.666333 / 3.00
+print 9.234 ** 4.76
 
 # NOTE: We cannot simply do `-9.999999` here because the Python `ast` module
 # treats that as a single number instead of a unary negation operator applied
