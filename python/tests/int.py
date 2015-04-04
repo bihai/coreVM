@@ -12,7 +12,6 @@ print 123 | 321
 print 12345 ^ 67890
 print 10101 & 8563732
 print 5 // 2
-
 print ~1
 print ~0
 
@@ -23,6 +22,54 @@ print -1
 print +0
 print -(+123)
 print +(-(+321))
+
+i = 1
+i += 3
+print i
+
+j = 111
+j -= 110
+print j
+
+k = 123
+k *= 321
+print k
+
+u = 777
+u /= 7
+print u
+
+v = 639
+v %= 5
+print v
+
+w = 23
+w *= 3
+print w
+
+x = 5000
+x <<= 2
+print x
+
+y = 9999999
+y >>= 3
+print y
+
+z = 12345
+z |= 54321
+print z
+
+zeta = 85638
+zeta ^= 00001
+print zeta
+
+zelda = 55555
+zelda &= 7654321
+print zelda
+
+fd = 368
+fd //= 5
+print fd
 
 if 1 == 1:
     print 'You cannot argue with that'
