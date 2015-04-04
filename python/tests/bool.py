@@ -12,6 +12,7 @@ False & True
 True & bool(1)
 True ^ bool(0)
 bool(0) ^ bool(1)
+bool(1) // bool(1)
 
 # Python returns int type.
 print ~True

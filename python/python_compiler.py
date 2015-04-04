@@ -781,6 +781,9 @@ class BytecodeGenerator(ast.NodeVisitor):
     def visit_BitAnd(self, node):
         pass
 
+    def visit_FloorDiv(self, node):
+        pass
+
     """ ---------------------------- unaryop ------------------------------- """
 
     def visit_Invert(self, node):

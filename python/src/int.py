@@ -214,6 +214,23 @@ class int(object):
         """
         return __call(int, res_)
 
+    def __floordiv__(self, value):
+        """
+        ### BEGIN VECTOR ###
+        [ldobj, value, 0]
+        [gethndl, 0, 0]
+        [pop, 0, 0]
+        [ldobj, self, 0]
+        [gethndl, 0, 0]
+        [pop, 0, 0]
+        [div, 0, 0]
+        [new, 0, 0]
+        [sethndl, 0, 0]
+        [stobj, res_, 0]
+        ### END VECTOR ###
+        """
+        return __call(int, res_)
+
     def __invert__(self):
         """
         ### BEGIN VECTOR ###

@@ -11,6 +11,7 @@ print 99 >> 2
 print 123 | 321
 print 12345 ^ 67890
 print 10101 & 8563732
+print 5 // 2
 
 print ~1
 print ~0

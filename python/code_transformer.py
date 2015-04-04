@@ -365,6 +365,9 @@ class CodeTransformer(ast.NodeVisitor):
     def visit_BitAnd(self, node):
         return '__and__'
 
+    def visit_FloorDiv(self, node):
+        return '__floordiv__'
+
     """ ---------------------------- unaryop ------------------------------- """
 
     def visit_Invert(self, node):
