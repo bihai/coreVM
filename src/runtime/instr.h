@@ -226,16 +226,12 @@ enum instr_enum : uint32_t
   SETFLCALL,
 
   /**
-   * <mute, _, _>
-   * Clears the `IS_IMMUTABLE` flag on the object on top of the stack.
-   */
-  MUTE,
-
-  /**
-   * <unmute, _, _>
+   * <setflmute, #, _>
    * Sets the `IS_IMMUTABLE` flag on the object on top of the stack.
+   * The first operand is a boolean value used to set the value of the flag.
+   * A value of `1` sets the flag, `0` otherwise.
    */
-  UNMUTE,
+  SETFLMUTE,
 
 
   /* ------------------------ Control instructions -------------------------- */
@@ -1270,15 +1266,7 @@ public:
 
 // -----------------------------------------------------------------------------
 
-class instr_handler_mute : public instr_handler
-{
-public:
-  virtual void execute(const corevm::runtime::instr&, corevm::runtime::process&);
-};
-
-// -----------------------------------------------------------------------------
-
-class instr_handler_unmute : public instr_handler
+class instr_handler_setflmute : public instr_handler
 {
 public:
   virtual void execute(const corevm::runtime::instr&, corevm::runtime::process&);

@@ -884,42 +884,10 @@ TEST_F(instrs_obj_flag_unittest, TestInstrSETFLCALL)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(instrs_obj_unittest, TestInstrMUTE)
+TEST_F(instrs_obj_flag_unittest, TestInstrSETFLMUTE)
 {
-  corevm::dyobj::dyobj_id id = process::adapter(m_process).help_create_dyobj();
-  m_process.push_stack(id);
-
-  corevm::runtime::instr instr { .code=0, .oprd1=0, .oprd2=0 };
-  execute_instr<corevm::runtime::instr_handler_mute>(instr, 1);
-
-  corevm::dyobj::dyobj_id expected_id = id;
-  corevm::dyobj::dyobj_id actual_id = m_process.top_stack();
-
-  ASSERT_EQ(expected_id, actual_id);
-
-  auto &actual_obj = process::adapter(m_process).help_get_dyobj(actual_id);
-
-  ASSERT_EQ(false, actual_obj.get_flag(corevm::dyobj::DYOBJ_IS_IMMUTABLE));
-}
-
-// -----------------------------------------------------------------------------
-
-TEST_F(instrs_obj_unittest, TestInstrUNMUTE)
-{
-  corevm::dyobj::dyobj_id id = process::adapter(m_process).help_create_dyobj();
-  m_process.push_stack(id);
-
-  corevm::runtime::instr instr { .code=0, .oprd1=0, .oprd2=0 };
-  execute_instr<corevm::runtime::instr_handler_unmute>(instr, 1);
-
-  corevm::dyobj::dyobj_id expected_id = id;
-  corevm::dyobj::dyobj_id actual_id = m_process.top_stack();
-
-  ASSERT_EQ(expected_id, actual_id);
-
-  auto &actual_obj = process::adapter(m_process).help_get_dyobj(actual_id);
-
-  ASSERT_EQ(true, actual_obj.get_flag(corevm::dyobj::DYOBJ_IS_IMMUTABLE));
+  execute_instr_and_assert_result<corevm::runtime::instr_handler_setflmute>(
+    corevm::dyobj::flags::DYOBJ_IS_IMMUTABLE);
 }
 
 // -----------------------------------------------------------------------------
