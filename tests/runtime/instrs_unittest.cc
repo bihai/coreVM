@@ -868,6 +868,14 @@ TEST_F(instrs_obj_flag_unittest, TestInstrSETFLGC)
 
 // -----------------------------------------------------------------------------
 
+TEST_F(instrs_obj_flag_unittest, TestInstrSETFLDEL)
+{
+  execute_instr_and_assert_result<corevm::runtime::instr_handler_setfldel>(
+    corevm::dyobj::flags::DYOBJ_IS_INDELIBLE);
+}
+
+// -----------------------------------------------------------------------------
+
 TEST_F(instrs_obj_unittest, TestInstrMUTE)
 {
   corevm::dyobj::dyobj_id id = process::adapter(m_process).help_create_dyobj();

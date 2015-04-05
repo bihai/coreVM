@@ -210,6 +210,14 @@ enum instr_enum : uint32_t
   SETFLGC,
 
   /**
+   * <setfldel, #, _>
+   * Sets the `IS_INDELIBLE` flag on the object on top of the stack.
+   * The first operand is a boolean vlaue used to set the value of the flag.
+   * A value of `1` sets the flag, `0` otherwise.
+   */
+  SETFLDEL,
+
+  /**
    * <mute, _, _>
    * Clears the `IS_IMMUTABLE` flag on the object on top of the stack.
    */
@@ -1231,6 +1239,14 @@ public:
 // -----------------------------------------------------------------------------
 
 class instr_handler_setflgc : public instr_handler
+{
+public:
+  virtual void execute(const corevm::runtime::instr&, corevm::runtime::process&);
+};
+
+// -----------------------------------------------------------------------------
+
+class instr_handler_setfldel : public instr_handler
 {
 public:
   virtual void execute(const corevm::runtime::instr&, corevm::runtime::process&);
