@@ -218,6 +218,14 @@ enum instr_enum : uint32_t
   SETFLDEL,
 
   /**
+   * <setflcall, #, _>
+   * Sets the `IS_NON_CALLABLE` flag on the object on top of the stack.
+   * The first operand is a boolean value used to set the value of the flag.
+   * A value of `1` sets the flag, `0` otherwise.
+   */
+  SETFLCALL,
+
+  /**
    * <mute, _, _>
    * Clears the `IS_IMMUTABLE` flag on the object on top of the stack.
    */
@@ -1247,6 +1255,14 @@ public:
 // -----------------------------------------------------------------------------
 
 class instr_handler_setfldel : public instr_handler
+{
+public:
+  virtual void execute(const corevm::runtime::instr&, corevm::runtime::process&);
+};
+
+// -----------------------------------------------------------------------------
+
+class instr_handler_setflcall : public instr_handler
 {
 public:
   virtual void execute(const corevm::runtime::instr&, corevm::runtime::process&);

@@ -104,6 +104,7 @@ corevm::runtime::instr_handler_meta::instr_info_map {
   { corevm::runtime::instr_enum::GETOBJ,    { .num_oprd=0, .str="getobj",    .handler=std::make_shared<corevm::runtime::instr_handler_getobj>()    } },
   { corevm::runtime::instr_enum::SETFLGC,   { .num_oprd=1, .str="setflgc",   .handler=std::make_shared<corevm::runtime::instr_handler_setflgc>()   } },
   { corevm::runtime::instr_enum::SETFLDEL,  { .num_oprd=1, .str="setfldel",  .handler=std::make_shared<corevm::runtime::instr_handler_setfldel>()  } },
+  { corevm::runtime::instr_enum::SETFLCALL, { .num_oprd=1, .str="setflcall", .handler=std::make_shared<corevm::runtime::instr_handler_setflcall>() } },
   { corevm::runtime::instr_enum::MUTE,      { .num_oprd=1, .str="mute",      .handler=std::make_shared<corevm::runtime::instr_handler_mute>()      } },
   { corevm::runtime::instr_enum::UNMUTE,    { .num_oprd=1, .str="unmute",    .handler=std::make_shared<corevm::runtime::instr_handler_unmute>()    } },
 
@@ -1049,6 +1050,27 @@ corevm::runtime::instr_handler_setfldel::execute(
   else
   {
     obj.clear_flag(corevm::dyobj::flags::DYOBJ_IS_INDELIBLE);
+  }
+}
+
+// -----------------------------------------------------------------------------
+
+void
+corevm::runtime::instr_handler_setflcall::execute(
+  const corevm::runtime::instr& instr, corevm::runtime::process& process)
+{
+  corevm::dyobj::dyobj_id id = process.top_stack();
+  auto &obj = corevm::runtime::process::adapter(process).help_get_dyobj(id);
+
+  bool on_off = static_cast<bool>(instr.oprd1);
+
+  if (on_off)
+  {
+    obj.set_flag(corevm::dyobj::flags::DYOBJ_IS_NON_CALLABLE);
+  }
+  else
+  {
+    obj.clear_flag(corevm::dyobj::flags::DYOBJ_IS_NON_CALLABLE);
   }
 }
 

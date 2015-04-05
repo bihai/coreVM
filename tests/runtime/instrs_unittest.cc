@@ -876,6 +876,14 @@ TEST_F(instrs_obj_flag_unittest, TestInstrSETFLDEL)
 
 // -----------------------------------------------------------------------------
 
+TEST_F(instrs_obj_flag_unittest, TestInstrSETFLCALL)
+{
+  execute_instr_and_assert_result<corevm::runtime::instr_handler_setflcall>(
+    corevm::dyobj::flags::DYOBJ_IS_NON_CALLABLE);
+}
+
+// -----------------------------------------------------------------------------
+
 TEST_F(instrs_obj_unittest, TestInstrMUTE)
 {
   corevm::dyobj::dyobj_id id = process::adapter(m_process).help_create_dyobj();
