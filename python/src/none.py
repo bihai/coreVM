@@ -16,9 +16,12 @@ class NoneType(object):
         return True
 
 
-# Global `None` object.
+## Global `None` object.
+#
 # NOTE: In Python it's a syntax error to assign a value to the name `None`,
 # so we cannot do `None = __call(NoneType)` here.
+#
+# TODO: Set the appropriate flags on the global object `None`.
 __call(NoneType)
 """
 ### BEGIN VECTOR ###
