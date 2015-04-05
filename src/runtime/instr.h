@@ -88,18 +88,6 @@ enum instr_enum : uint32_t
   DELATTR,
 
   /**
-   * <mute, _, _>
-   * Clears the `IS_IMMUTABLE` flag on the object on top of the stack.
-   */
-  MUTE,
-
-  /**
-   * <unmute, _, _>
-   * Sets the `IS_IMMUTABLE` flag on the object on top of the stack.
-   */
-  UNMUTE,
-
-  /**
    * <pop, _, _>
    * Pops the object on top of the stack.
    */
@@ -211,6 +199,28 @@ enum instr_enum : uint32_t
    * Pops the top of the eval stack, and put its value on the object stack.
    */
   GETOBJ,
+
+  /**
+   * <setflgc, #, _>
+   * Sets the `IS_NOT_GARBAGE_COLLECTIBLE` flag on the object on top of the
+   * stack.
+   * The first operand is a boolean value used to set the value of the flag.
+   * A value of `1` sets the flag, `0` otherwise.
+   */
+  SETFLGC,
+
+  /**
+   * <mute, _, _>
+   * Clears the `IS_IMMUTABLE` flag on the object on top of the stack.
+   */
+  MUTE,
+
+  /**
+   * <unmute, _, _>
+   * Sets the `IS_IMMUTABLE` flag on the object on top of the stack.
+   */
+  UNMUTE,
+
 
   /* ------------------------ Control instructions -------------------------- */
 
@@ -1092,22 +1102,6 @@ public:
 
 // -----------------------------------------------------------------------------
 
-class instr_handler_mute : public instr_handler
-{
-public:
-  virtual void execute(const corevm::runtime::instr&, corevm::runtime::process&);
-};
-
-// -----------------------------------------------------------------------------
-
-class instr_handler_unmute : public instr_handler
-{
-public:
-  virtual void execute(const corevm::runtime::instr&, corevm::runtime::process&);
-};
-
-// -----------------------------------------------------------------------------
-
 class instr_handler_pop : public instr_handler
 {
 public:
@@ -1229,6 +1223,30 @@ public:
 // -----------------------------------------------------------------------------
 
 class instr_handler_getobj : public instr_handler
+{
+public:
+  virtual void execute(const corevm::runtime::instr&, corevm::runtime::process&);
+};
+
+// -----------------------------------------------------------------------------
+
+class instr_handler_setflgc : public instr_handler
+{
+public:
+  virtual void execute(const corevm::runtime::instr&, corevm::runtime::process&);
+};
+
+// -----------------------------------------------------------------------------
+
+class instr_handler_mute : public instr_handler
+{
+public:
+  virtual void execute(const corevm::runtime::instr&, corevm::runtime::process&);
+};
+
+// -----------------------------------------------------------------------------
+
+class instr_handler_unmute : public instr_handler
 {
 public:
   virtual void execute(const corevm::runtime::instr&, corevm::runtime::process&);
