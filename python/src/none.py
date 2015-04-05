@@ -12,6 +12,9 @@ class NoneType(object):
     def __str__(self):
         return __call(str, 'None')
 
+    def __not__(self):
+        return True
+
 
 # Global `None` object.
 # NOTE: In Python it's a syntax error to assign a value to the name `None`,
