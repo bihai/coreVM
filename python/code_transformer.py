@@ -275,7 +275,7 @@ class CodeTransformer(ast.NodeVisitor):
         else:
             # TODO: special support for `is` and `is not` can be removed once
             # dynamic dispatching is supported.
-            base_str = '{indentation}{left} {op} {comparator}'.format(
+            base_str = '{indentation}({left} {op} {comparator})'.format(
               indentation=self.__indentation(),
               left=self.visit(node.left),
               op=self.visit(op),
@@ -406,7 +406,7 @@ class CodeTransformer(ast.NodeVisitor):
     def visit_IsNot(self, node):
         # TODO: special support for `is` and `is not` can be removed once
         # dynamic dispatching is supported.
-        print 'is not'
+        return 'is not'
 
     def visit_Eq(self, node):
         return '__eq__'
