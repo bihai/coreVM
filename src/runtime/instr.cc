@@ -52,7 +52,9 @@ std::ostream& operator<<(
 {
   ost << std::hex << std::showbase;
   ost << std::setiosflags(std::ios::left);
-  ost << std::setw(6) << instr.code << " " << std::setw(6) << instr.oprd1 << " " << std::setw(6) << instr.oprd2;
+  ost << std::setw(6) << instr.code << " ";
+  ost << std::setw(6) << instr.oprd1 << " ";
+  ost << std::setw(6) << instr.oprd2;
   ost << std::resetiosflags(std::ios::adjustfield);
   ost << std::noshowbase << std::dec;
   return ost;
