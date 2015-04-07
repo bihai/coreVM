@@ -261,9 +261,14 @@ class CodeTransformer(ast.NodeVisitor):
         for i in xrange(len(node.keys)):
             base_str += '{indentation}{key}: {value},\n'.format(
                 indentation=self.__indentation(),
-                key='__call(dict.__dict_ObjectHashPair, {obj})'.format(
-                    obj=self.visit(node.keys[i])),
-                value=self.visit(node.values[i]))
+                key='__call({obj}.__hash__)'.format(
+                    obj=self.visit(node.keys[i])
+                ),
+                value='__call(dict.__dict_KeyValuePair, {key}, {value})'.format(
+                    key=self.visit(node.keys[i]),
+                    value=self.visit(node.values[i])
+                )
+            )
 
         self.__dedent()
 

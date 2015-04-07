@@ -661,7 +661,7 @@ class BytecodeGenerator(ast.NodeVisitor):
             self.__add_instr('ldobj2', self.__get_encoding_id(dict_name), 0)
             self.__add_instr('gethndl', 0, 0)
             self.__add_instr('ldobj2', self.__get_encoding_id(key_name), 0)
-            self.__add_instr('putobj', 0, 0)
+            self.__add_instr('gethndl', 0, 0)
             self.__add_instr('ldobj2', self.__get_encoding_id(value_name), 0)
             self.__add_instr('putobj', 0, 0)
 
@@ -669,8 +669,6 @@ class BytecodeGenerator(ast.NodeVisitor):
 
             self.__add_instr('ldobj2', self.__get_encoding_id(dict_name), 0)
             self.__add_instr('sethndl', 0, 0)
-
-        self.__add_instr('ldobj2', self.__get_encoding_id(dict_name), 0)
 
     def visit_Compare(self, node):
         # Note: Only supports one comparison now.

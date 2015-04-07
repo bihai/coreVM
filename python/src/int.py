@@ -30,6 +30,9 @@ class int(object):
         str_obj = __call(str, value)
         return str_obj
 
+    def __repr__(self):
+        return __call(self.__str__)
+
     def __add__(self, value):
         """
         ### BEGIN VECTOR ###
