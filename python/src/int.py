@@ -12,6 +12,9 @@ class int(object):
         ### END VECTOR ###
         """
 
+    def __hash__(self):
+        return __call(int, self)
+
     def __str__(self):
         """
         ### BEGIN VECTOR ###
