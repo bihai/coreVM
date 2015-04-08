@@ -40,6 +40,18 @@ class dict(object):
         """
         return __call(int, res_)
 
+    def keys(self):
+        res = __call(list, [])
+        for item in __call(self.items):
+            __call(res.append, item.key)
+        return res
+
+    def values(self):
+        res = __call(list, [])
+        for item in __call(self.items):
+            __call(res.append, item.value)
+        return res
+
     def items(self):
         # TODO: Convert `__dict_KeyValuePair` instances to tuples.
         """

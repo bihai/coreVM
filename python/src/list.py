@@ -16,14 +16,15 @@ class list(object):
         """
         ### BEGIN VECTOR ###
         [ldobj, self, 0]
-        [putobj, 0, 0]
-        [ldobj, arg, 0]
         [gethndl, 0, 0]
-        [pop, 0, 0]
+        [ldobj, arg, 0]
+        [putobj, 0, 0]
         [aryapnd, 0, 0]
+        [ldobj, self, 0]
         [sethndl, 0, 0]
         ### END VECTOR ###
         """
+        return None
 
     def __len__(self):
         """
