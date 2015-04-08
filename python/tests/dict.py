@@ -1,4 +1,6 @@
 print {
   123: 321,
-  11: 'Hello World!'
+  99: {
+    8: ['Welcome', 'to', 'Python', {123: 123.654321}]
+  }
 }

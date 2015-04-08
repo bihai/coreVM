@@ -77,3 +77,6 @@ class dict(object):
 
         __call(res.__add__, __call(str, '}'))
         return res
+
+    def __repr__(self):
+        return __call(self.__str__)
