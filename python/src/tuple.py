@@ -25,6 +25,21 @@ class tuple(object):
         """
         return __call(int, res_)
 
+    def __add__(self, other):
+        """
+        ### BEGIN VECTOR ###
+        [ldobj, self, 0]
+        [gethndl, 0, 0]
+        [ldobj, other, 0]
+        [gethndl, 0, 0]
+        [arymrg, 0, 0]
+        [new, 0, 0]
+        [sethndl, 0, 0]
+        [stobj, res_, 0]
+        ### END VECTOR ###
+        """
+        return __call(tuple, res_)
+
     def __str__(self):
         size = __call(self.__len__)
         top_index = __call(size.__sub__, 1)
