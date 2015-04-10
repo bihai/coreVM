@@ -852,6 +852,8 @@ TEST_F(instrs_obj_unittest, TestInstrSWAP)
   m_process.push_stack(id2);
   m_process.push_stack(id1);
 
+  ASSERT_EQ(id1, m_process.top_stack());
+
   execute_instr<corevm::runtime::instr_handler_swap>(instr, 2);
 
   corevm::dyobj::dyobj_id top_id = m_process.top_stack();
