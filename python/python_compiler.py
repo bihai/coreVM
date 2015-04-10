@@ -795,6 +795,8 @@ class BytecodeGenerator(ast.NodeVisitor):
             self.__add_instr('swap', 0, 0)
             self.__add_instr('setattr', self.__get_encoding_id(node.attr), 0, loc=Loc.from_node(node))
         else:
+            # NOTE: if this ever happens, then we have to take that type into
+            # consideration.
             raise Exception('Unexpected type for node.ctx in visit_Attribute')
 
     """ ---------------------------- boolop -------------------------------- """
