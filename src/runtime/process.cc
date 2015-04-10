@@ -369,8 +369,10 @@ corevm::runtime::process::swap_stack()
   std::advance(itr, m_dyobj_stack.size() - 2);
   std::advance(itr2, m_dyobj_stack.size() - 1);
 
+#if __DEBUG__
   ASSERT(itr != m_dyobj_stack.end());
   ASSERT(itr2 != m_dyobj_stack.end());
+#endif
 
   std::swap(*itr, *itr2);
 }
