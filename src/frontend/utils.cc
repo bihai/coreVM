@@ -35,6 +35,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <utility>
 
 
+// -----------------------------------------------------------------------------
+
 corevm::runtime::vector
 corevm::frontend::get_vector_from_json(const JSON& json)
 {
@@ -202,6 +204,34 @@ corevm::frontend::get_v0_1_locs_schema_definition()
               "\"lineno\","
               "\"col_offset\""
             "]"
+          "}"
+        "}"
+      "}"
+    "}"
+  );
+
+  return def;
+}
+
+// -----------------------------------------------------------------------------
+
+const std::string
+corevm::frontend::get_v0_1_catch_sites_definition()
+{
+  static const std::string def(
+    "{"
+      "\"type\": \"array\","
+      "\"items\": {"
+        "\"type\": \"object\","
+        "\"properties\": {"
+          "\"from\": {"
+            "\"type\": \"integer\""
+          "},"
+          "\"to\": {"
+            "\"type\": \"integer\""
+          "},"
+          "\"dst\": {"
+            "\"type\": \"integer\""
           "}"
         "}"
       "}"
