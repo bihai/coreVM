@@ -170,7 +170,6 @@ corevm::runtime::instr_handler_meta::instr_set[INSTR_CODE_MAX] {
   /* JMPIF     */    { .num_oprd=1, .str="jmpif",     .handler=std::make_shared<corevm::runtime::instr_handler_jmpif>()     },
   /* JMPR      */    { .num_oprd=1, .str="jmpr",      .handler=std::make_shared<corevm::runtime::instr_handler_jmpr>()      },
   /* EXC       */    { .num_oprd=0, .str="exc",       .handler=std::make_shared<corevm::runtime::instr_handler_exc>()       },
-  /* EXC2      */    { .num_oprd=0, .str="exc2",      .handler=std::make_shared<corevm::runtime::instr_handler_exc2>()      },
   /* EXIT      */    { .num_oprd=1, .str="exit",      .handler=std::make_shared<corevm::runtime::instr_handler_exit>()      },
 
   /* ------------------------- Function instructions ------------------------ */
@@ -1328,15 +1327,6 @@ corevm::runtime::instr_handler_jmpr::execute(
 
 void
 corevm::runtime::instr_handler_exc::execute(
-  const corevm::runtime::instr& instr, corevm::runtime::process& process)
-{
-  // TODO: to be implemented.
-}
-
-// -----------------------------------------------------------------------------
-
-void
-corevm::runtime::instr_handler_exc2::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
 {
   // TODO: to be implemented.

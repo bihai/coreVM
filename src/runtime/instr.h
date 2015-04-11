@@ -285,15 +285,9 @@ enum instr_enum : uint32_t
 
   /**
    * <exc, _, _>
-   * Raise an empty exception.
-   */
-  EXC,
-
-  /**
-   * <exc2, _, _>
    * Pop the object at the top and raise it as an exception.
    */
-  EXC2,
+  EXC,
 
   /**
    * <exit, code, _>
@@ -1367,14 +1361,6 @@ public:
 // -----------------------------------------------------------------------------
 
 class instr_handler_exc : public instr_handler
-{
-public:
-  virtual void execute(const corevm::runtime::instr&, corevm::runtime::process&);
-};
-
-// -----------------------------------------------------------------------------
-
-class instr_handler_exc2 : public instr_handler
 {
 public:
   virtual void execute(const corevm::runtime::instr&, corevm::runtime::process&);

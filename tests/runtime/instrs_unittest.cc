@@ -1571,13 +1571,6 @@ TEST_F(instrs_control_instrs_test, TestInstrEXC)
 
 // -----------------------------------------------------------------------------
 
-TEST_F(instrs_control_instrs_test, TestInstrEXC2)
-{
-  // TODO: [COREVM-49] Complete instruction set and implementations
-}
-
-// -----------------------------------------------------------------------------
-
 TEST_F(instrs_control_instrs_test, TestInstrEXIT)
 {
   auto sig_handler = [](int signum) {
