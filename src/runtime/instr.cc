@@ -78,14 +78,23 @@ static corevm::dyobj::attr_key
 get_attr_key(
   corevm::runtime::process& process,
   corevm::runtime::compartment_id compartment_id,
-  uint64_t str_key)
+  uint64_t str_key,
+  bool from_current_compartment=false)
 {
   corevm::runtime::compartment *compartment=nullptr;
   process.get_compartment(compartment_id, &compartment);
 
-#if __DEBUG__
-  ASSERT(compartment);
-#endif
+  if (!compartment)
+  {
+    if (!from_current_compartment)
+    {
+      THROW(corevm::runtime::compartment_not_found_error(compartment_id));
+    }
+    else
+    {
+      ASSERT(compartment);
+    }
+  }
 
   std::string attr_str;
   compartment->get_encoding_string(str_key, &attr_str);
@@ -104,10 +113,8 @@ get_attr_key_from_current_compartment(
 {
   const corevm::runtime::frame& frame = process.top_frame();
 
-  corevm::runtime::compartment *compartment=nullptr;
-  process.get_compartment(frame.closure_ctx().compartment_id, &compartment);
-
-  return get_attr_key(process, frame.closure_ctx().compartment_id, str_key);
+  return get_attr_key(
+    process, frame.closure_ctx().compartment_id, str_key, true);
 }
 
 // -----------------------------------------------------------------------------
