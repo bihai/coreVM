@@ -82,6 +82,21 @@ class Loc(object):
         return Loc(node.lineno, node.col_offset)
 
 
+class CatchSite(object):
+
+    def __init__(self, from_value, to_value, dst_value):
+        self.from_value = int(from_value)
+        self.to_value = int(to_value)
+        self.dst_value = int(dst_value)
+
+    def to_json(self):
+        return {
+            'from': self.from_value,
+            'to': self.to_value,
+            'dst': self.dst_value
+        }
+
+
 class Closure(object):
 
     # Has to be a non-zero value.
@@ -93,6 +108,7 @@ class Closure(object):
         self.parent_name = parent_name
         self.vector = []
         self.locs = {} # mapping of instr index to loc info
+        self.catch_sites = []
         self.closure_id = Closure.__closure_id
         self.parent_id = parent_id
         Closure.__closure_id += 1
@@ -122,6 +138,12 @@ class Closure(object):
                     }
                 }
                 for index, loc in self.locs.iteritems()
+            ]
+
+        if self.catch_sites:
+            json_dict['catch_sites'] = [
+                catch_site.to_json()
+                for catch_site in self.catch_sites
             ]
 
         return json_dict
@@ -223,6 +245,9 @@ class BytecodeGenerator(ast.NodeVisitor):
 
         if loc:
             self.__current_closure().add_loc(len(self.__current_vector()) - 1, loc)
+
+    def __add_catch_site(self, catch_site):
+        self.__current_closure().catch_sites.append(catch_site)
 
     def __mingle_name(self, name):
         # TDOO: [COREVM-177] Add support for name mingling in Python compiler
@@ -502,6 +527,66 @@ class BytecodeGenerator(ast.NodeVisitor):
 
         for stmt in node.orelse:
             self.visit(stmt)
+
+    def visit_Raise(self, node):
+        self.visit(node.type)
+        self.__add_instr('exc', 0, 0)
+
+    def visit_TryExcept(self, node):
+        vector_length1 = len(self.__current_vector())
+
+        for stmt in node.body:
+            self.visit(stmt)
+
+        vector_length2 = len(self.__current_vector())
+
+        if node.handlers:
+            self.__add_catch_site(
+                CatchSite(
+                    from_value=vector_length1,
+                    to_value=vector_length2 - 1,
+                    dst_value=vector_length2
+                )
+            )
+
+        for i in xrange(len(node.handlers)):
+            handler = node.handlers[i]
+
+            vector_length3 = len(self.__current_vector())
+
+            self.visit(handler.type)
+            self.__add_instr('excobj', 0, 0)
+            self.__add_instr('getattr', self.__get_encoding_id('__class__'), 0)
+            self.__add_instr('swap', 0, 0)
+            self.__add_instr('objeq', 0, 0)
+
+            self.__add_instr('jmpif', 0, 0)
+
+            vector_length_x = len(self.__current_vector())
+
+            self.__add_instr('excobj', 0, 0)
+            self.__add_instr('exc', 0, 0)
+
+            vector_length_y = len(self.__current_vector())
+
+            length_diff = vector_length_y - vector_length_x
+            self.__current_vector()[vector_length_x - 1] = Instr(
+                self.instr_str_to_code_map['jmpif'], length_diff, 0)
+
+            for stmt in handler.body:
+                self.visit(stmt)
+
+            vector_length4 = len(self.__current_vector())
+
+            dst_value = vector_length4 if i + 1 < len(node.handlers) else 0
+
+            self.__add_catch_site(
+                CatchSite(
+                  from_value=vector_length3,
+                  to_value=vector_length4 - 1,
+                  dst_value=dst_value
+                )
+            )
 
     def visit_Expr(self, node):
         self.visit(node.value)
@@ -1046,6 +1131,7 @@ def main():
         generator.read_from_source('python/src/list.py')
         generator.read_from_source('python/src/dict.py')
         generator.read_from_source('python/src/tuple.py')
+        generator.read_from_source('python/src/exceptions.py')
 
         generator.read_from_source(options.input_file)
 

@@ -290,6 +290,13 @@ enum instr_enum : uint32_t
   EXC,
 
   /**
+   * <excobj, _, _>
+   * Gets the exception object associated with the current frame, and pushes it
+   * on top of the stack.
+   */
+  EXCOBJ,
+
+  /**
    * <exit, code, _>
    * Halts the execution of instructions and exits the program
    * (with an optional exit code).
@@ -1361,6 +1368,14 @@ public:
 // -----------------------------------------------------------------------------
 
 class instr_handler_exc : public instr_handler
+{
+public:
+  virtual void execute(const corevm::runtime::instr&, corevm::runtime::process&);
+};
+
+// -----------------------------------------------------------------------------
+
+class instr_handler_excobj : public instr_handler
 {
 public:
   virtual void execute(const corevm::runtime::instr&, corevm::runtime::process&);
