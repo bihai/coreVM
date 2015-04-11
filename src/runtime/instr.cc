@@ -956,7 +956,7 @@ corevm::runtime::instr_handler_setattrs::execute(
 
   corevm::runtime::frame& frame = process.top_frame();
 
-  corevm::types::native_type_handle hndl = process.get_ntvhndl(src_obj.ntvhndl_key());//frame.pop_eval_stack();
+  corevm::types::native_type_handle hndl = process.get_ntvhndl(src_obj.ntvhndl_key());
   corevm::types::native_type_handle res;
 
   corevm::types::interface_to_map(hndl, res);
@@ -971,7 +971,8 @@ corevm::runtime::instr_handler_setattrs::execute(
   for (auto itr = map.begin(); itr != map.end(); ++itr)
   {
     uint64_t str_key = static_cast<uint64_t>(itr->first);
-    corevm::dyobj::attr_key attr_key = get_attr_key(process, src_obj.closure_ctx().compartment_id, str_key);
+    corevm::dyobj::attr_key attr_key = get_attr_key(
+      process, src_obj.closure_ctx().compartment_id, str_key);
 
     corevm::dyobj::dyobj_id attr_id = static_cast<corevm::dyobj::dyobj_id>(itr->second);
 
@@ -979,8 +980,11 @@ corevm::runtime::instr_handler_setattrs::execute(
 
     if (should_clone)
     {
-      auto cloned_attr_id = corevm::runtime::process::adapter(process).help_create_dyobj();
-      auto& cloned_attr_obj = corevm::runtime::process::adapter(process).help_get_dyobj(cloned_attr_id);
+      auto cloned_attr_id =
+        corevm::runtime::process::adapter(process).help_create_dyobj();
+
+      auto& cloned_attr_obj =
+        corevm::runtime::process::adapter(process).help_get_dyobj(cloned_attr_id);
 
       cloned_attr_obj.copy_from(attr_obj);
       cloned_attr_obj.manager().on_setattr();
