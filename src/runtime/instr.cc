@@ -24,6 +24,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "process.h"
 #include "corevm/macros.h"
+#include "dyobj/util.h"
 #include "types/interfaces.h"
 #include "types/types.h"
 
@@ -99,7 +100,7 @@ get_attr_key(
   std::string attr_str;
   compartment->get_encoding_string(str_key, &attr_str);
 
-  corevm::dyobj::attr_key attr_key = std::hash<std::string>()(attr_str);
+  corevm::dyobj::attr_key attr_key = corevm::dyobj::hash_attr_str(attr_str);
 
   return attr_key;
 }

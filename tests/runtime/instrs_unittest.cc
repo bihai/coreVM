@@ -21,6 +21,7 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 *******************************************************************************/
 #include "dyobj/flags.h"
+#include "dyobj/util.h"
 #include "runtime/closure.h"
 #include "runtime/common.h"
 #include "runtime/invocation_ctx.h"
@@ -236,7 +237,7 @@ TEST_F(instrs_obj_unittest, TestInstrGETATTR)
   corevm::dyobj::dyobj_id id2 = process::adapter(m_process).help_create_dyobj();
 
   auto &obj = process::adapter(m_process).help_get_dyobj(id1);
-  corevm::dyobj::attr_key attr_key = std::hash<std::string>()(attr_str);
+  corevm::dyobj::attr_key attr_key = corevm::dyobj::hash_attr_str(attr_str);
   obj.putattr(attr_key, id2);
   m_process.push_stack(id1);
 
@@ -289,7 +290,7 @@ TEST_F(instrs_obj_unittest, TestInstrSETATTR)
 
   auto &obj = process::adapter(m_process).help_get_dyobj(actual_id);
 
-  corevm::dyobj::attr_key attr_key = std::hash<std::string>()(attr_str);
+  corevm::dyobj::attr_key attr_key = corevm::dyobj::hash_attr_str(attr_str);
 
   ASSERT_TRUE(obj.hasattr(attr_key));
 
@@ -738,9 +739,9 @@ TEST_F(instrs_obj_unittest, TestInstrSETATTRS)
   compartment.set_encoding_map(encoding_map);
   m_process.insert_compartment(compartment);
 
-  corevm::dyobj::attr_key attr_key1 = std::hash<std::string>()(attr_str1);
-  corevm::dyobj::attr_key attr_key2 = std::hash<std::string>()(attr_str2);
-  corevm::dyobj::attr_key attr_key3 = std::hash<std::string>()(attr_str3);
+  corevm::dyobj::attr_key attr_key1 = corevm::dyobj::hash_attr_str(attr_str1);
+  corevm::dyobj::attr_key attr_key2 = corevm::dyobj::hash_attr_str(attr_str2);
+  corevm::dyobj::attr_key attr_key3 = corevm::dyobj::hash_attr_str(attr_str3);
 
   corevm::runtime::closure_ctx ctx {
     .compartment_id = compartment_id,
@@ -816,7 +817,7 @@ TEST_F(instrs_obj_unittest, TestInstrRSETATTRS)
 
   m_process.push_frame(frame);
 
-  corevm::dyobj::attr_key attr_key = std::hash<std::string>()(attr_str);
+  corevm::dyobj::attr_key attr_key = corevm::dyobj::hash_attr_str(attr_str);
 
   corevm::runtime::instr instr {
     .code = 0,
