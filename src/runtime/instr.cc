@@ -1335,45 +1335,46 @@ corevm::runtime::instr_handler_exc::execute(
   while (process.has_frame())
   {
     corevm::runtime::frame& frame = process.top_frame();
-
     corevm::dyobj::dyobj_id exc_obj_id = process.pop_stack();
-
-    corevm::runtime::compartment *compartment = nullptr;
-    process.get_compartment(frame.closure_ctx().compartment_id, &compartment);
-
-#if __DEBUG__
-    ASSERT(compartment);
-#endif
-
-    corevm::runtime::closure *closure = nullptr;
-    compartment->get_closure_by_id(frame.closure_ctx().closure_id, &closure);
-
-#if __DEBUG__
-    ASSERT(closure);
-#endif
-
     corevm::runtime::instr_addr starting_addr = frame.return_addr() + 1;
-    uint32_t index = process.pc() - starting_addr;
-
     uint32_t dst = 0;
 
     if (search_catch_sites)
     {
-      const auto& catch_sites = closure->catch_sites;
+      corevm::runtime::compartment *compartment = nullptr;
+      process.get_compartment(frame.closure_ctx().compartment_id, &compartment);
 
-      auto itr = std::find_if(
-        catch_sites.begin(),
-        catch_sites.end(),
-        [&index](const corevm::runtime::catch_site& catch_site) -> bool {
-          return index >= catch_site.from && index <= catch_site.to;
-        }
-      );
+#if __DEBUG__
+      ASSERT(compartment);
+#endif
 
-      if (itr != catch_sites.end())
+      corevm::runtime::closure *closure = nullptr;
+      compartment->get_closure_by_id(frame.closure_ctx().closure_id, &closure);
+
+#if __DEBUG__
+      ASSERT(closure);
+#endif
+
+      uint32_t index = process.pc() - starting_addr;
+
+      if (search_catch_sites)
       {
-        const corevm::runtime::catch_site& catch_site = *itr;
+        const auto& catch_sites = closure->catch_sites;
 
-        dst = catch_site.dst;
+        auto itr = std::find_if(
+          catch_sites.begin(),
+          catch_sites.end(),
+          [&index](const corevm::runtime::catch_site& catch_site) -> bool {
+            return index >= catch_site.from && index <= catch_site.to;
+          }
+        );
+
+        if (itr != catch_sites.end())
+        {
+          const corevm::runtime::catch_site& catch_site = *itr;
+
+          dst = catch_site.dst;
+        }
       }
     }
 
