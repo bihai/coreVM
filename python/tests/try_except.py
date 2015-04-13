@@ -62,6 +62,58 @@ except YetAnotherException:
 
 ## -----------------------------------------------------------------------------
 
+def welcome():
+    greetings()
+
+try:
+    welcome()
+except Exception:
+    print 'Catching exception through triple calls'
+
+## -----------------------------------------------------------------------------
+
+def explode():
+    raise Exception()
+
+def handle_explosion():
+    try:
+        explode()
+    except Exception:
+        raise AnotherException()
+
+def do_something():
+    try:
+        handle_explosion()
+    except AnotherException:
+        raise YetAnotherException()
+
+def run():
+    try:
+        do_something()
+    except YetAnotherException:
+        print 'Catching triple-nested exception is fun!'
+
+## -----------------------------------------------------------------------------
+
+def handle_explosion2():
+    try:
+        explode()
+    except Exception:
+        print 'Explosion handled'
+
+    # Do some math to calm down after handling an explosion.
+    i = 1 + 2
+
+    explode()
+
+def do_something_again():
+    try:
+        handle_explosion2()
+    except Exception:
+        print 'Explosion handled again'
+
+## -----------------------------------------------------------------------------
+
 # TODO: Run this test when inheritance is supported.
 #try:
 #    raise YetAnotherException()
