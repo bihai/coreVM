@@ -97,6 +97,12 @@ class CatchSite(object):
         }
 
 
+class TryExceptState(object):
+
+    def __init__(self):
+        self.in_try_block = False
+
+
 class Closure(object):
 
     # Has to be a non-zero value.
@@ -193,6 +199,7 @@ class BytecodeGenerator(ast.NodeVisitor):
 
         # states
         self.current_class_name = ''
+        self.try_except_state = TryExceptState()
 
     def read_from_source(self, path):
         with open(path, 'r') as fd:
@@ -530,15 +537,24 @@ class BytecodeGenerator(ast.NodeVisitor):
 
     def visit_Raise(self, node):
         self.visit(node.type)
-        self.__add_instr('exc', 0, 0)
+
+        search_catch_sites_in_current_closure = int(self.try_except_state.in_try_block)
+
+        self.__add_instr('exc', search_catch_sites_in_current_closure, 0)
 
     def visit_TryExcept(self, node):
+        self.try_except_state.in_try_block = True
+
+        # Step in.
         vector_length1 = len(self.__current_vector())
 
         for stmt in node.body:
             self.visit(stmt)
 
         vector_length2 = len(self.__current_vector())
+
+        # Step out.
+        self.try_except_state.in_try_block = False
 
         if node.handlers:
             self.__add_catch_site(
@@ -565,7 +581,7 @@ class BytecodeGenerator(ast.NodeVisitor):
             vector_length_x = len(self.__current_vector())
 
             self.__add_instr('excobj', 0, 0)
-            self.__add_instr('exc', 0, 0)
+            self.__add_instr('exc', 1, 0)
 
             vector_length_y = len(self.__current_vector())
 
@@ -573,8 +589,14 @@ class BytecodeGenerator(ast.NodeVisitor):
             self.__current_vector()[vector_length_x - 1] = Instr(
                 self.instr_str_to_code_map['jmpif'], length_diff, 0)
 
+            # Step in.
+            self.try_except_state.in_try_block = False
+
             for stmt in handler.body:
                 self.visit(stmt)
+
+            # Step out.
+            self.try_except_state.in_try_block = True
 
             vector_length4 = len(self.__current_vector())
 

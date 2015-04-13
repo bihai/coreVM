@@ -1330,6 +1330,8 @@ void
 corevm::runtime::instr_handler_exc::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
 {
+  bool search_catch_sites = static_cast<bool>(instr.oprd1);
+
   while (process.has_frame())
   {
     corevm::runtime::frame& frame = process.top_frame();
@@ -1353,23 +1355,26 @@ corevm::runtime::instr_handler_exc::execute(
     corevm::runtime::instr_addr starting_addr = frame.return_addr() + 1;
     uint32_t index = process.pc() - starting_addr;
 
-    const auto& catch_sites = closure->catch_sites;
-
-    auto itr = std::find_if(
-      catch_sites.begin(),
-      catch_sites.end(),
-      [&index](const corevm::runtime::catch_site& catch_site) -> bool {
-        return index >= catch_site.from && index <= catch_site.to;
-      }
-    );
-
     uint32_t dst = 0;
 
-    if (itr != catch_sites.end())
+    if (search_catch_sites)
     {
-      const corevm::runtime::catch_site& catch_site = *itr;
+      const auto& catch_sites = closure->catch_sites;
 
-      dst = catch_site.dst;
+      auto itr = std::find_if(
+        catch_sites.begin(),
+        catch_sites.end(),
+        [&index](const corevm::runtime::catch_site& catch_site) -> bool {
+          return index >= catch_site.from && index <= catch_site.to;
+        }
+      );
+
+      if (itr != catch_sites.end())
+      {
+        const corevm::runtime::catch_site& catch_site = *itr;
+
+        dst = catch_site.dst;
+      }
     }
 
     if (dst)
@@ -1397,6 +1402,9 @@ corevm::runtime::instr_handler_exc::execute(
         previous_frame.set_exc_obj(exc_obj_id);
 
         process.push_stack(exc_obj_id);
+
+        // Need to search catch sites in the other frames.
+        search_catch_sites = true;
       }
     }
   }

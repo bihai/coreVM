@@ -47,6 +47,21 @@ except Exception:
 
 ## -----------------------------------------------------------------------------
 
+def catch_exception_from_same_level_of_except_block():
+    try:
+        raise AnotherException()
+    except AnotherException:
+        raise YetAnotherException()
+    except YetAnotherException:
+        print 'Catching exception from same level of except blocks is not supported in Python'
+
+try:
+    catch_exception_from_same_level_of_except_block()
+except YetAnotherException:
+    print 'Catching exception from exception raised in except block'
+
+## -----------------------------------------------------------------------------
+
 # TODO: Run this test when inheritance is supported.
 #try:
 #    raise YetAnotherException()

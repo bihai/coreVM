@@ -284,8 +284,11 @@ enum instr_enum : uint32_t
   JMPR,
 
   /**
-   * <exc, _, _>
+   * <exc, `search_catch_sites_in_current_closure`, _>
    * Pop the object at the top and raise it as an exception.
+   * The first operand is a boolean value indicating whether the runtime should
+   * search for a catch site in the current closure. A value of `false` will
+   * make the runtime pop the current frame.
    */
   EXC,
 
