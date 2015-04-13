@@ -1566,7 +1566,65 @@ TEST_F(instrs_control_instrs_test, TestInstrJMPR)
 
 TEST_F(instrs_control_instrs_test, TestInstrEXC)
 {
-  // TODO: [COREVM-49] Complete instruction set and implementations
+  const corevm::runtime::closure_id closure_id = 0;
+  const corevm::runtime::compartment_id compartment_id = 0;
+
+  corevm::runtime::vector vector {
+    { 0, 0, 0 },
+    { 0, 0, 0 },
+    { 0, 0, 0 },
+    { 0, 0, 0 },
+    { 0, 0, 0 },
+    { 0, 0, 0 },
+    { 0, 0, 0 },
+  };
+
+  corevm::runtime::catch_site catch_site {
+    .from = 0,
+    .to = 5,
+    .dst = 7,
+  };
+
+  corevm::runtime::catch_site_list catch_site_list { catch_site };
+
+  corevm::runtime::closure closure {
+    .id = closure_id,
+    .parent_id = corevm::runtime::NONESET_CLOSURE_ID,
+    .vector = vector,
+    .catch_sites = catch_site_list,
+  };
+
+  corevm::runtime::closure_ctx ctx {
+    .closure_id = closure_id,
+    .compartment_id = compartment_id
+  };
+
+  corevm::runtime::closure_table closure_table { closure };
+  corevm::runtime::compartment compartment(DUMMY_PATH);
+  compartment.set_closure_table(closure_table);
+  m_process.insert_compartment(compartment);
+
+  corevm::dyobj::dyobj_id id = 1;
+  m_process.push_stack(id);
+
+  m_process.emplace_frame(ctx);
+
+  // Emulate process starting condition.
+  m_process.insert_vector(vector);
+  m_process.set_pc(0);
+
+  corevm::runtime::instr instr {
+    .code = 0,
+    .oprd1 = 1,
+    .oprd2 = 0
+  };
+
+  corevm::runtime::instr_handler_exc handler;
+  handler.execute(instr, m_process);
+
+  // Checks that the program counter is set to be one less than the destination
+  // specified in the catch site.
+  ASSERT_EQ(catch_site.dst - 1, m_process.pc());
 }
 
 // -----------------------------------------------------------------------------
