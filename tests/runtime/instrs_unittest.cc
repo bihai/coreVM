@@ -1629,6 +1629,39 @@ TEST_F(instrs_control_instrs_test, TestInstrEXC)
 
 // -----------------------------------------------------------------------------
 
+TEST_F(instrs_obj_unittest, TestInstrEXCOBJ)
+{
+  corevm::runtime::closure_ctx ctx {
+    .closure_id = 0,
+    .compartment_id = 0
+  };
+
+  corevm::runtime::frame frame(ctx);
+
+  ASSERT_EQ(0, frame.exc_obj());
+
+  corevm::dyobj::dyobj_id id = 1;
+
+  frame.set_exc_obj(id);
+
+  ASSERT_EQ(id, frame.exc_obj());
+
+  m_process.push_frame(frame);
+
+  corevm::runtime::instr instr {
+    .code = 0,
+    .oprd1 = 0,
+    .oprd2 = 0
+  };
+
+  corevm::runtime::instr_handler_excobj handler;
+  handler.execute(instr, m_process);
+
+  ASSERT_EQ(id, m_process.top_stack());
+}
+
+// -----------------------------------------------------------------------------
+
 TEST_F(instrs_control_instrs_test, TestInstrEXIT)
 {
   auto sig_handler = [](int signum) {
