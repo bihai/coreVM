@@ -566,10 +566,6 @@ corevm::runtime::process::start()
     corevm::runtime::instr_handler* handler =
       const_cast<corevm::runtime::instr_handler*>(this->get_instr_handler(instr.code));
 
-#if 0
-    std::cout << instr.code << " ";
-#endif
-
     sigsetjmp(corevm::runtime::sighandler_registrar::get_sigjmp_env(), 1);
 
     if (!corevm::runtime::sighandler_registrar::is_sig_raised())
