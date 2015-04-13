@@ -32,9 +32,12 @@ import traceback
 from datetime import datetime
 
 
+## -----------------------------------------------------------------------------
+
 INSTR_STR_TO_CODE_MAP = 'INSTR_STR_TO_CODE_MAP'
 DYOBJ_FLAG_STR_TO_VALUE_MAP = 'DYOBJ_FLAG_STR_TO_VALUE_MAP'
 
+## -----------------------------------------------------------------------------
 
 class VectorString(object):
 
@@ -59,6 +62,7 @@ class VectorString(object):
 
         return vector
 
+## -----------------------------------------------------------------------------
 
 class Instr(object):
 
@@ -70,6 +74,7 @@ class Instr(object):
     def to_json(self):
         return [self.code, self.oprd1, self.oprd2]
 
+## -----------------------------------------------------------------------------
 
 class Loc(object):
 
@@ -81,6 +86,7 @@ class Loc(object):
     def from_node(cls, node):
         return Loc(node.lineno, node.col_offset)
 
+## -----------------------------------------------------------------------------
 
 class CatchSite(object):
 
@@ -96,12 +102,14 @@ class CatchSite(object):
             'dst': self.dst_value
         }
 
+## -----------------------------------------------------------------------------
 
 class TryExceptState(object):
 
     def __init__(self):
         self.in_try_block = False
 
+## -----------------------------------------------------------------------------
 
 class Closure(object):
 
@@ -154,6 +162,7 @@ class Closure(object):
 
         return json_dict
 
+## -----------------------------------------------------------------------------
 
 class BytecodeGenerator(ast.NodeVisitor):
     """Traverses through Python AST and generates version and format specific
@@ -538,14 +547,14 @@ class BytecodeGenerator(ast.NodeVisitor):
     def visit_Raise(self, node):
         self.visit(node.type)
 
-        search_catch_sites_in_current_closure = int(self.try_except_state.in_try_block)
+        search_catch_sites = int(self.try_except_state.in_try_block)
 
-        self.__add_instr('exc', search_catch_sites_in_current_closure, 0)
+        self.__add_instr('exc', search_catch_sites, 0)
 
     def visit_TryExcept(self, node):
         self.try_except_state.in_try_block = True
 
-        # Step in.
+        # Step in (for try-block stmts).
         vector_length1 = len(self.__current_vector())
 
         for stmt in node.body:
@@ -553,7 +562,7 @@ class BytecodeGenerator(ast.NodeVisitor):
 
         vector_length2 = len(self.__current_vector())
 
-        # Step out.
+        # Step out (for try-block stmts).
         self.try_except_state.in_try_block = False
 
         if node.handlers:
@@ -589,13 +598,13 @@ class BytecodeGenerator(ast.NodeVisitor):
             self.__current_vector()[vector_length_x - 1] = Instr(
                 self.instr_str_to_code_map['jmpif'], length_diff, 0)
 
-            # Step in.
+            # Step in (for except-block stmts).
             self.try_except_state.in_try_block = False
 
             for stmt in handler.body:
                 self.visit(stmt)
 
-            # Step out.
+            # Step out (for except-block stmts).
             self.try_except_state.in_try_block = True
 
             vector_length4 = len(self.__current_vector())
@@ -1018,6 +1027,12 @@ class BytecodeGenerator(ast.NodeVisitor):
     def visit_NotIn(self, node):
         pass
 
+    """ ------------------------- excepthandler ---------------------------- """
+
+    def visit_excepthandler(self, node):
+        # Do nothing here. Except handlers are implemented in `visit_TryExcept`.
+        pass
+
     """ --------------------------- arguments ------------------------------ """
 
     def visit_arguments(self, node):
@@ -1086,6 +1101,7 @@ class BytecodeGenerator(ast.NodeVisitor):
             self.__add_instr('getkwargs', 0, 0, loc=Loc.from_node(node))
             # TODO: retrieve kwargs stored as a map on top of eval stack.
 
+## -----------------------------------------------------------------------------
 
 def main():
     parser = optparse.OptionParser(
