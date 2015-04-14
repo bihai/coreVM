@@ -118,6 +118,19 @@ def do_something_again():
 
 ## -----------------------------------------------------------------------------
 
+def exception_in_lambda():
+    def inner():
+        raise AnotherException()
+
+    inner()
+
+try:
+    exception_in_lambda()
+except AnotherException:
+    print 'Catching exception from lambda'
+
+## -----------------------------------------------------------------------------
+
 # TODO: Run this test when inheritance is supported.
 #try:
 #    raise YetAnotherException()
