@@ -604,6 +604,7 @@ class BytecodeGenerator(ast.NodeVisitor):
             self.try_except_state.in_except_block = True
 
             if handler.name:
+                self.__add_instr('excobj', 0, 0)
                 self.visit(handler.name)
 
             for stmt in handler.body:

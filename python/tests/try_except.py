@@ -9,6 +9,9 @@ class YetAnotherException(Exception):
     def __init__(self):
         pass
 
+    def __str__(self):
+        return 'Yet another exception'
+
 ## -----------------------------------------------------------------------------
 
 try:
@@ -22,8 +25,9 @@ try:
     raise YetAnotherException()
 except AnotherException:
     print 'This is not it either'
-except YetAnotherException:
+except YetAnotherException as exc:
     print 'Found it'
+    print exc
 
 ## -----------------------------------------------------------------------------
 
