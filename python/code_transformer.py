@@ -497,7 +497,8 @@ class CodeTransformer(ast.NodeVisitor):
     def visit_ExceptHandler(self, node):
         def exception_type_and_name(node):
             if node.type and node.name:
-                return ' {type} as {name}'.format(type=self.visit(node.type), name=self.visit(node.name))
+                return ' {type} as {name}'.format(
+                    type=self.visit(node.type), name=self.visit(node.name))
             elif node.type:
                 return ' {type}'.format(type=self.visit(node.type))
             elif node.name:
