@@ -13,7 +13,7 @@ class YetAnotherException(Exception):
 
 try:
     raise Exception()
-except Exception:
+except Exception as exc:
     print 'Everything is going to be okay'
 
 ## -----------------------------------------------------------------------------

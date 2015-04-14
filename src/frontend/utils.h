@@ -60,7 +60,7 @@ const std::string get_v0_1_locs_schema_definition();
 
 // -----------------------------------------------------------------------------
 
-const std::string get_v0_1_catch_sites_definition();
+const std::string get_v0_1_catch_sites_schema_definition();
 
 // -----------------------------------------------------------------------------
 

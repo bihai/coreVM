@@ -97,7 +97,6 @@ corevm::frontend::get_v0_1_instr_code_schema_definition()
   for (auto i = 0; i < corevm::runtime::instr_enum::INSTR_CODE_MAX; ++i)
   {
     const corevm::runtime::instr_code code = static_cast<corevm::runtime::instr_code>(i);
-    const corevm::runtime::instr_info& info = corevm::runtime::instr_handler_meta::get(code);
 
     ss << code;
 
@@ -216,7 +215,7 @@ corevm::frontend::get_v0_1_locs_schema_definition()
 // -----------------------------------------------------------------------------
 
 const std::string
-corevm::frontend::get_v0_1_catch_sites_definition()
+corevm::frontend::get_v0_1_catch_sites_schema_definition()
 {
   static const std::string def(
     "{"

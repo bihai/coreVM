@@ -211,7 +211,7 @@ class CodeTransformer(ast.NodeVisitor):
         if node.type:
             base_str += (' ' + self.visit(node.type))
         else:
-            # Raises an instance of `Exception` is target is not specified.
+            # Raises an instance of `Exception` if target is not specified.
             base_str += (' ' + '__call(Exception)')
 
         return base_str

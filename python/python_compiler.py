@@ -107,7 +107,7 @@ class CatchSite(object):
 class TryExceptState(object):
 
     def __init__(self):
-        self.in_try_block = False
+        self.in_except_block = False
 
 ## -----------------------------------------------------------------------------
 
@@ -547,12 +547,14 @@ class BytecodeGenerator(ast.NodeVisitor):
     def visit_Raise(self, node):
         self.visit(node.type)
 
-        search_catch_sites = int(self.try_except_state.in_try_block)
+        # Do NOT turn on catch site searching in except blocks.
+        search_catch_sites = int(not self.try_except_state.in_except_block)
 
         self.__add_instr('exc', search_catch_sites, 0)
 
     def visit_TryExcept(self, node):
-        self.try_except_state.in_try_block = True
+        # TODO: Add support for `node.orelse`.
+        self.try_except_state.in_except_block = False
 
         # Step in (for try-block stmts).
         vector_length1 = len(self.__current_vector())
@@ -563,7 +565,7 @@ class BytecodeGenerator(ast.NodeVisitor):
         vector_length2 = len(self.__current_vector())
 
         # Step out (for try-block stmts).
-        self.try_except_state.in_try_block = False
+        self.try_except_state.in_except_block = False
 
         if node.handlers:
             self.__add_catch_site(
@@ -599,13 +601,16 @@ class BytecodeGenerator(ast.NodeVisitor):
                 self.instr_str_to_code_map['jmpif'], length_diff, 0)
 
             # Step in (for except-block stmts).
-            self.try_except_state.in_try_block = False
+            self.try_except_state.in_except_block = True
+
+            if handler.name:
+                self.visit(handler.name)
 
             for stmt in handler.body:
                 self.visit(stmt)
 
             # Step out (for except-block stmts).
-            self.try_except_state.in_try_block = True
+            self.try_except_state.in_except_block = False
 
             vector_length4 = len(self.__current_vector())
 

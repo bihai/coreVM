@@ -173,7 +173,7 @@ corevm::frontend::bytecode_loader_v0_1::schema() const
       boost::format(unformatted_def)
         % get_v0_1_vector_schema_definition()
         % get_v0_1_locs_schema_definition()
-        % get_v0_1_catch_sites_definition()
+        % get_v0_1_catch_sites_schema_definition()
     )
   );
 

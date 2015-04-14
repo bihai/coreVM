@@ -1585,13 +1585,13 @@ TEST_F(instrs_control_instrs_test, TestInstrEXC)
     .dst = 7,
   };
 
-  corevm::runtime::catch_site_list catch_site_list { catch_site };
+  corevm::runtime::catch_site_list catch_sites { catch_site };
 
   corevm::runtime::closure closure {
     .id = closure_id,
     .parent_id = corevm::runtime::NONESET_CLOSURE_ID,
     .vector = vector,
-    .catch_sites = catch_site_list,
+    .catch_sites = catch_sites,
   };
 
   corevm::runtime::closure_ctx ctx {

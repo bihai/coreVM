@@ -1423,7 +1423,7 @@ corevm::runtime::instr_handler_excobj::execute(
 
   if (!exc_obj_id)
   {
-    THROW(corevm::runtime::invalid_operation_error("No exception object"));
+    THROW(corevm::runtime::invalid_operation_error("No exception raised"));
   }
   else
   {
