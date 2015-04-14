@@ -576,6 +576,7 @@ class BytecodeGenerator(ast.NodeVisitor):
                 )
             )
 
+        # Do the work inside `visit_excepthandler` here instead.
         for i in xrange(len(node.handlers)):
             handler = node.handlers[i]
 
