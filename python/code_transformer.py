@@ -153,17 +153,46 @@ class CodeTransformer(ast.NodeVisitor):
         return base_str
 
     def visit_For(self, node):
-        base_str = '{indentation}for {target} in {iter}:\n'.format(
+        base_str = "{indentation}try:\n".format(indentation=self.__indentation())
+
+        # Indent lvl 1.
+        self.__indent()
+
+        base_str += '{indentation}iterator__ = __call({iter}.__iter__)\n'.format(
             indentation=self.__indentation(),
-            target=self.visit(node.target),
             iter=self.visit(node.iter)
         )
 
+        base_str += '{indentation}while True:\n'.format(
+            indentation=self.__indentation())
+
+        # Indent lvl 2.
         self.__indent()
+
+        base_str += '{indentation}{target} = __call(iterator__.next)\n'.format(
+            indentation=self.__indentation(),
+            target=self.visit(node.target)
+        )
 
         for stmt in node.body:
             base_str += (self.visit(stmt) + '\n')
 
+        # Dedent lvl 2.
+        self.__dedent()
+
+        # Dedent lvl 1.
+        self.__dedent()
+
+        base_str += '{indentation}except StopIteration:\n'.format(
+            indentation=self.__indentation())
+
+        # Indent lvl 1.
+        self.__indent()
+
+        base_str += '{indentation}pass\n'.format(
+            indentation=self.__indentation())
+
+        # Dedent lvl 1.
         self.__dedent()
 
         return base_str
