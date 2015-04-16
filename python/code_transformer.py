@@ -21,6 +21,8 @@
 
 import ast
 import optparse
+import random
+import string
 import sys
 import traceback
 
@@ -40,6 +42,9 @@ class CodeTransformer(ast.NodeVisitor):
     def __indentation(self):
         INDENT = '  '
         return ''.join([INDENT for _ in xrange(self.indent_level)])
+
+    def __get_random_name(self):
+        return ''.join(random.choice(string.ascii_letters) for _ in xrange(5))
 
     def transform(self):
         with open(self.options.input_file, 'r') as fd:
@@ -158,8 +163,11 @@ class CodeTransformer(ast.NodeVisitor):
         # Indent lvl 1.
         self.__indent()
 
-        base_str += '{indentation}iterator__ = __call({iter}.__iter__)\n'.format(
+        iterator_var_name = self.__get_random_name() + '_iterator_'
+
+        base_str += '{indentation}{iterator_var_name} = __call({iter}.__iter__)\n'.format(
             indentation=self.__indentation(),
+            iterator_var_name=iterator_var_name,
             iter=self.visit(node.iter)
         )
 
@@ -169,9 +177,10 @@ class CodeTransformer(ast.NodeVisitor):
         # Indent lvl 2.
         self.__indent()
 
-        base_str += '{indentation}{target} = __call(iterator__.next)\n'.format(
+        base_str += '{indentation}{target} = __call({iterator_var_name}.next)\n'.format(
             indentation=self.__indentation(),
-            target=self.visit(node.target)
+            target=self.visit(node.target),
+            iterator_var_name=iterator_var_name
         )
 
         for stmt in node.body:
@@ -226,10 +235,14 @@ class CodeTransformer(ast.NodeVisitor):
         self.__dedent()
 
         if node.orelse:
-            base_str += 'else:\n'
+            base_str += '{indentation}else:\n'.format(
+                indentation=self.__indentation())
+
             self.__indent()
+
             for stmt in node.orelse:
                 base_str += (self.visit(stmt) + '\n')
+
             self.__dedent()
 
         return base_str
