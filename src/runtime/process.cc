@@ -563,6 +563,8 @@ corevm::runtime::process::start()
 
     const corevm::runtime::instr& instr = m_instrs[m_pc];
 
+    //std::cout << instr.code << " ";
+
     corevm::runtime::instr_handler* handler =
       const_cast<corevm::runtime::instr_handler*>(this->get_instr_handler(instr.code));
 
@@ -674,7 +676,7 @@ corevm::runtime::process::insert_vector(corevm::runtime::vector& vector)
 
 // -----------------------------------------------------------------------------
 
-void
+bool
 corevm::runtime::process::get_frame_by_closure_ctx(
   corevm::runtime::closure_ctx& closure_ctx, corevm::runtime::frame** frame_ptr)
 {
@@ -689,7 +691,10 @@ corevm::runtime::process::get_frame_by_closure_ctx(
   if (itr != m_call_stack.end())
   {
     *frame_ptr = &(*itr);
+    return true;
   }
+
+  return false;
 }
 
 // -----------------------------------------------------------------------------

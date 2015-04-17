@@ -208,6 +208,7 @@ class BytecodeGenerator(ast.NodeVisitor):
 
         # states
         self.current_class_name = ''
+        self.current_function_name = ''
         self.try_except_state = TryExceptState()
         self.continue_stmt_vector_lengths = []
         self.break_stmt_vector_lengths = []
@@ -319,7 +320,8 @@ class BytecodeGenerator(ast.NodeVisitor):
 
     def visit_FunctionDef(self, node):
         # step in
-        name = self.__mingle_name(node.name)
+        self.current_function_name = self.current_function_name + '::' + node.name
+        name = self.current_class_name + '.' + self.current_function_name
 
         self.closure_map[name] = Closure(
             node.name,
@@ -342,6 +344,7 @@ class BytecodeGenerator(ast.NodeVisitor):
 
         # step out
         self.current_closure_name = self.closure_map[self.current_closure_name].parent_name
+        self.current_function_name = '::'.join(self.current_function_name.split('::')[:-1])
 
         # In the outer closure, set the closure id on the object
 

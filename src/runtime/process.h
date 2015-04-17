@@ -162,7 +162,7 @@ public:
 
   void insert_vector(corevm::runtime::vector& vector);
 
-  void get_frame_by_closure_ctx(
+  bool get_frame_by_closure_ctx(
     corevm::runtime::closure_ctx&, corevm::runtime::frame**);
 
   void start();
