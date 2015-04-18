@@ -120,95 +120,6 @@ get_attr_key_from_current_compartment(
 
 // -----------------------------------------------------------------------------
 
-/**
- * Given a starting closure context, find the existing frame associated with it,
- * following the closure tree.
- *
- * Returns a pointer that points to the frame, if found. Returns a null pointer
- * otherwise.
- */
-static
-corevm::runtime::frame* find_frame_by_ctx(
-  corevm::runtime::closure_ctx ctx,
-  corevm::runtime::compartment* compartment,
-  corevm::runtime::process& process)
-{
-  ASSERT(compartment);
-
-  corevm::runtime::frame* frame = nullptr;
-
-  while (!frame)
-  {
-    bool res = process.get_frame_by_closure_ctx(ctx, &frame);
-
-    if (res)
-    {
-      ASSERT(frame);
-      break;
-    }
-
-    corevm::runtime::closure closure = compartment->get_closure_by_id(ctx.closure_id);
-    ctx.closure_id = closure.parent_id;
-
-    if (ctx.closure_id == corevm::runtime::NONESET_CLOSURE_ID)
-    {
-      THROW(corevm::runtime::local_variable_not_found_error());
-    }
-  }
-
-  return frame;
-}
-
-// -----------------------------------------------------------------------------
-
-/**
- * Given a pointer to a starting frame, find the existing frame associated with
- * the parent of the given frame's closure context.
- *
- * Returns a pointer that points to the frame, if found. Returns a null pointer
- * otherwise.
- */
-static
-corevm::runtime::frame* find_parent_frame_in_process(
-  corevm::runtime::frame* frame_ptr,
-  corevm::runtime::process& process)
-{
-  ASSERT(frame_ptr);
-
-  corevm::runtime::compartment_id compartment_id = frame_ptr->closure_ctx().compartment_id;
-  corevm::runtime::compartment* compartment = nullptr;
-
-  process.get_compartment(compartment_id, &compartment);
-
-  if (!compartment)
-  {
-    THROW(corevm::runtime::compartment_not_found_error(compartment_id));
-  }
-
-  corevm::runtime::closure_id closure_id = frame_ptr->closure_ctx().closure_id;
-  corevm::runtime::closure closure = compartment->get_closure_by_id(closure_id);
-
-  corevm::runtime::closure_id parent_closure_id = closure.parent_id;
-
-  ASSERT(closure.id != closure.parent_id);
-
-  if (parent_closure_id == corevm::runtime::NONESET_CLOSURE_ID)
-  {
-    THROW(corevm::runtime::local_variable_not_found_error());
-  }
-
-  closure_ctx ctx {
-    .compartment_id = compartment_id,
-    .closure_id = parent_closure_id
-  };
-
-  frame_ptr = find_frame_by_ctx(ctx, compartment, process);
-
-  return frame_ptr;
-}
-
-// -----------------------------------------------------------------------------
-
 } /* end namespace runtime */
 
 
@@ -619,7 +530,8 @@ corevm::runtime::instr_handler_ldobj::execute(
 
   while (!frame_ptr->has_visible_var(key))
   {
-    frame_ptr = find_parent_frame_in_process(frame_ptr, process);
+    frame_ptr = corevm::runtime::process::find_parent_frame_in_process(
+      frame_ptr, process);
 
     if (!frame_ptr)
     {
@@ -738,7 +650,8 @@ corevm::runtime::instr_handler_ldobj2::execute(
 
   while (!frame_ptr->has_invisible_var(key))
   {
-    frame_ptr = find_parent_frame_in_process(frame_ptr, process);
+    frame_ptr = corevm::runtime::process::find_parent_frame_in_process(
+      frame_ptr, process);
 
     if (!frame_ptr)
     {
@@ -949,7 +862,8 @@ corevm::runtime::instr_handler_cldobj::execute(
 
   while (!frame_ptr->has_visible_var(key))
   {
-    frame_ptr = find_parent_frame_in_process(frame_ptr, process);
+    frame_ptr = corevm::runtime::process::find_parent_frame_in_process(
+      frame_ptr, process);
 
     if (!frame_ptr)
     {
