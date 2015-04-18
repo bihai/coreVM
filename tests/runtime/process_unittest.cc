@@ -643,11 +643,6 @@ TEST_F(process_find_frame_by_ctx_unittest, TestFindFrameByTraverseClosureTree)
     .closure_id = closure1.id
   };
 
-  corevm::runtime::closure_ctx ctx2 {
-    .compartment_id = 0,
-    .closure_id = closure2.id
-  };
-
   corevm::runtime::closure_ctx ctx3 {
     .compartment_id = 0,
     .closure_id = closure3.id
@@ -656,11 +651,9 @@ TEST_F(process_find_frame_by_ctx_unittest, TestFindFrameByTraverseClosureTree)
   process.insert_compartment(compartment);
 
   process.emplace_frame(ctx1);
-  process.emplace_frame(ctx2);
-  process.emplace_frame(ctx3);
 
   corevm::runtime::frame* res = corevm::runtime::process::find_frame_by_ctx(
-    ctx1, &compartment, process);
+    ctx3, &compartment, process);
 
   ASSERT_NE(nullptr, res);
   ASSERT_TRUE(ctx1 == res->closure_ctx());
