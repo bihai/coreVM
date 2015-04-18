@@ -563,8 +563,6 @@ corevm::runtime::process::start()
 
     const corevm::runtime::instr& instr = m_instrs[m_pc];
 
-    //std::cout << instr.code << " ";
-
     corevm::runtime::instr_handler* handler =
       const_cast<corevm::runtime::instr_handler*>(this->get_instr_handler(instr.code));
 
@@ -816,7 +814,9 @@ corevm::runtime::process::find_frame_by_ctx(
       break;
     }
 
-    corevm::runtime::closure closure = compartment->get_closure_by_id(ctx.closure_id);
+    corevm::runtime::closure closure = compartment->get_closure_by_id(
+      ctx.closure_id);
+
     ctx.closure_id = closure.parent_id;
 
     if (ctx.closure_id == corevm::runtime::NONESET_CLOSURE_ID)
@@ -838,7 +838,9 @@ corevm::runtime::process::find_parent_frame_in_process(
 {
   ASSERT(frame_ptr);
 
-  corevm::runtime::compartment_id compartment_id = frame_ptr->closure_ctx().compartment_id;
+  corevm::runtime::compartment_id compartment_id =
+    frame_ptr->closure_ctx().compartment_id;
+
   corevm::runtime::compartment* compartment = nullptr;
 
   process.get_compartment(compartment_id, &compartment);
