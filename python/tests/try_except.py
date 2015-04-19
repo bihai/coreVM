@@ -144,6 +144,24 @@ except Exception:
 
 ## -----------------------------------------------------------------------------
 
+try:
+    print 'Do something here...'
+except YetAnotherException:
+    print 'This is not the right exception'
+else:
+    print 'This should be printed'
+
+## -----------------------------------------------------------------------------
+
+try:
+    raise AnotherException()
+except AnotherException:
+    print 'This should be printed'
+else:
+    print 'This should not be printed'
+
+## -----------------------------------------------------------------------------
+
 # TODO: Run this test when inheritance is supported.
 #try:
 #    raise YetAnotherException()

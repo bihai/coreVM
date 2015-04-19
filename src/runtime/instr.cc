@@ -171,6 +171,8 @@ corevm::runtime::instr_handler_meta::instr_set[INSTR_CODE_MAX] {
   /* JMPR      */    { .num_oprd=1, .str="jmpr",      .handler=std::make_shared<corevm::runtime::instr_handler_jmpr>()      },
   /* EXC       */    { .num_oprd=0, .str="exc",       .handler=std::make_shared<corevm::runtime::instr_handler_exc>()       },
   /* EXCOBJ    */    { .num_oprd=0, .str="excobj",    .handler=std::make_shared<corevm::runtime::instr_handler_excobj>()    },
+  /* CLREXC    */    { .num_oprd=0, .str="clrexc",    .handler=std::make_shared<corevm::runtime::instr_handler_clrexc>()    },
+  /* JMPEXC    */    { .num_oprd=1, .str="jmpexc",    .handler=std::make_shared<corevm::runtime::instr_handler_jmpexc>()    },
   /* EXIT      */    { .num_oprd=1, .str="exit",      .handler=std::make_shared<corevm::runtime::instr_handler_exit>()      },
 
   /* ------------------------- Function instructions ------------------------ */
@@ -1354,6 +1356,50 @@ corevm::runtime::instr_handler_excobj::execute(
   else
   {
     process.push_stack(exc_obj_id);
+  }
+}
+
+// -----------------------------------------------------------------------------
+
+void
+corevm::runtime::instr_handler_clrexc::execute(
+  const corevm::runtime::instr& instr, corevm::runtime::process& process)
+{
+  corevm::runtime::frame& frame = process.top_frame();
+  frame.clear_exc_obj();
+}
+
+// -----------------------------------------------------------------------------
+
+void
+corevm::runtime::instr_handler_jmpexc::execute(
+  const corevm::runtime::instr& instr, corevm::runtime::process& process)
+{
+  const corevm::runtime::frame& frame = process.top_frame();
+  corevm::dyobj::dyobj_id exc_obj_id = frame.exc_obj();
+
+  bool jump_on_exc = static_cast<bool>(instr.oprd2);
+
+  bool jump = jump_on_exc ? exc_obj_id : !exc_obj_id;
+
+  if (jump)
+  {
+    corevm::runtime::instr_addr starting_addr = process.pc();
+    corevm::runtime::instr_addr relative_addr =
+      static_cast<corevm::runtime::instr_addr>(instr.oprd1);
+
+    corevm::runtime::instr_addr addr = starting_addr + relative_addr;
+
+    if (addr == corevm::runtime::NONESET_INSTR_ADDR)
+    {
+      THROW(corevm::runtime::invalid_instr_addr_error());
+    }
+    else if (addr < starting_addr)
+    {
+      THROW(corevm::runtime::invalid_instr_addr_error());
+    }
+
+    process.set_pc(addr);
   }
 }
 
