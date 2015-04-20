@@ -557,7 +557,7 @@ class CodeTransformer(ast.NodeVisitor):
             elif node.name:
                 return ' {name}'.format(name=self.visit(node.name))
             else:
-                return ''
+                return ' {type}'.format(type='Exception')
 
         base_str = '{indentation}except{type_and_name}:\n'.format(
             indentation=self.__indentation(),

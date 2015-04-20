@@ -162,6 +162,30 @@ else:
 
 ## -----------------------------------------------------------------------------
 
+def raise_another_exception():
+    raise AnotherException()
+
+try:
+    raise_another_exception()
+except AnotherException:
+    print 'AnotherException caught'
+else:
+    print 'This should not be printed'
+
+## -----------------------------------------------------------------------------
+
+def run():
+    parent()()
+
+try:
+    run()
+except:
+    print 'Exception caught'
+else:
+    print 'This should not be printed'
+
+## -----------------------------------------------------------------------------
+
 # TODO: Run this test when inheritance is supported.
 #try:
 #    raise YetAnotherException()
