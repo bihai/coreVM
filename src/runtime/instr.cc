@@ -1409,12 +1409,6 @@ void
 corevm::runtime::instr_handler_exit::execute(
   const corevm::runtime::instr& instr, corevm::runtime::process& process)
 {
-  /*
-  // http://en.cppreference.com/w/cpp/utility/program/exit
-  int exit_code = static_cast<int>(instr.oprd1);
-  std::cout << "Exiting program with code " << exit_code << ". Bye." << std::endl;
-  std::exit(exit_code);
-  */
   raise(SIGTERM);
 }
 
