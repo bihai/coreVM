@@ -149,6 +149,40 @@ def test_while_else_loop_with_continue():
 
 ## -----------------------------------------------------------------------------
 
+def test_while_loop_with_exception():
+    def inner():
+        i = 0
+        while i < 5:
+            print i
+            if i > 3:
+                raise Exception()
+            i += 1
+
+    try:
+        inner()
+    except Exception:
+        print 'Exception in while-else loop caught'
+
+## -----------------------------------------------------------------------------
+
+def test_while_else_loop_with_exception():
+    def inner():
+        i = 0
+        while i < 5:
+            print i
+            if i > 3:
+                raise Exception()
+            i += 1
+        else:
+            print 'This never happens'
+
+    try:
+        inner()
+    except Exception:
+        print 'Exception in while-else loop caught again'
+
+## -----------------------------------------------------------------------------
+
 test_while_loop()
 test_while_loop_with_continue()
 test_while_loop_with_continue_2()
@@ -160,5 +194,7 @@ test_while_loop_nested_with_break_and_continue()
 test_while_else_loop()
 test_while_else_loop_with_break()
 test_while_else_loop_with_continue()
+test_while_loop_with_exception()
+test_while_else_loop_with_exception()
 
 ## -----------------------------------------------------------------------------
