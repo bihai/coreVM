@@ -172,7 +172,7 @@ corevm::runtime::instr_handler_meta::instr_set[INSTR_CODE_MAX] {
   /* EXC       */    { .num_oprd=0, .str="exc",       .handler=std::make_shared<corevm::runtime::instr_handler_exc>()       },
   /* EXCOBJ    */    { .num_oprd=0, .str="excobj",    .handler=std::make_shared<corevm::runtime::instr_handler_excobj>()    },
   /* CLREXC    */    { .num_oprd=0, .str="clrexc",    .handler=std::make_shared<corevm::runtime::instr_handler_clrexc>()    },
-  /* JMPEXC    */    { .num_oprd=1, .str="jmpexc",    .handler=std::make_shared<corevm::runtime::instr_handler_jmpexc>()    },
+  /* JMPEXC    */    { .num_oprd=2, .str="jmpexc",    .handler=std::make_shared<corevm::runtime::instr_handler_jmpexc>()    },
   /* EXIT      */    { .num_oprd=1, .str="exit",      .handler=std::make_shared<corevm::runtime::instr_handler_exit>()      },
 
   /* ------------------------- Function instructions ------------------------ */
